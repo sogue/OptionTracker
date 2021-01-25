@@ -29,7 +29,8 @@ namespace OptionTracker
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(Environment.GetEnvironmentVariable("DefaultConnection")));
+                options.UseNpgsql(Environment.GetEnvironmentVariable("DefaultConnection") ??
+                    Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddScoped<IApiService, ApiService>();
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
