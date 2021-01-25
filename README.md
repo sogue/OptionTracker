@@ -2,6 +2,10 @@
 
 Track options and open interest via TD Ameritrade API
 
+Deployed App:
+
+https://option-tracker-qepiuuzgya-uc.a.run.app/
+
 ASP.NET Core MVC / Razor / Entity Core
 
 ## Setup environments
