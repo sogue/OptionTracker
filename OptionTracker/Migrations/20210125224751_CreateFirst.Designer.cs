@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OptionTracker.Data;
 
-namespace OptionTracker.Data.Migrations
+namespace OptionTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210125223648_CreateFirst")]
+    [Migration("20210125224751_CreateFirst")]
     partial class CreateFirst
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
