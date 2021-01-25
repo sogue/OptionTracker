@@ -7,10 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["OptionTracker/OptionTracker.csproj", "OptionTracker/"]
-RUN dotnet restore "OptionTracker/OptionTracker.csproj"
+COPY ["OptionTracker.csproj", ""]
+RUN dotnet restore "OptionTracker.csproj"
 COPY . .
-WORKDIR "/src/OptionTracker"
+WORKDIR "/src"
 RUN dotnet build "OptionTracker.csproj" -c Release -o /app/build
 
 FROM build AS publish
@@ -20,3 +20,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "OptionTracker.dll"]
+
