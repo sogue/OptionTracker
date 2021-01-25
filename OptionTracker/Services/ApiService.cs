@@ -14,7 +14,7 @@ namespace OptionTracker.Services
 {
     public class ApiService : IApiService
     {
-        private readonly string _apiKey = Environment.GetEnvironmentVariable("ApiKey") ?? "HUG3TYZLIYML6S1FDFEJC0RZF7GPAMVG";
+        private readonly string _apiKey = Environment.GetEnvironmentVariable("ApiKey");
         public IList<OptionResult> GetChainsByTickerName(string ticker)
         {
             string url =
