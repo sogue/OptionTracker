@@ -10,8 +10,8 @@ using OptionTracker.Data;
 namespace OptionTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210125224751_CreateFirst")]
-    partial class CreateFirst
+    [Migration("20210126231014_AddTickerWatchlist")]
+    partial class AddTickerWatchlist
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -237,6 +237,171 @@ namespace OptionTracker.Migrations
                     b.ToTable("ChainResults");
                 });
 
+            modelBuilder.Entity("OptionTracker.Models.OptionContract", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<decimal>("Ask")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("AskSize")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Bid")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("BidAskSize")
+                        .HasColumnType("text");
+
+                    b.Property<int>("BidSize")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("ClosePrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("DaysToExpiration")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("DeliverableNote")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Delta")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ExchangeName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("ExpirationDate")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ExpirationType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Gamma")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("HighPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<bool>("InTheMoney")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("IsIndexOption")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Last")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("LastSize")
+                        .HasColumnType("text");
+
+                    b.Property<long>("LastTradingDay")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("LowPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("Mark")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("MarkChange")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("MarkPercentChange")
+                        .HasColumnType("numeric");
+
+                    b.Property<bool>("Mini")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("Multiplier")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("NetChange")
+                        .HasColumnType("numeric");
+
+                    b.Property<bool>("NonStandard")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("OpenInterest")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("OpenPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("OptionDeliverablesList")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("PercentChange")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("PutCall")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long?>("QuoteTimeInLong")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Rho")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SettlementType")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("StrikePrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TheoreticalOptionValue")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TheoreticalVolatility")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Theta")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("TimeValue")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("TotalVolume")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TradeDate")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("TradeTimeInLong")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Vega")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Volatility")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OptionContracts");
+                });
+
             modelBuilder.Entity("OptionTracker.Models.OptionResult", b =>
                 {
                     b.Property<int>("Id")
@@ -261,6 +426,33 @@ namespace OptionTracker.Migrations
                     b.HasIndex("ChainResultId");
 
                     b.ToTable("OptionResults");
+                });
+
+            modelBuilder.Entity("OptionTracker.Models.Ticker", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<string>("Symbol")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ticker");
+                });
+
+            modelBuilder.Entity("OptionTracker.Models.Watchlist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .UseIdentityByDefaultColumn();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Watchlist");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
