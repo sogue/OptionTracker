@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,78 +8,66 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OptionTracker.Data;
 using OptionTracker.Models;
-using OptionTracker.Services;
 
 namespace OptionTracker.Controllers
 {
     [Authorize]
-    public class ChainResultsController : Controller
+    public class TickersController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IApiService _apiService;
 
-        public ChainResultsController(ApplicationDbContext context, IApiService apiService)
+        public TickersController(ApplicationDbContext context)
         {
             _context = context;
-            _apiService = apiService;
         }
 
-        // GET: ChainResults
+        // GET: Tickers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ChainResults.ToListAsync());
+            return View(await _context.Ticker.ToListAsync());
         }
 
-        // GET: ChainResults/Details/5
+        // GET: Tickers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-
             if (id == null)
             {
                 return NotFound();
             }
 
-            var chainResult = await _context.ChainResults.Include(x=>x.OptionsResults.OrderByDescending(y=>y.OpenInterest))
+            var ticker = await _context.Ticker
                 .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (chainResult == null)
+            if (ticker == null)
             {
                 return NotFound();
             }
 
-            return View(chainResult);
+            return View(ticker);
         }
 
-        // GET: ChainResults/Create
+        // GET: Tickers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ChainResults/Create
+        // POST: Tickers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Ticker,Created")] ChainResult chainResult)
+        public async Task<IActionResult> Create([Bind("Id,Symbol")] Ticker ticker)
         {
             if (ModelState.IsValid)
             {
-                var optionContracts = _apiService.GetContractsByTickerName(chainResult.Ticker).ToList();
-
-                await _context.OptionContracts.AddRangeAsync(optionContracts);
-                var optionResults = _apiService.CreateResults(optionContracts);
-                chainResult.OptionsResults = optionResults;
-
-                await _context.ChainResults.AddAsync(chainResult);
-                
+                _context.Add(ticker);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(chainResult);
+            return View(ticker);
         }
 
-        // GET: ChainResults/Edit/5
+        // GET: Tickers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,22 +75,22 @@ namespace OptionTracker.Controllers
                 return NotFound();
             }
 
-            var chainResult = await _context.ChainResults.FindAsync(id);
-            if (chainResult == null)
+            var ticker = await _context.Ticker.FindAsync(id);
+            if (ticker == null)
             {
                 return NotFound();
             }
-            return View(chainResult);
+            return View(ticker);
         }
 
-        // POST: ChainResults/Edit/5
+        // POST: Tickers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Ticker,Created")] ChainResult chainResult)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Symbol")] Ticker ticker)
         {
-            if (id != chainResult.Id)
+            if (id != ticker.Id)
             {
                 return NotFound();
             }
@@ -113,12 +99,22 @@ namespace OptionTracker.Controllers
             {
                 try
                 {
-                    _context.Update(chainResult);
+                   var defaultWatchlist = await _context.Watchlist.FirstOrDefaultAsync();
+                    if( defaultWatchlist == null)
+                    {
+                       await _context.Watchlist.AddAsync(new Watchlist());
+                       await _context.SaveChangesAsync();
+                    }
+
+                    var updatedList = await _context.Watchlist.Include(x=>x.TickerList).FirstOrDefaultAsync();
+
+                    updatedList.TickerList.Add(ticker);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ChainResultExists(chainResult.Id))
+                    if (!TickerExists(ticker.Id))
                     {
                         return NotFound();
                     }
@@ -129,10 +125,10 @@ namespace OptionTracker.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(chainResult);
+            return View(ticker);
         }
 
-        // GET: ChainResults/Delete/5
+        // GET: Tickers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,30 +136,30 @@ namespace OptionTracker.Controllers
                 return NotFound();
             }
 
-            var chainResult = await _context.ChainResults
+            var ticker = await _context.Ticker
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (chainResult == null)
+            if (ticker == null)
             {
                 return NotFound();
             }
 
-            return View(chainResult);
+            return View(ticker);
         }
 
-        // POST: ChainResults/Delete/5
+        // POST: Tickers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var chainResult = await _context.ChainResults.FindAsync(id);
-            _context.ChainResults.Remove(chainResult);
+            var ticker = await _context.Ticker.FindAsync(id);
+            _context.Ticker.Remove(ticker);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ChainResultExists(int id)
+        private bool TickerExists(int id)
         {
-            return _context.ChainResults.Any(e => e.Id == id);
+            return _context.Ticker.Any(e => e.Id == id);
         }
     }
 }

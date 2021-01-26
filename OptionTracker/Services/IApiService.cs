@@ -8,6 +8,7 @@ namespace OptionTracker.Services
 {
     public interface IApiService
     {
-        IList<OptionResult> GetChainsByTickerName(string ticker);
+        IEnumerable<OptionContract> GetContractsByTickerName(string ticker);
+        IList<OptionResult> CreateResults(IEnumerable<OptionContract> chainsByInterest);
     }
 }

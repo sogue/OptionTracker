@@ -15,7 +15,7 @@ namespace OptionTracker.Services
     public class ApiService : IApiService
     {
         private readonly string _apiKey = Environment.GetEnvironmentVariable("ApiKey");
-        public IList<OptionResult> GetChainsByTickerName(string ticker)
+        public IEnumerable<OptionContract> GetContractsByTickerName(string ticker)
         {
             string url =
                 "https://api.tdameritrade.com/v1/marketdata/chains?apikey=" 
@@ -33,13 +33,18 @@ namespace OptionTracker.Services
                 JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, OptionContract[]>>>(s.ToString());
 
             var chainsByInterest = result.SelectMany(x => x.Value.SelectMany(o => o.Value));
+            return chainsByInterest;
+        }
+
+        public IList<OptionResult> CreateResults(IEnumerable<OptionContract> chainsByInterest)
+        {
             var optionResults = chainsByInterest
                 .Select(x => new OptionResult
-                    {
-                     OpenInterest = x.OpenInterest,
-                     ClosePrice = x.ClosePrice,
-                     Description = x.Description
-                    }).OrderBy(x => x.OpenInterest);
+                {
+                    OpenInterest = x.OpenInterest,
+                    ClosePrice = x.ClosePrice,
+                    Description = x.Description
+                }).OrderBy(x => x.OpenInterest);
 
             return optionResults.ToList();
         }

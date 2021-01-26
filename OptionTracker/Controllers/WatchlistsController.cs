@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,73 +13,64 @@ using OptionTracker.Services;
 namespace OptionTracker.Controllers
 {
     [Authorize]
-    public class ChainResultsController : Controller
+    public class WatchlistsController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IApiService _apiService;
 
-        public ChainResultsController(ApplicationDbContext context, IApiService apiService)
+        public WatchlistsController(ApplicationDbContext context, IApiService apiService)
         {
             _context = context;
             _apiService = apiService;
         }
 
-        // GET: ChainResults
+        // GET: Watchlists
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ChainResults.ToListAsync());
+            return View(await _context.Watchlist.ToListAsync());
         }
 
-        // GET: ChainResults/Details/5
+        // GET: Watchlists/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-
             if (id == null)
             {
                 return NotFound();
             }
 
-            var chainResult = await _context.ChainResults.Include(x=>x.OptionsResults.OrderByDescending(y=>y.OpenInterest))
+            var watchlist = await _context.Watchlist
                 .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (chainResult == null)
+            if (watchlist == null)
             {
                 return NotFound();
             }
 
-            return View(chainResult);
+            return View(watchlist);
         }
 
-        // GET: ChainResults/Create
+        // GET: Watchlists/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ChainResults/Create
+        // POST: Watchlists/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Ticker,Created")] ChainResult chainResult)
+        public async Task<IActionResult> Create([Bind("Id")] Watchlist watchlist)
         {
             if (ModelState.IsValid)
             {
-                var optionContracts = _apiService.GetContractsByTickerName(chainResult.Ticker).ToList();
-
-                await _context.OptionContracts.AddRangeAsync(optionContracts);
-                var optionResults = _apiService.CreateResults(optionContracts);
-                chainResult.OptionsResults = optionResults;
-
-                await _context.ChainResults.AddAsync(chainResult);
-                
+                _context.Add(watchlist);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(chainResult);
+            return View(watchlist);
         }
 
-        // GET: ChainResults/Edit/5
+        // GET: Watchlists/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,22 +78,22 @@ namespace OptionTracker.Controllers
                 return NotFound();
             }
 
-            var chainResult = await _context.ChainResults.FindAsync(id);
-            if (chainResult == null)
+            var watchlist = await _context.Watchlist.FindAsync(id);
+            if (watchlist == null)
             {
                 return NotFound();
             }
-            return View(chainResult);
+            return View(watchlist);
         }
 
-        // POST: ChainResults/Edit/5
+        // POST: Watchlists/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Ticker,Created")] ChainResult chainResult)
+        public async Task<IActionResult> Edit(int id, [Bind("Id")] Watchlist watchlist)
         {
-            if (id != chainResult.Id)
+            if (id != watchlist.Id)
             {
                 return NotFound();
             }
@@ -113,12 +102,27 @@ namespace OptionTracker.Controllers
             {
                 try
                 {
-                    _context.Update(chainResult);
+                    foreach (var ticker in watchlist.TickerList)
+                    {
+                        var optionContracts = _apiService.GetContractsByTickerName(ticker.Symbol).ToList();
+
+                        await _context.OptionContracts.AddRangeAsync(optionContracts);
+                        var optionResults = _apiService.CreateResults(optionContracts);
+
+                        var chainResult = new ChainResult();
+
+                        chainResult.OptionsResults = optionResults;
+
+                        await _context.ChainResults.AddAsync(chainResult);
+
+                        await _context.SaveChangesAsync();
+                    }
+                    _context.Update(watchlist);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ChainResultExists(chainResult.Id))
+                    if (!WatchlistExists(watchlist.Id))
                     {
                         return NotFound();
                     }
@@ -129,10 +133,10 @@ namespace OptionTracker.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(chainResult);
+            return View(watchlist);
         }
 
-        // GET: ChainResults/Delete/5
+        // GET: Watchlists/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,30 +144,30 @@ namespace OptionTracker.Controllers
                 return NotFound();
             }
 
-            var chainResult = await _context.ChainResults
+            var watchlist = await _context.Watchlist
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (chainResult == null)
+            if (watchlist == null)
             {
                 return NotFound();
             }
 
-            return View(chainResult);
+            return View(watchlist);
         }
 
-        // POST: ChainResults/Delete/5
+        // POST: Watchlists/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var chainResult = await _context.ChainResults.FindAsync(id);
-            _context.ChainResults.Remove(chainResult);
+            var watchlist = await _context.Watchlist.FindAsync(id);
+            _context.Watchlist.Remove(watchlist);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ChainResultExists(int id)
+        private bool WatchlistExists(int id)
         {
-            return _context.ChainResults.Any(e => e.Id == id);
+            return _context.Watchlist.Any(e => e.Id == id);
         }
     }
 }
