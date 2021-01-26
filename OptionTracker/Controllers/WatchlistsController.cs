@@ -63,6 +63,8 @@ namespace OptionTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                var allTickers =  _context.Ticker.AsQueryable().ToList();
+                watchlist.TickerList = allTickers;
                 _context.Add(watchlist);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
