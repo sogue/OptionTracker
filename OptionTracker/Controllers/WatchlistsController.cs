@@ -104,7 +104,9 @@ namespace OptionTracker.Controllers
             {
                 try
                 {
-                    foreach (var ticker in watchlist.TickerList)
+                    var watched = await _context.Watchlist.FindAsync(id);
+
+                    foreach (var ticker in watched.TickerList)
                     {
                         var optionContracts = _apiService.GetContractsByTickerName(ticker.Symbol).ToList();
 
