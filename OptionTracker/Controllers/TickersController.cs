@@ -102,8 +102,10 @@ namespace OptionTracker.Controllers
                    var defaultWatchlist = await _context.Watchlist.FirstOrDefaultAsync();
                     if( defaultWatchlist == null)
                     {
-                       await _context.Watchlist.AddAsync(new Watchlist());
-                       await _context.SaveChangesAsync();
+                        var watchlist = new Watchlist();
+                        watchlist.TickerList = new List<Ticker>();
+                        await _context.Watchlist.AddAsync(watchlist);
+                        await _context.SaveChangesAsync();
                     }
 
                     var updatedList = await _context.Watchlist.Include(x=>x.TickerList).FirstOrDefaultAsync();
