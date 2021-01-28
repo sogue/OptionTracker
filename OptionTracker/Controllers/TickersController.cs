@@ -21,13 +21,13 @@ namespace OptionTracker.Controllers
             _context = context;
         }
 
-        // GET: Tickers
+        // GET: Ticker
         public async Task<IActionResult> Index()
         {
             return View(await _context.Ticker.ToListAsync());
         }
 
-        // GET: Tickers/Details/5
+        // GET: Ticker/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,13 +45,13 @@ namespace OptionTracker.Controllers
             return View(ticker);
         }
 
-        // GET: Tickers/Create
+        // GET: Ticker/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Tickers/Create
+        // POST: Ticker/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -67,7 +67,7 @@ namespace OptionTracker.Controllers
             return View(ticker);
         }
 
-        // GET: Tickers/Edit/5
+        // GET: Ticker/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,7 +83,7 @@ namespace OptionTracker.Controllers
             return View(ticker);
         }
 
-        // POST: Tickers/Edit/5
+        // POST: Ticker/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -102,14 +102,14 @@ namespace OptionTracker.Controllers
                    var defaultWatchlist = await _context.Watchlist.FirstOrDefaultAsync();
                     if( defaultWatchlist == null)
                     {
-                        var watchlist = new Watchlist {TickerList = new List<Ticker>()};
+                        var watchlist = new Watchlist {TickerList = new List<string>()};
                         await _context.Watchlist.AddAsync(watchlist);
                         await _context.SaveChangesAsync();
                     }
 
                     var updatedList = await _context.Watchlist.FirstOrDefaultAsync();
 
-                    updatedList.TickerList.Add(ticker);
+                    updatedList.TickerList.Add(ticker.Symbol);
 
                     await _context.SaveChangesAsync();
                 }
@@ -129,7 +129,7 @@ namespace OptionTracker.Controllers
             return View(ticker);
         }
 
-        // GET: Tickers/Delete/5
+        // GET: Ticker/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -147,7 +147,7 @@ namespace OptionTracker.Controllers
             return View(ticker);
         }
 
-        // POST: Tickers/Delete/5
+        // POST: Ticker/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

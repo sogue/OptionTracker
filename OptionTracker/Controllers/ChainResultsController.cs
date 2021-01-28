@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using OptionTracker.Data;
 using OptionTracker.Models;
 using OptionTracker.Services;
@@ -44,12 +45,40 @@ namespace OptionTracker.Controllers
             var chainResult = await _context.ChainResults.Include(x=>x.OptionsResults.OrderByDescending(y=>y.OpenInterest))
                 .FirstOrDefaultAsync(m => m.Id == id);
 
+            var oldChainResult = await _context.ChainResults.Include(x => x.OptionsResults.OrderByDescending(y => y.OpenInterest))
+                .Where(m => m.Ticker == chainResult.Ticker && m.Id != id).OrderByDescending(y => y.Created).FirstOrDefaultAsync();
+
+            if (oldChainResult == null)
+            {
+                return NotFound();
+            }
+
             if (chainResult == null)
             {
                 return NotFound();
             }
 
-            return View(chainResult);
+            var viewModel = new ChainResultViewModel
+            {
+                Ticker = chainResult.Ticker,
+                Created = chainResult.Created,
+                TimeChange = chainResult.Created - oldChainResult.Created,
+
+                OptionsResults = chainResult.OptionsResults.Zip(oldChainResult.OptionsResults, (a, b) => new {a, b})
+                    .Select(both => new OptionResultViewModel
+                    {
+                        Id = both.a.Id,
+                        Description = both.a.Description,
+                        OpenInterest = both.a.OpenInterest,
+                        ClosePrice = both.a.ClosePrice,
+                        OpenInterestChange = both.a.OpenInterest - both.b.OpenInterest,
+                        ClosePriceChange = both.a.ClosePrice - both.b.ClosePrice
+                    })
+                    .ToList()
+            };
+
+
+            return View(viewModel);
         }
 
         // GET: ChainResults/Create

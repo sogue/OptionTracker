@@ -15,11 +15,8 @@ namespace OptionTracker.Data
         }
         public DbSet<ChainResult> ChainResults { get; set; }
         public DbSet<OptionResult> OptionResults { get; set; }
-
         public DbSet<OptionContract> OptionContracts { get; set; }
-
-        public DbSet<OptionTracker.Models.Watchlist> Watchlist { get; set; }
-
-        public DbSet<OptionTracker.Models.Ticker> Ticker { get; set; }
+        public DbSet<Watchlist> Watchlist { get; set; }
+        public DbSet<Ticker> Ticker { get; set; }
     }
 }

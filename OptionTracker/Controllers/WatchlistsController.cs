@@ -24,13 +24,13 @@ namespace OptionTracker.Controllers
             _apiService = apiService;
         }
 
-        // GET: Watchlists
+        // GET: Watchlist
         public async Task<IActionResult> Index()
         {
             return View(await _context.Watchlist.ToListAsync());
         }
 
-        // GET: Watchlists/Details/5
+        // GET: Watchlist/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -48,13 +48,13 @@ namespace OptionTracker.Controllers
             return View(watchlist);
         }
 
-        // GET: Watchlists/Create
+        // GET: Watchlist/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Watchlists/Create
+        // POST: Watchlist/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -63,8 +63,8 @@ namespace OptionTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                var allTickers =  _context.Ticker.AsQueryable().ToList();
-                watchlist.TickerList = allTickers;
+                var allTickers = _context.Ticker.Where(x=>true).ToListAsync();
+                watchlist.TickerList = allTickers.Result.Select(x=>x.Symbol).ToList();
                 _context.Add(watchlist);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -72,7 +72,7 @@ namespace OptionTracker.Controllers
             return View(watchlist);
         }
 
-        // GET: Watchlists/Edit/5
+        // GET: Watchlist/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -88,7 +88,7 @@ namespace OptionTracker.Controllers
             return View(watchlist);
         }
 
-        // POST: Watchlists/Edit/5
+        // POST: Watchlist/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -104,18 +104,21 @@ namespace OptionTracker.Controllers
             {
                 try
                 {
-                    var watched = await _context.Watchlist.FindAsync(id);
+                    var watched = await _context.Ticker.Where(y=>true).ToListAsync();
 
-                    foreach (var ticker in watched.TickerList)
+                    foreach (var ticker in watched)
                     {
                         var optionContracts = _apiService.GetContractsByTickerName(ticker.Symbol).ToList();
 
                         await _context.OptionContracts.AddRangeAsync(optionContracts);
                         var optionResults = _apiService.CreateResults(optionContracts);
 
-                        var chainResult = new ChainResult();
+                        var chainResult = new ChainResult
+                        {
+                            Ticker = ticker.Symbol,
 
-                        chainResult.OptionsResults = optionResults;
+                            OptionsResults = optionResults
+                        };
 
                         await _context.ChainResults.AddAsync(chainResult);
 
@@ -140,7 +143,7 @@ namespace OptionTracker.Controllers
             return View(watchlist);
         }
 
-        // GET: Watchlists/Delete/5
+        // GET: Watchlist/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -158,7 +161,7 @@ namespace OptionTracker.Controllers
             return View(watchlist);
         }
 
-        // POST: Watchlists/Delete/5
+        // POST: Watchlist/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
