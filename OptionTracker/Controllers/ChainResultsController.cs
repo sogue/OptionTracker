@@ -68,7 +68,7 @@ namespace OptionTracker.Controllers
                          ClosePriceChange = both.ClosePrice - both.ClosePrice
                      })
                      .ToList()
-                }
+                };
             }
             else
             {
