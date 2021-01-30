@@ -63,8 +63,8 @@ namespace OptionTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                var allTickers = _context.Ticker.Where(x=>true).ToListAsync();
-                watchlist.TickerList = allTickers.Result.Select(x=>x.Symbol).ToList();
+                var allTickers = _context.Ticker.Where(x => true).ToListAsync();
+                watchlist.TickerList = allTickers.Result.Select(x => x.Symbol).ToList();
                 _context.Add(watchlist);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -104,7 +104,7 @@ namespace OptionTracker.Controllers
             {
                 try
                 {
-                    var watched = await _context.Ticker.Where(y=>true).ToListAsync();
+                    var watched = await _context.Ticker.Where(y => true).ToListAsync();
 
                     foreach (var ticker in watched)
                     {

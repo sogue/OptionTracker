@@ -10,12 +10,12 @@ namespace OptionTracker.Models
         public int OpenInterest { get; set; }
         public int OpenInterestChange { get; set; }
         public decimal ClosePriceChange { get; set; }
-        [DisplayFormat(DataFormatString="{0:C}")]
+        [DisplayFormat(DataFormatString = "{0:C}")]
         [DataType(DataType.Currency)]
         [Display(Name = "Close Price")]
         public decimal ClosePrice { get; set; }
         [Display(Name = "Total Value")]
-        [DisplayFormat(DataFormatString="{0:C}")]
+        [DisplayFormat(DataFormatString = "{0:C}")]
         public decimal TotalValue => ClosePrice * OpenInterest * 100;
     }
 }

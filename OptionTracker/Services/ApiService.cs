@@ -18,10 +18,10 @@ namespace OptionTracker.Services
         public IEnumerable<OptionContract> GetContractsByTickerName(string ticker)
         {
             string url =
-                "https://api.tdameritrade.com/v1/marketdata/chains?apikey=" 
-                +_apiKey 
-                + "&symbol=" 
-                + ticker 
+                "https://api.tdameritrade.com/v1/marketdata/chains?apikey="
+                + _apiKey
+                + "&symbol="
+                + ticker
                 + "&contractType=CALL&range=OTM&optionType=S";
 
             HttpClient client = new HttpClient();

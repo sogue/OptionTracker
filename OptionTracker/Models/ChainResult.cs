@@ -13,5 +13,5 @@ namespace OptionTracker.Models
         public ICollection<OptionResult> OptionsResults { get; set; }
     }
 
-    
+
 }

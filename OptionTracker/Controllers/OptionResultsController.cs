@@ -15,7 +15,7 @@ namespace OptionTracker.Controllers
     public class OptionResultsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        
+
 
         public OptionResultsController(ApplicationDbContext context)
         {

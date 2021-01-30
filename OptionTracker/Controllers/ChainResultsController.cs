@@ -42,15 +42,54 @@ namespace OptionTracker.Controllers
                 return NotFound();
             }
 
-            var chainResult = await _context.ChainResults.Include(x=>x.OptionsResults.OrderByDescending(y=>y.OpenInterest))
+            var chainResult = await _context.ChainResults.Include(x => x.OptionsResults.OrderByDescending(y => y.OpenInterest))
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             var oldChainResult = await _context.ChainResults.Include(x => x.OptionsResults.OrderByDescending(y => y.OpenInterest))
-                .Where(m => m.Ticker == chainResult.Ticker && m.Id != id).OrderByDescending(y => y.Created).FirstOrDefaultAsync();
+                .Where(m => m.Ticker == chainResult.Ticker && m.Id != id && m.Created < chainResult.Created).OrderByDescending(y => y.Created).FirstOrDefaultAsync();
+
+            var viewModel = new ChainResultViewModel();
 
             if (oldChainResult == null)
             {
-                return NotFound();
+                viewModel = new ChainResultViewModel
+                {
+                    Ticker = chainResult.Ticker,
+                    Created = chainResult.Created,
+
+                    OptionsResults = chainResult.OptionsResults
+                     .Select(both => new OptionResultViewModel
+                     {
+                         Id = both.Id,
+                         Description = both.Description,
+                         OpenInterest = both.OpenInterest,
+                         ClosePrice = both.ClosePrice,
+                         OpenInterestChange = both.OpenInterest - both.OpenInterest,
+                         ClosePriceChange = both.ClosePrice - both.ClosePrice
+                     })
+                     .ToList()
+                }
+            }
+            else
+            {
+                viewModel = new ChainResultViewModel
+                {
+                    Ticker = chainResult.Ticker,
+                    Created = chainResult.Created,
+                    TimeChange = chainResult.Created - oldChainResult.Created,
+
+                    OptionsResults = chainResult.OptionsResults.Zip(oldChainResult.OptionsResults, (a, b) => new { a, b })
+                   .Select(both => new OptionResultViewModel
+                   {
+                       Id = both.a.Id,
+                       Description = both.a.Description,
+                       OpenInterest = both.a.OpenInterest,
+                       ClosePrice = both.a.ClosePrice,
+                       OpenInterestChange = both.a.OpenInterest - both.b.OpenInterest,
+                       ClosePriceChange = both.a.ClosePrice - both.b.ClosePrice
+                   })
+                   .ToList()
+                };
             }
 
             if (chainResult == null)
@@ -58,24 +97,7 @@ namespace OptionTracker.Controllers
                 return NotFound();
             }
 
-            var viewModel = new ChainResultViewModel
-            {
-                Ticker = chainResult.Ticker,
-                Created = chainResult.Created,
-                TimeChange = chainResult.Created - oldChainResult.Created,
 
-                OptionsResults = chainResult.OptionsResults.Zip(oldChainResult.OptionsResults, (a, b) => new {a, b})
-                    .Select(both => new OptionResultViewModel
-                    {
-                        Id = both.a.Id,
-                        Description = both.a.Description,
-                        OpenInterest = both.a.OpenInterest,
-                        ClosePrice = both.a.ClosePrice,
-                        OpenInterestChange = both.a.OpenInterest - both.b.OpenInterest,
-                        ClosePriceChange = both.a.ClosePrice - both.b.ClosePrice
-                    })
-                    .ToList()
-            };
 
 
             return View(viewModel);
@@ -103,7 +125,7 @@ namespace OptionTracker.Controllers
                 chainResult.OptionsResults = optionResults;
 
                 await _context.ChainResults.AddAsync(chainResult);
-                
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
