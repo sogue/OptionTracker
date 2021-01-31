@@ -28,15 +28,17 @@ namespace OptionTracker.Controllers
         }
 
         // GET: ChainResults
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var result =_context.OptionChain.GroupBy(x => x.OptionContract.Symbol).Select(group => new ChainResult
+            var result =_context.OptionChain.ToListAsync();
+
+            var s = result.Result.GroupBy(x => x.OptionContract.Symbol).Select(group => new ChainResult
             {
                 Ticker = group.Key,
                 OptionsResults = _apiService.CreateResults(group.Select(item => item.OptionContract).ToList())
-            }).ToListAsync();
+            }).ToList();
 
-            return View(await result);
+            return View(result);
         }
 
         // GET: ChainResults/Details/5
