@@ -30,7 +30,13 @@ namespace OptionTracker.Controllers
         // GET: ChainResults
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ChainResults.ToListAsync());
+            var result =_context.OptionChain.GroupBy(x => x.OptionContract.Symbol).Select(group => new ChainResult
+            {
+                Ticker = group.Key,
+                OptionsResults = _apiService.CreateResults(group.Select(item => item.OptionContract).ToList())
+            }).ToListAsync();
+
+            return View(await result);
         }
 
         // GET: ChainResults/Details/5
