@@ -34,14 +34,5 @@ namespace OptionTracker.Migrations
                     table.PrimaryKey("PK_OptionChainRaw", x => x.Id);
                 });
         }
-
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "OptionChain");
-
-            migrationBuilder.DropTable(
-                name: "OptionChainRaw");
-        }
     }
 }
