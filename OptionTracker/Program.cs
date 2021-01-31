@@ -16,7 +16,7 @@ namespace OptionTracker
     {
         public static async Task Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build();
             IHost host = CreateHostBuilder(args).Build();
             using IServiceScope scope = host.Services.CreateScope();
             IServiceProvider services = scope.ServiceProvider;
