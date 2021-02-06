@@ -30,7 +30,7 @@ namespace OptionTracker.Controllers
         // GET: ChainResults
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ChainResults.ToListAsync());
+            return View(await _context.ChainResults.OrderByDescending(x=>x.Created).ToListAsync());
         }
 
         // GET: ChainResults/Details/5
