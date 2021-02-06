@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
 
 namespace OptionTracker.Models
 {
@@ -7,7 +8,7 @@ namespace OptionTracker.Models
         public int Id { get; set; }
 
         [Column(TypeName = "jsonb")]
-        public string Data { get; set; }
+        public JsonDocument Data { get; set; }
 
     }
 }

@@ -14,9 +14,24 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="OptionContract" class="control-label"></label>
-                <input asp-for="OptionContract" class="form-control" />
-                <span asp-validation-for="OptionContract" class="text-danger"></span>
+                <label asp-for="Symbol" class="control-label"></label>
+                <input asp-for="Symbol" class="form-control" />
+                <span asp-validation-for="Symbol" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UnderlyingPrice" class="control-label"></label>
+                <input asp-for="UnderlyingPrice" class="form-control" />
+                <span asp-validation-for="UnderlyingPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Created" class="control-label"></label>
+                <input asp-for="Created" class="form-control" />
+                <span asp-validation-for="Created" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OptionContracts" class="control-label"></label>
+                <input asp-for="OptionContracts" class="form-control" />
+                <span asp-validation-for="OptionContracts" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

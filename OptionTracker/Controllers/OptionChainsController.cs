@@ -22,7 +22,7 @@ namespace OptionTracker.Controllers
         // GET: OptionChains
         public async Task<IActionResult> Index()
         {
-            return View(await _context.OptionChain.Take(1000).ToListAsync());
+            return View(await _context.OptionChain.ToListAsync());
         }
 
         // GET: OptionChains/Details/5
@@ -54,7 +54,7 @@ namespace OptionTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,OptionContract")] OptionChain optionChain)
+        public async Task<IActionResult> Create([Bind("Id,Symbol,UnderlyingPrice,Created,OptionContracts")] OptionChain optionChain)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace OptionTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OptionContract")] OptionChain optionChain)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Symbol,UnderlyingPrice,Created,OptionContracts")] OptionChain optionChain)
         {
             if (id != optionChain.Id)
             {
