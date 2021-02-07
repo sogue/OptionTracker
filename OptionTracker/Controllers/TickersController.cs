@@ -28,21 +28,48 @@ namespace OptionTracker.Controllers
         }
 
         // GET: Ticker/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet("Tickers/Details/{symbol}")]
+        public async Task<IActionResult> Details(string symbol)
         {
-            if (id == null)
+            if (symbol == null)
             {
                 return NotFound();
             }
 
             var ticker = await _context.Ticker
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Symbol.Equals(symbol.ToUpper()));
+
             if (ticker == null)
             {
                 return NotFound();
             }
 
-            return View(ticker);
+            var chainRaw = await _context.ChainRaw.Where(x => x.Chain.Symbol.Equals(ticker.Symbol))
+                .OrderByDescending(x => x.Chain.Created)
+                .FirstAsync();
+            var optionContract = chainRaw.Chain.OptionContracts.OrderByDescending(x => x.OpenInterest)
+                .Take(20).ToList();
+
+            var viewModel = new ChainResultViewModel();
+
+                viewModel = new ChainResultViewModel
+                {
+                    Ticker = chainRaw.Chain.Symbol,
+                    Created = chainRaw.Chain.Created,
+
+                    OptionsResults = optionContract
+                     .Select(both => new OptionResultViewModel
+                     {
+                         Description = both.Description,
+                         OpenInterest = both.OpenInterest,
+                         ClosePrice = both.ClosePrice,
+                         OpenInterestChange = both.OpenInterest,
+                         ClosePriceChange = both.ClosePrice
+                     })
+                     .ToList()
+                };
+
+            return View(viewModel);
         }
 
         // GET: Ticker/Create

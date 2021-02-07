@@ -1,4 +1,4 @@
-﻿@model OptionTracker.Models.Ticker
+﻿@model ChainResultViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -9,16 +9,68 @@
 <div>
     <h4>Ticker</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Symbol)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Symbol)
-        </dd>
-    </dl>
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Ticker)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Ticker)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Created)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Created)
+                @Html.DisplayFor(model => model.TimeChange)
+            </dd>
+        </dl>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().OpenInterest)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().ClosePrice)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().TotalValue)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OptionsResults)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OpenInterest)
+                            <span>(@Html.DisplayFor(modelItem => item.OpenInterestChange))</span>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ClosePrice)
+                            <span>(@Html.DisplayFor(modelItem => item.ClosePriceChange))</span>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalValue)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

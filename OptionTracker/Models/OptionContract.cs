@@ -1,14 +1,7 @@
-﻿#nullable enable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace OptionTracker.Models
 {
     public class OptionContract
     {
-        public int Id { get; set; }
         public string PutCall { get; set; }
         public string Symbol { get; set; }
         public string Description { get; set; }

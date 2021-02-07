@@ -1,5 +1,3 @@
-using System;
-
 namespace OptionTracker.Models
 {
     public class ErrorViewModel
