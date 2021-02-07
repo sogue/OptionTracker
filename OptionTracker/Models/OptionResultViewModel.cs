@@ -4,7 +4,7 @@ namespace OptionTracker.Models
 {
     public class OptionResultViewModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Description { get; set; }
         [Display(Name = "Open Interest")]
         public int OpenInterest { get; set; }

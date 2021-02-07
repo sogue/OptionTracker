@@ -60,6 +60,7 @@ namespace OptionTracker.Controllers
                     OptionsResults = optionContract
                      .Select(both => new OptionResultViewModel
                      {
+                         Id = both.Symbol,
                          Description = both.Description,
                          OpenInterest = both.OpenInterest,
                          ClosePrice = both.ClosePrice,
@@ -95,19 +96,28 @@ namespace OptionTracker.Controllers
         }
 
         // GET: Ticker/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [HttpGet("Tickers/Edit/{id}")]
+        public async Task<IActionResult> Edit(string? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var ticker = await _context.Ticker.FindAsync(id);
-            if (ticker == null)
+            var sy = id.Split("_")[0];
+            var chainRaw = await _context.ChainRaw.Where(x => x.Chain.Symbol.Equals(sy))
+               .OrderByDescending(x => x.Chain.Created)
+               .FirstAsync();
+
+            var op = chainRaw.Chain.OptionContracts.Where(x=>x.Symbol.Equals(id))
+                .OrderByDescending(x => x.QuoteTimeInLong)
+                .First();
+
+            if (op == null)
             {
                 return NotFound();
             }
-            return View(ticker);
+            return View(op);
         }
 
         // POST: Ticker/Edit/5

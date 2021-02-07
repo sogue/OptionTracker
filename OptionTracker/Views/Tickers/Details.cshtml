@@ -4,11 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>Ticker</h4>
-    <hr />
     <div>
         <dl class="row">
             <dt class="col-sm-2">
@@ -62,8 +58,7 @@
                             @Html.DisplayFor(modelItem => item.TotalValue)
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Edit" asp-route-id="@item.Id">Details</a> |
                             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                         </td>
                     </tr>
