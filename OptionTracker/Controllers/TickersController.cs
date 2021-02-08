@@ -6,8 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using OptionTracker.Data;
 using OptionTracker.Models;
+using OptionTracker.Services;
 
 namespace OptionTracker.Controllers
 {
@@ -15,10 +18,14 @@ namespace OptionTracker.Controllers
     public class TickersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<TickersController> _logger;
+        private readonly IApiService _apiService;
 
-        public TickersController(ApplicationDbContext context)
+        public TickersController(ApplicationDbContext context, IApiService apiService, ILogger<TickersController> logger)
         {
             _context = context;
+            _apiService = apiService;
+            _logger = logger;
         }
 
         // GET: Ticker
@@ -29,13 +36,13 @@ namespace OptionTracker.Controllers
 
         // GET: Ticker/Details/5
         [HttpGet("Tickers/Details/{symbol}")]
-        public async Task<IActionResult> Details(string symbol)
+        [Route("Tickers/Details/{symbol}/{id}")]
+        public async Task<IActionResult> Details(string symbol, bool? id)
         {
             if (symbol == null)
             {
                 return NotFound();
             }
-
             var ticker = await _context.Ticker
                 .FirstOrDefaultAsync(m => m.Symbol.Equals(symbol.ToUpper()));
 
@@ -47,6 +54,7 @@ namespace OptionTracker.Controllers
             var chainRaw = await _context.ChainRaw.Where(x => x.Chain.Symbol.Equals(ticker.Symbol))
                 .OrderByDescending(x => x.Chain.Created)
                 .FirstAsync();
+
             var optionContract = chainRaw.Chain.OptionContracts.OrderByDescending(x => x.OpenInterest)
                 .Take(20).ToList();
 
@@ -70,6 +78,11 @@ namespace OptionTracker.Controllers
                      .ToList()
                 };
 
+                if (id.HasValue && id.Value)
+                {
+                    viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x=>x.TotalValue).ToList();
+                }
+
             return View(viewModel);
         }
 
@@ -88,8 +101,36 @@ namespace OptionTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(ticker);
-                await _context.SaveChangesAsync();
+                if (!_context.Ticker.Any(x => x.Symbol == ticker.Symbol))
+                {
+                    _context.Add(ticker);
+                    await _context.SaveChangesAsync();
+
+
+                    var y = await _apiService.GetContractsByTickerName(ticker.Symbol);
+
+                    var contracts =
+                        new ChainRaw
+                        {
+                            Chain = new Chain
+                            {
+                                Symbol = y.RootElement.GetProperty("symbol").GetString(),
+                                UnderlyingPrice = y.RootElement.GetProperty("underlyingPrice").GetDecimal(),
+                                OptionContracts = JsonConvert
+                                    .DeserializeObject<Dictionary<string, Dictionary<string, OptionContract[]>>>(
+                                        y.RootElement.GetProperty("callExpDateMap").ToString() ?? "")
+                                    .SelectMany(a => a.Value.Values)
+                                    .SelectMany(x => x).ToArray()
+                            }
+                        };
+
+                    _logger.LogWarning("Log - Poco Save Start:" + DateTime.Now);
+                    await _context.ChainRaw.AddRangeAsync(contracts);
+                    await _context.SaveChangesAsync();
+                    _logger.LogWarning("Log - Poco Save Done:" + DateTime.Now);
+
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             return View(ticker);
