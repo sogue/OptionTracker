@@ -14,7 +14,6 @@ using OptionTracker.Services;
 
 namespace OptionTracker.Controllers
 {
-    [Authorize]
     public class TickersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -37,7 +36,7 @@ namespace OptionTracker.Controllers
         // GET: Ticker/Details/5
         [HttpGet("Tickers/Details/{symbol}")]
         [Route("Tickers/Details/{symbol}/{id}")]
-        public async Task<IActionResult> Details(string symbol, bool? id)
+        public async Task<IActionResult> Details(string symbol, string? id)
         {
             if (symbol == null)
             {
@@ -49,6 +48,30 @@ namespace OptionTracker.Controllers
             if (ticker == null)
             {
                 return NotFound();
+            }
+            if (id != null && id.Equals("update"))
+            {
+                var y = await _apiService.GetContractsByTickerName(ticker.Symbol);
+
+            var contracts =
+                new ChainRaw
+                {
+                    Chain = new Chain
+                    {
+                        Symbol = y.RootElement.GetProperty("symbol").GetString(),
+                        UnderlyingPrice = y.RootElement.GetProperty("underlyingPrice").GetDecimal(),
+                        OptionContracts = JsonConvert
+                            .DeserializeObject<Dictionary<string, Dictionary<string, OptionContract[]>>>(
+                                y.RootElement.GetProperty("callExpDateMap").ToString() ?? "")
+                            .SelectMany(a => a.Value.Values)
+                            .SelectMany(x => x).ToArray()
+                    }
+                };
+
+            _logger.LogWarning("Log - Poco Save Start:" + DateTime.Now);
+            await _context.ChainRaw.AddRangeAsync(contracts);
+            await _context.SaveChangesAsync();
+            _logger.LogWarning("Log - Poco Save Done:" + DateTime.Now);
             }
 
             var chainRaw = await _context.ChainRaw.Where(x => x.Chain.Symbol.Equals(ticker.Symbol))
@@ -78,7 +101,7 @@ namespace OptionTracker.Controllers
                      .ToList()
                 };
 
-                if (id.HasValue && id.Value)
+                if (id != null && id.Equals("true"))
                 {
                     viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x=>x.TotalValue).ToList();
                 }
