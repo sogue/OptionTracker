@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,7 @@ using OptionTracker.Services;
 
 namespace OptionTracker.Controllers
 {
+    [Authorize]
     public class TickersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -104,7 +106,7 @@ namespace OptionTracker.Controllers
 
                     TimeChange = chainRaw.Chain.Created - oldChainRaw.Chain.Created,
 
-                    OptionsResults = chainRaw.Chain.OptionContracts.Zip(oldChainRaw.Chain.OptionContracts, (a, b) => new {a, b})
+                    OptionsResults = chainRaw.Chain.OptionContracts.OrderByDescending(x=>x.Symbol).Zip(oldChainRaw.Chain.OptionContracts.OrderByDescending(x => x.Symbol), (a, b) => new {a, b})
                         .Select(both => new OptionResultViewModel
                         {
                             Description = both.a.Description,
