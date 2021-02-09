@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -34,6 +35,28 @@ namespace OptionTracker.Controllers
             return View(await _context.Ticker.ToListAsync());
         }
 
+        // GET: Ticker/Details/5
+        [HttpGet("Tickers/TotalDetails/")]
+        [Route("Tickers/TotalDetails/{id}")]
+        public async Task<IActionResult> DetailsTotal(string? id)
+        {
+                var chainRaws = await _context.CompareRaw.ToListAsync();
+
+                
+
+            var result = chainRaws.OrderByDescending(x => x.OpenInterestChange).Take(50).ToList();
+
+            if (id != null && id.Equals("true"))
+                result = result.OrderByDescending(x => x.TotalValue).ToList();
+
+            if (id != null && id.Equals("oChange"))
+                result = result.OrderByDescending(x => x.OpenInterestChange).ToList();
+
+            if (id != null && id.Equals("cChange"))
+                result = result.OrderByDescending(x => x.ClosePriceChange).ToList();
+
+            return View(result);
+        }
         // GET: Ticker/Details/5
         [HttpGet("Tickers/Details/{symbol}")]
         [Route("Tickers/Details/{symbol}/{id}")]

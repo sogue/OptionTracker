@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace OptionTracker.Models
 {
     public class OptionResultViewModel
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Description { get; set; }
         [Display(Name = "Open Interest")]
         public int OpenInterest { get; set; }
@@ -17,5 +18,9 @@ namespace OptionTracker.Models
         [Display(Name = "Total Value")]
         [DisplayFormat(DataFormatString = "{0:C}")]
         public decimal TotalValue => ClosePrice * OpenInterest * 100;
+
+        public decimal Volatility { get; set; }
+        public decimal VolatilityChange { get; set; }
+        public DateTime CompareDate { get; set; }
     }
 }
