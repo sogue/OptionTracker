@@ -15,7 +15,7 @@
                 <a asp-controller="Tickers"
                    asp-action="Details"
                    asp-route-id="update">
-                   Update Contracts
+                    Update Contracts
                 </a>
             </dd>
             <dt class="col-sm-2">
@@ -28,35 +28,48 @@
         </dl>
         <table class="table">
             <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().Description)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().ClosePrice)
-                    </th>
-                    <th>
-                        <a asp-controller="Tickers"
-                           asp-action="Details"
-                           asp-route-id="false">
-                            @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().OpenInterest)
-                        </a>
-                    </th>
-                    <th>
-                        <a asp-controller="Tickers"
-                           asp-action="Details"
-                           asp-route-id="true">
-                            @Html.DisplayNameFor(model =>
-        model.OptionsResults.FirstOrDefault().TotalValue)
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().Description)
 
-                        </a>
-                    </th>
-                    <th></th>
-                </tr>
+
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().ClosePrice)
+
+                    <a asp-controller="Tickers"
+                       asp-action="Details"
+                       asp-route-id="cChange">
+                        (By Change)
+                    </a>
+                </th>
+                <th>
+                    <a asp-controller="Tickers"
+                       asp-action="Details"
+                       asp-route-id="false">
+                        @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().OpenInterest)
+                    </a>
+                    <a asp-controller="Tickers"
+                       asp-action="Details"
+                       asp-route-id="oChange">
+                        (By Change)
+                    </a>
+                </th>
+                <th>
+                    <a asp-controller="Tickers"
+                       asp-action="Details"
+                       asp-route-id="true">
+                        @Html.DisplayNameFor(model =>
+                            model.OptionsResults.FirstOrDefault().TotalValue)
+
+                    </a>
+                </th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.OptionsResults)
-                {
+            @foreach (var item in Model.OptionsResults)
+            {
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.Description)
@@ -76,7 +89,7 @@
                         <a asp-action="Edit" asp-route-id="@item.Id">Details</a>
                     </td>
                 </tr>
-                }
+            }
             </tbody>
         </table>
     </div>
