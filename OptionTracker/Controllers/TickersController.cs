@@ -118,7 +118,7 @@ namespace OptionTracker.Controllers
                         .ToList()
                 };
 
-            viewModel.OptionsResults = viewModel.OptionsResults.Take(20).OrderByDescending(x => x.OpenInterest).ToList();
+            viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.OpenInterest).Take(20).ToList();
 
             if (id != null && id.Equals("true"))
                 viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.TotalValue).ToList();
