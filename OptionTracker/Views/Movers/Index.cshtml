@@ -50,7 +50,13 @@
                     @Html.DisplayNameFor(model => model.VolatilityChange)
                 </a>
             </th>
-            <th></th>
+            <th>
+                <a asp-controller="Movers"
+                   asp-action="Index"
+                   asp-route-id="tValue">
+                    @Html.DisplayNameFor(model => model.TotalValue)
+                </a>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -76,6 +82,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.VolatilityChange)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalValue)
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>

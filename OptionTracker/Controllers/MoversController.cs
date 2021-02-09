@@ -40,6 +40,9 @@ namespace OptionTracker.Controllers
             if (id != null && id.Equals("oInterest"))
                 result = chainRaws.OrderByDescending(x => x.OpenInterest);
 
+            if (id != null && id.Equals("tValue"))
+                result = chainRaws.OrderByDescending(x => x.TotalValue);
+
             return View(result.Take(50).ToList());
         }
         // GET: Movers/Details/5
