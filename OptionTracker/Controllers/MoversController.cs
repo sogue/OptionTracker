@@ -26,7 +26,7 @@ namespace OptionTracker.Controllers
         {
             var chainRaws = await _context.CompareRaw.Where(x=>x.CompareDate.Date > DateTime.Today.Date.AddDays(-1)).ToListAsync();
 
-            var result = chainRaws.OrderByDescending(x => x.OpenInterestChange);
+            var result = chainRaws.OrderByDescending(x => x.OpenInterest);
 
             if (id != null && id.Equals("vChange"))
                 result = chainRaws.OrderByDescending(x => x.VolatilityChange);
@@ -34,8 +34,11 @@ namespace OptionTracker.Controllers
             if (id != null && id.Equals("oChange"))
                 result = chainRaws.OrderByDescending(x => x.OpenInterestChange);
 
-            if (id != null && id.Equals("cChange"))
+            if (id != null && id.Equals("pChange"))
                 result = chainRaws.OrderByDescending(x => x.ClosePriceChange);
+
+            if (id != null && id.Equals("oInterest"))
+                result = chainRaws.OrderByDescending(x => x.OpenInterest);
 
             return View(result.Take(50).ToList());
         }

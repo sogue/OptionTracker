@@ -16,22 +16,39 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OpenInterest)
+                <a asp-controller="Movers"
+                   asp-action="Index"
+                   asp-route-id="oInterest">
+                    @Html.DisplayNameFor(model => model.OpenInterest)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OpenInterestChange)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClosePriceChange)
+                <a asp-controller="Movers"
+                   asp-action="Index"
+                   asp-route-id="oChange">
+                    @Html.DisplayNameFor(model => model.OpenInterestChange)
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ClosePrice)
             </th>
             <th>
+                <a asp-controller="Movers"
+                   asp-action="Index"
+                   asp-route-id="pChange">
+                    @Html.DisplayNameFor(model => model.ClosePriceChange)
+                </a>
+            </th>
+
+            <th>
                 @Html.DisplayNameFor(model => model.Volatility)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.VolatilityChange)
+                <a asp-controller="Movers"
+                   asp-action="Index"
+                   asp-route-id="vChange">
+                    @Html.DisplayNameFor(model => model.VolatilityChange)
+                </a>
             </th>
             <th></th>
         </tr>
@@ -49,10 +66,10 @@
                 @Html.DisplayFor(modelItem => item.OpenInterestChange)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ClosePriceChange)
+                @Html.DisplayFor(modelItem => item.ClosePrice)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ClosePrice)
+                @Html.DisplayFor(modelItem => item.ClosePriceChange)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Volatility)
