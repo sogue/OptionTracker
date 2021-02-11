@@ -29,9 +29,18 @@ namespace OptionTracker.Controllers
         }
 
         // GET: Ticker
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Ticker.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;
+
+            var tickers = _context.Ticker.Select(x=> x);
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                tickers = tickers.Where(s => s.Symbol.Contains(searchString));
+            }
+            
+            return View(await tickers.AsNoTracking().ToListAsync());
         }
 
         // GET: Ticker/Details/5
