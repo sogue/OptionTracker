@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -11,6 +6,10 @@ using Newtonsoft.Json;
 using OptionTracker.Data;
 using OptionTracker.Models;
 using OptionTracker.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OptionTracker.Controllers
 {
@@ -40,9 +39,8 @@ namespace OptionTracker.Controllers
         [Route("Tickers/TotalDetails/{id}")]
         public async Task<IActionResult> DetailsTotal(string? id)
         {
-                var chainRaws = await _context.CompareRaw.ToListAsync();
+            var chainRaws = await _context.CompareRaw.ToListAsync();
 
-                
 
             var result = chainRaws.OrderByDescending(x => x.OpenInterestChange).Take(50).ToList();
 
@@ -57,6 +55,7 @@ namespace OptionTracker.Controllers
 
             return View(result);
         }
+
         // GET: Ticker/Details/5
         [HttpGet("Tickers/Details/{symbol}")]
         [Route("Tickers/Details/{symbol}/{id}")]
@@ -97,12 +96,12 @@ namespace OptionTracker.Controllers
                 .FirstAsync();
 
             var oldChainRaw = await _context.ChainRaw.Where(x =>
-                    x.Chain.Symbol.Equals(ticker.Symbol) &&  (chainRaw.Chain.Created - x.Chain.Created) > new TimeSpan(0,23,0,0,0) && chainRaw.Id != x.Id)
+                    x.Chain.Symbol.Equals(ticker.Symbol) &&
+                    chainRaw.Chain.Created - x.Chain.Created > new TimeSpan(0, 23, 0, 0, 0) && chainRaw.Id != x.Id)
                 .OrderByDescending(x => x.Chain.Created)
                 .FirstOrDefaultAsync();
-
             var viewModel = new ChainResultViewModel();
-
+            var listOp = new List<OptionResultViewModel>();
             if (oldChainRaw == null)
                 viewModel = new ChainResultViewModel
                 {
@@ -120,7 +119,27 @@ namespace OptionTracker.Controllers
                         })
                         .ToList()
                 };
-            else
+            if (oldChainRaw != null)
+            {
+                foreach (var a in chainRaw.Chain.OptionContracts)
+                {
+                    var b = oldChainRaw.Chain.OptionContracts.SingleOrDefault(x => x.Symbol == a.Symbol);
+
+                    if (b != null)
+                    {
+                        var s = new OptionResultViewModel
+                        {
+                            Description = a.Description,
+                            OpenInterest = a.OpenInterest,
+                            ClosePrice = a.ClosePrice,
+                            OpenInterestChange = a.OpenInterest - b.OpenInterest,
+                            ClosePriceChange = a.ClosePrice - b.ClosePrice
+                        };
+                        listOp.Add(s);
+                    }
+                }
+
+
                 viewModel = new ChainResultViewModel
                 {
                     Ticker = chainRaw.Chain.Symbol,
@@ -129,30 +148,23 @@ namespace OptionTracker.Controllers
 
                     TimeChange = chainRaw.Chain.Created - oldChainRaw.Chain.Created,
 
-                    OptionsResults = chainRaw.Chain.OptionContracts.OrderByDescending(x=>x.Symbol).Zip(oldChainRaw.Chain.OptionContracts.OrderByDescending(x => x.Symbol), (a, b) => new {a, b})
-                        .Select(both => new OptionResultViewModel
-                        {
-                            Description = both.a.Description,
-                            OpenInterest = both.a.OpenInterest,
-                            ClosePrice = both.a.ClosePrice,
-                            OpenInterestChange = both.a.OpenInterest - both.b.OpenInterest,
-                            ClosePriceChange = both.a.ClosePrice - both.b.ClosePrice
-                        })
-                        .ToList()
+                    OptionsResults = listOp
                 };
+            }
 
-            viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.OpenInterest).Take(20).ToList();
+            viewModel.OptionsResults =
+                viewModel.OptionsResults.OrderByDescending(x => x.OpenInterest).Take(20).ToList();
 
             if (id != null && id.Equals("true"))
                 viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.TotalValue).ToList();
 
             if (id != null && id.Equals("oChange"))
-                viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.OpenInterestChange).ToList();
+                viewModel.OptionsResults =
+                    viewModel.OptionsResults.OrderByDescending(x => x.OpenInterestChange).ToList();
 
             if (id != null && id.Equals("cChange"))
                 viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.ClosePriceChange).ToList();
 
-            
 
             return View(viewModel);
         }
@@ -242,7 +254,7 @@ namespace OptionTracker.Controllers
                     var defaultWatchlist = await _context.Watchlist.FirstOrDefaultAsync();
                     if (defaultWatchlist == null)
                     {
-                        var watchlist = new Watchlist {TickerList = new List<string>()};
+                        var watchlist = new Watchlist { TickerList = new List<string>() };
                         await _context.Watchlist.AddAsync(watchlist);
                         await _context.SaveChangesAsync();
                     }

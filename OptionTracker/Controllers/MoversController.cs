@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 using OptionTracker.Data;
 using OptionTracker.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OptionTracker.Controllers
 {
@@ -24,7 +21,7 @@ namespace OptionTracker.Controllers
         [Route("Movers/{id}")]
         public async Task<IActionResult> IndexAsync(string? id)
         {
-            var chainRaws = await _context.CompareRaw.Where(x=>x.CompareDate.Date > DateTime.Today.Date.AddDays(-1)).ToListAsync();
+            var chainRaws = await _context.CompareRaw.Where(x => x.CompareDate.Date > DateTime.Today.Date.AddDays(-1)).ToListAsync();
 
             var result = chainRaws.OrderByDescending(x => x.OpenInterest);
 
