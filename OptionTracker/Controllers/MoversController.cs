@@ -21,7 +21,7 @@ namespace OptionTracker.Controllers
         [Route("Movers/{id}")]
         public async Task<IActionResult> IndexAsync(string? id)
         {
-            var chainRaws = await _context.CompareRaw.Where(x => x.CompareDate.Date > DateTime.Today.Date.AddDays(-1)).ToListAsync();
+            var chainRaws = await _context.CompareRaw.Where(x => x.CompareDate.Date >= DateTime.Today.Date.AddDays(-1)).ToListAsync();
 
             var result = chainRaws.OrderByDescending(x => x.OpenInterest);
 
