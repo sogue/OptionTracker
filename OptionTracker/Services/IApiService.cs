@@ -8,6 +8,5 @@ namespace OptionTracker.Services
     public interface IApiService
     {
         Task<JsonDocument> GetContractsByTickerName(string ticker);
-        IList<OptionResult> CreateResults(IEnumerable<OptionContract> chainsByInterest);
     }
 }

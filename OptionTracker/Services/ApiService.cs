@@ -19,26 +19,14 @@ namespace OptionTracker.Services
                 + _apiKey
                 + "&symbol="
                 + ticker
-                + "&contractType=CALL&optionType=S";
+                + "&optionType=S";
 
             HttpClient client = new HttpClient();
 
             var response = client.GetFromJsonAsync<JsonDocument>(url);
+
             return response;
 
-        }
-
-        public IList<OptionResult> CreateResults(IEnumerable<OptionContract> chainsByInterest)
-        {
-            var optionResults = chainsByInterest
-                .Select(x => new OptionResult
-                {
-                    OpenInterest = x.OpenInterest,
-                    ClosePrice = x.ClosePrice,
-                    Description = x.Description
-                }).OrderBy(x => x.OpenInterest);
-
-            return optionResults.ToList();
         }
     }
 

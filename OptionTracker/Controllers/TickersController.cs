@@ -50,7 +50,6 @@ namespace OptionTracker.Controllers
         {
             var chainRaws = await _context.CompareRaw.ToListAsync();
 
-
             var result = chainRaws.OrderByDescending(x => x.OpenInterestChange).Take(50).ToList();
 
             if (id != null && id.Equals("true"))
@@ -66,8 +65,9 @@ namespace OptionTracker.Controllers
         }
 
         // GET: Ticker/Details/5
-        [HttpGet("Tickers/Details/{symbol}")]
-        [Route("Tickers/Details/{symbol}/{id}")]
+        // [ResponseCache(VaryByHeader = "", Location = ResponseCacheLocation.Client, Duration = 30)]
+        [HttpGet("Tickers/Details/{symbol}/{id}")]
+        [Route("Tickers/Details/{symbol}/")]
         public async Task<IActionResult> Details(string symbol, string? id)
         {
             if (symbol == null) return NotFound();
@@ -104,11 +104,29 @@ namespace OptionTracker.Controllers
                 .OrderByDescending(x => x.Chain.Created)
                 .FirstAsync();
 
-            var oldChainRaw = await _context.ChainRaw.Where(x =>
+            var oldChainRaw = new ChainRaw();
+
+            if (id != null && id.Equals("dWeek"))
+                oldChainRaw = await _context.ChainRaw.Where(x =>
+                        x.Chain.Symbol.Equals(ticker.Symbol) &&
+                        chainRaw.Chain.Created - x.Chain.Created > new TimeSpan(6, 23, 0, 0, 0) && chainRaw.Id != x.Id)
+                    .OrderByDescending(x => x.Chain.Created)
+                    .FirstOrDefaultAsync();
+
+            else if (id != null && id.Equals("threeD"))
+                oldChainRaw = await _context.ChainRaw.Where(x =>
+                        x.Chain.Symbol.Equals(ticker.Symbol) &&
+                        chainRaw.Chain.Created - x.Chain.Created > new TimeSpan(2, 23, 0, 0, 0) && chainRaw.Id != x.Id)
+                    .OrderByDescending(x => x.Chain.Created)
+                    .FirstOrDefaultAsync();
+
+            else 
+                oldChainRaw = await _context.ChainRaw.Where(x =>
                     x.Chain.Symbol.Equals(ticker.Symbol) &&
                     chainRaw.Chain.Created - x.Chain.Created > new TimeSpan(0, 23, 0, 0, 0) && chainRaw.Id != x.Id)
                 .OrderByDescending(x => x.Chain.Created)
                 .FirstOrDefaultAsync();
+
             var viewModel = new ChainResultViewModel();
             var listOp = new List<OptionResultViewModel>();
             if (oldChainRaw == null)
@@ -174,6 +192,10 @@ namespace OptionTracker.Controllers
             if (id != null && id.Equals("cChange"))
                 viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.ClosePriceChange).ToList();
 
+            if (id != null && ((id.Equals("dWeek")) || (id.Equals("threeD"))))
+                viewModel.OptionsResults =
+                    viewModel.OptionsResults.OrderByDescending(x => x.OpenInterestChange).ToList();
+
 
             return View(viewModel);
         }
@@ -197,7 +219,6 @@ namespace OptionTracker.Controllers
                 {
                     _context.Add(ticker);
                     await _context.SaveChangesAsync();
-
 
                     var y = await _apiService.GetContractsByTickerName(ticker.Symbol);
 
