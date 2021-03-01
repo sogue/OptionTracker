@@ -8,7 +8,9 @@ using OptionTracker.Models;
 using OptionTracker.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace OptionTracker.Controllers
@@ -139,6 +141,8 @@ namespace OptionTracker.Controllers
                         .Select(both => new OptionResultViewModel
                         {
                             Description = both.Description,
+                            
+                            ChartCode = CreateChartCode(both.Description),
                             OpenInterest = both.OpenInterest,
                             ClosePrice = both.ClosePrice,
                             OpenInterestChange = both.OpenInterest - both.OpenInterest,
@@ -158,6 +162,7 @@ namespace OptionTracker.Controllers
                         {
                             Description = a.Description,
                             OpenInterest = a.OpenInterest,
+                            ChartCode = CreateChartCode(a.Description),
                             ClosePrice = a.ClosePrice,
                             OpenInterestChange = a.OpenInterest - b.OpenInterest,
                             ClosePriceChange = a.ClosePrice - b.ClosePrice
@@ -198,6 +203,25 @@ namespace OptionTracker.Controllers
 
 
             return View(viewModel);
+        }
+
+        private string CreateChartCode(string bothDescription)
+        {
+            //.MA210618C350
+            var all = bothDescription.Split(" ");
+            // MA Mar 19 2021 300 Put
+            var sb = new StringBuilder();
+            DateTime parsedDate;
+            sb.Append(".");
+            sb.Append(all[0]);
+
+            var dt = (DateTime.TryParseExact(all[3]+ all[1]+ all[2], "yyyyMMMdd", null,
+                DateTimeStyles.None, out parsedDate));
+            sb.Append(parsedDate.ToString("yyMMdd"));
+            var cp = all[5].Equals("Call") ? "C" : "P";
+            sb.Append(cp);
+            sb.Append(all[4]);
+            return sb.ToString();
         }
 
         // GET: Ticker/Create
