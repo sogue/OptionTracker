@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace OptionTracker.Controllers
@@ -282,11 +281,8 @@ namespace OptionTracker.Controllers
             if (id == null) return NotFound();
 
             var sy = id.Split("_")[0];
-            Regex rgx = new Regex("[^a-zA-Z -]");
-            var str = rgx.Replace(id, "");
-            var sym = str.Remove(str.Length-1,1);
 
-            var chainRaw = await _context.ChainRaw.Where(x => x.Chain.Symbol.Equals(sym))
+            var chainRaw = await _context.ChainRaw.Where(x => x.Chain.Symbol.Equals(sy))
                 .OrderByDescending(x => x.Chain.Created)
                 .FirstAsync();
 
