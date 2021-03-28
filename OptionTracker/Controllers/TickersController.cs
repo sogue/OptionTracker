@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace OptionTracker.Controllers
@@ -136,12 +137,12 @@ namespace OptionTracker.Controllers
                 {
                     Ticker = chainRaw.Chain.Symbol,
                     Created = chainRaw.Chain.Created,
-
+                    
                     OptionsResults = chainRaw.Chain.OptionContracts
                         .Select(both => new OptionResultViewModel
                         {
                             Description = both.Description,
-                            
+                            Symbol = both.Symbol,
                             ChartCode = CreateChartCode(both.Description),
                             OpenInterest = both.OpenInterest,
                             ClosePrice = both.ClosePrice,
@@ -161,6 +162,7 @@ namespace OptionTracker.Controllers
                         var s = new OptionResultViewModel
                         {
                             Description = a.Description,
+                            Symbol = a.Symbol,
                             OpenInterest = a.OpenInterest,
                             ChartCode = CreateChartCode(a.Description),
                             ClosePrice = a.ClosePrice,
@@ -280,10 +282,15 @@ namespace OptionTracker.Controllers
             if (id == null) return NotFound();
 
             var sy = id.Split("_")[0];
-            var chainRaw = await _context.ChainRaw.Where(x => x.Chain.Symbol.Equals(sy))
+            Regex rgx = new Regex("[^a-zA-Z -]");
+            var str = rgx.Replace(id, "");
+            var sym = str.Remove(str.Length-1,1);
+
+            var chainRaw = await _context.ChainRaw.Where(x => x.Chain.Symbol.Equals(sym))
                 .OrderByDescending(x => x.Chain.Created)
                 .FirstAsync();
 
+            // "AMZN_121721P3700"
             var op = chainRaw.Chain.OptionContracts.Where(x => x.Symbol.Equals(id))
                 .OrderByDescending(x => x.QuoteTimeInLong)
                 .First();

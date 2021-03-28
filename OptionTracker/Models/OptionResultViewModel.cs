@@ -23,5 +23,6 @@ namespace OptionTracker.Models
         public decimal Volatility { get; set; }
         public decimal VolatilityChange { get; set; }
         public DateTime CompareDate { get; set; }
+        public string Symbol { get; set; }
     }
 }
