@@ -1,0 +1,29 @@
+﻿@model IEnumerable<DateChainViewModel>
+
+@{
+    ViewData["Title"] = @Model.FirstOrDefault()?.Symbol;
+}
+
+<h1>@Html.ViewData.Model.FirstOrDefault()?.Symbol</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <a asp-action="@item.Symbol" asp-route-id="@item.ExpDate">
+                    @Html.DisplayFor(modelItem => item.ExpDate)
+                </a> 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

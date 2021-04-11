@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace OptionTracker.Controllers
 {
-    [Authorize]
+    
     public class TickersController : Controller
     {
         private readonly ApplicationDbContext _context;

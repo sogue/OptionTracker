@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace OptionTracker.Models
 {
-    public class Watchlist
+    public class Ticker
     {
         public int Id { get; set; }
-        public ICollection<string> TickerList = new List<string>();
+        public string Symbol { get; set; }
+        public int MarketCap { get; set; }
+        public DateTime NextEarnings { get; set; }
     }
 }

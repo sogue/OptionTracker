@@ -1,0 +1,281 @@
+﻿@using System.Globalization
+@model IEnumerable<OptionTracker.Models.OptionContract>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ask)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Last)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mark)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HighPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LowPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OpenPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClosePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalVolume)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TradeDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TradeTimeInLong)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QuoteTimeInLong)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NetChange)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Volatility)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Delta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gamma)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Theta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vega)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rho)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OpenInterest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TheoreticalOptionValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TheoreticalVolatility)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OptionDeliverablesList)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StrikePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpirationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DaysToExpiration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpirationType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastTradingDay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Multiplier)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SettlementType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliverableNote)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsIndexOption)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PercentChange)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MarkChange)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MarkPercentChange)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NonStandard)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mini)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InTheMoney)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>  <a asp-controller="Tickers"
+   asp-action="Edit"
+   asp-route-id="@item.Symbol">
+    @Html.DisplayFor(modelItem => item.Description)
+</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Bid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ask)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Last)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Mark)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HighPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LowPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OpenPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClosePrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalVolume)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TradeDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TradeTimeInLong)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuoteTimeInLong)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NetChange)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Volatility)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Delta)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gamma)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Theta)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vega)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rho)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OpenInterest)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TheoreticalOptionValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TheoreticalVolatility)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OptionDeliverablesList)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StrikePrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExpirationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DaysToExpiration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExpirationType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastTradingDay)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Multiplier)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SettlementType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeliverableNote)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsIndexOption)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PercentChange)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MarkChange)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MarkPercentChange)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NonStandard)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Mini)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InTheMoney)
+                </td>
+                <td>
+                    @{
+                        var parms = new Dictionary<string, string>
+                        {
+                            { "s", item.Symbol }
+                        };
+                    }
+
+                    <a asp-controller="Tickers"
+                       asp-action="Edit"
+                       asp-route-id="@item.Symbol"></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
