@@ -284,9 +284,9 @@ namespace OptionTracker.Controllers
 
             var sy = id.Split("_")[0];
 
-            var chainRaw = await _context.ChainRaw.Where(x => x.Chain.Symbol.Equals(sy))
+            var chainRaw = _context.ChainRaw.AsNoTracking().Where(x => x.Chain.Symbol.Equals(sy))
                 .OrderByDescending(x => x.Chain.Created)
-                .FirstAsync();
+                .First();
 
             // "AMZN_121721P3700"
             var op = chainRaw.Chain.OptionContracts.Where(x => x.Symbol.Equals(id))
