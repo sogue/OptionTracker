@@ -6,6 +6,7 @@ namespace OptionTracker.Models
     public class OptionResultViewModel
     {
         public int Id { get; set; }
+        public int ChainResultViewModelId { get; set; }
         public string Description { get; set; }
         public string ChartCode { get; set; }
         [Display(Name = "Open Interest")]

@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -6,16 +11,9 @@ using Newtonsoft.Json;
 using OptionTracker.Data;
 using OptionTracker.Models;
 using OptionTracker.Services;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OptionTracker.Controllers
 {
-    
     public class TickersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -35,13 +33,10 @@ namespace OptionTracker.Controllers
         {
             ViewData["CurrentFilter"] = searchString;
 
-            var tickers = _context.Ticker.Select(x=> x);
+            var tickers = _context.Ticker.Select(x => x);
 
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                tickers = tickers.Where(s => s.Symbol.Contains(searchString));
-            }
-            
+            if (!string.IsNullOrEmpty(searchString)) tickers = tickers.Where(s => s.Symbol.Contains(searchString));
+
             return View(await tickers.AsNoTracking().ToListAsync());
         }
 
@@ -102,6 +97,43 @@ namespace OptionTracker.Controllers
                 _logger.LogWarning("Log - Poco Save Done:" + DateTime.Now);
             }
 
+            var viewModels = await _context.ComparedChains.Include(s=>s.OptionsResults).Where(x => x.Ticker.Equals(symbol)).ToListAsync();
+
+
+            var viewModel = id != null && id.Equals("dWeek")
+                                ? viewModels.FirstOrDefault(x => x.TimeChange > new TimeSpan(6, 23, 0, 0, 0))
+                                : id != null && id.Equals("3d")
+                                    ? viewModels.FirstOrDefault(x =>
+                                        x.TimeChange > new TimeSpan(2, 23, 0, 0, 0) &&
+                                        x.TimeChange < new TimeSpan(6, 23, 0, 0, 0))
+                                    : viewModels.FirstOrDefault(x => x.TimeChange < new TimeSpan(1, 23, 0, 0, 0)) 
+                ;
+
+            if (viewModel == null)
+            {
+                viewModel = await CreateChainResultViewModel(id, ticker);
+            }
+
+            if (id != null && id.Equals("true"))
+                viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.TotalValue).ToList();
+
+            if (id != null && id.Equals("oChange"))
+                viewModel.OptionsResults =
+                    viewModel.OptionsResults.OrderByDescending(x => x.OpenInterestChange).ToList();
+
+            if (id != null && id.Equals("cChange"))
+                viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.ClosePriceChange).ToList();
+
+            if (id != null && (id.Equals("dWeek") || id.Equals("threeD")))
+                viewModel.OptionsResults =
+                    viewModel.OptionsResults.OrderByDescending(x => x.OpenInterestChange).ToList();
+
+
+            return View(viewModel);
+        }
+
+        private async Task<ChainResultViewModel> CreateChainResultViewModel(string id, Ticker ticker)
+        {
             var chainRaw = await _context.ChainRaw.Where(x => x.Chain.Symbol.Equals(ticker.Symbol))
                 .OrderByDescending(x => x.Chain.Created)
                 .FirstAsync();
@@ -122,12 +154,12 @@ namespace OptionTracker.Controllers
                     .OrderByDescending(x => x.Chain.Created)
                     .FirstOrDefaultAsync();
 
-            else 
+            else
                 oldChainRaw = await _context.ChainRaw.Where(x =>
-                    x.Chain.Symbol.Equals(ticker.Symbol) &&
-                    chainRaw.Chain.Created - x.Chain.Created > new TimeSpan(0, 23, 0, 0, 0) && chainRaw.Id != x.Id)
-                .OrderByDescending(x => x.Chain.Created)
-                .FirstOrDefaultAsync();
+                        x.Chain.Symbol.Equals(ticker.Symbol) &&
+                        chainRaw.Chain.Created - x.Chain.Created > new TimeSpan(0, 23, 0, 0, 0) && chainRaw.Id != x.Id)
+                    .OrderByDescending(x => x.Chain.Created)
+                    .FirstOrDefaultAsync();
 
             var viewModel = new ChainResultViewModel();
             var listOp = new List<OptionResultViewModel>();
@@ -138,7 +170,7 @@ namespace OptionTracker.Controllers
                     MarketCap = ticker.MarketCap,
                     ClosePrice = ticker.ClosePrice,
                     Created = chainRaw.Chain.Created,
-                    
+
                     OptionsResults = chainRaw.Chain.OptionContracts
                         .Select(both => new OptionResultViewModel
                         {
@@ -189,23 +221,7 @@ namespace OptionTracker.Controllers
 
             viewModel.OptionsResults =
                 viewModel.OptionsResults.OrderByDescending(x => x.OpenInterest).Take(50).ToList();
-
-            if (id != null && id.Equals("true"))
-                viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.TotalValue).ToList();
-
-            if (id != null && id.Equals("oChange"))
-                viewModel.OptionsResults =
-                    viewModel.OptionsResults.OrderByDescending(x => x.OpenInterestChange).ToList();
-
-            if (id != null && id.Equals("cChange"))
-                viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.ClosePriceChange).ToList();
-
-            if (id != null && ((id.Equals("dWeek")) || (id.Equals("threeD"))))
-                viewModel.OptionsResults =
-                    viewModel.OptionsResults.OrderByDescending(x => x.OpenInterestChange).ToList();
-
-
-            return View(viewModel);
+            return viewModel;
         }
 
         private string CreateChartCode(string bothDescription)
@@ -218,8 +234,8 @@ namespace OptionTracker.Controllers
             sb.Append(".");
             sb.Append(all[0]);
 
-            var dt = (DateTime.TryParseExact(all[3]+ all[1]+ all[2], "yyyyMMMdd", null,
-                DateTimeStyles.None, out parsedDate));
+            var dt = DateTime.TryParseExact(all[3] + all[1] + all[2], "yyyyMMMdd", null,
+                DateTimeStyles.None, out parsedDate);
             sb.Append(parsedDate.ToString("yyMMdd"));
             var cp = all[5].Equals("Call") ? "C" : "P";
             sb.Append(cp);
@@ -313,7 +329,7 @@ namespace OptionTracker.Controllers
                     var defaultWatchlist = await _context.Watchlist.FirstOrDefaultAsync();
                     if (defaultWatchlist == null)
                     {
-                        var watchlist = new Watchlist { TickerList = new List<string>() };
+                        var watchlist = new Watchlist {TickerList = new List<string>()};
                         await _context.Watchlist.AddAsync(watchlist);
                         await _context.SaveChangesAsync();
                     }

@@ -17,6 +17,8 @@ namespace OptionTracker.Data
         public DbSet<ChainRaw> ChainRaw { get; set; }
         public DbSet<OptionResultViewModel> CompareRaw { get; set; }
         public DbSet<OptionTracker.Models.DateChain> DateChain { get; set; }
+        public DbSet<ChainResultViewModel> ComparedChains { get; set; }
+        
 
     }
 }
