@@ -179,8 +179,8 @@ namespace OptionTracker.Controllers
                 {
                     Ticker = chainRaw.Chain.Symbol,
                     Created = chainRaw.Chain.Created,
-
-
+                    MarketCap = ticker.MarketCap,
+                    ClosePrice = ticker.ClosePrice,
                     TimeChange = chainRaw.Chain.Created - oldChainRaw.Chain.Created,
 
                     OptionsResults = listOp
