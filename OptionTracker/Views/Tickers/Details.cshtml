@@ -1,7 +1,7 @@
 ﻿@model ChainResultViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = @Model.Ticker;
 }
 
 <div>
@@ -12,11 +12,27 @@
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Ticker)
+                <a asp-controller="DateChains"
+                   asp-action="@Model.Ticker">
+                    Date Chains
+                </a>
                 <a asp-controller="Tickers"
                    asp-action="Details"
                    asp-route-id="update">
                     Update Contracts
                 </a>
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.MarketCap)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.MarketCap)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ClosePrice)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ClosePrice)
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Created)

@@ -135,6 +135,8 @@ namespace OptionTracker.Controllers
                 viewModel = new ChainResultViewModel
                 {
                     Ticker = chainRaw.Chain.Symbol,
+                    MarketCap = ticker.MarketCap,
+                    ClosePrice = ticker.ClosePrice,
                     Created = chainRaw.Chain.Created,
                     
                     OptionsResults = chainRaw.Chain.OptionContracts
@@ -186,7 +188,7 @@ namespace OptionTracker.Controllers
             }
 
             viewModel.OptionsResults =
-                viewModel.OptionsResults.OrderByDescending(x => x.OpenInterest).Take(20).ToList();
+                viewModel.OptionsResults.OrderByDescending(x => x.OpenInterest).Take(50).ToList();
 
             if (id != null && id.Equals("true"))
                 viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.TotalValue).ToList();

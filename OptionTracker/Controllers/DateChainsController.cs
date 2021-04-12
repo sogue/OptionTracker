@@ -75,8 +75,9 @@ namespace OptionTracker.Controllers
                     });
             }
 
-            var rView = list.First(x => x.ExpDate.Equals(date)).OptionContracts ?? new List<OptionContract>();
+            var rView = list.First(x => x.ExpDate.Equals(date)).OptionContracts.OrderByDescending(x=>x.OpenInterest).ToList() ?? new List<OptionContract>();
            
+
             return View(rView);
         }
 
