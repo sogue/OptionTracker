@@ -8,19 +8,16 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using OptionTracker.Data;
 using OptionTracker.Models;
-using OptionTracker.Services;
 
 namespace OptionTracker.Controllers
 {
     public class DateChainsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IApiService _apiService;
 
-        public DateChainsController(ApplicationDbContext context, IApiService apiService)
+        public DateChainsController(ApplicationDbContext context)
         {
             _context = context;
-            _apiService = apiService;
         }
 
         // GET: DateChains
@@ -29,13 +26,6 @@ namespace OptionTracker.Controllers
         public async Task<IActionResult> Index(string? ticker)
         {
             var result = await _context.OptionChainRaw.FirstOrDefaultAsync(x => x.Data.RootElement.GetProperty("symbol").GetString().Equals(ticker));
-
-            if (result == null)
-            {
-                result = new OptionChainRaw()
-                    {Data = await _apiService.GetContractsByTickerName(ticker)
-                    };
-            }
 
             var dates = JsonConvert
                 .DeserializeObject<Dictionary<string, Dictionary<string, OptionContract[]>>>(

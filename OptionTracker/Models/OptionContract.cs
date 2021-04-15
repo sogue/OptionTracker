@@ -2,8 +2,6 @@ namespace OptionTracker.Models
 {
     public class OptionContract
     {
-        public int Id { get; set; }
-        public int HistoricalOptionContractId { get; set; }
         public string PutCall { get; set; }
         public string Symbol { get; set; }
         public string Description { get; set; }
