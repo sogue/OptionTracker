@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -25,25 +26,22 @@ namespace OptionTracker.Controllers
         [Route("DateChains/{ticker}")]
         public async Task<IActionResult> Index(string? ticker)
         {
-            var result = await _context.OptionChainRaw.FirstOrDefaultAsync(x => x.Data.RootElement.GetProperty("symbol").GetString().Equals(ticker));
+            var chainRaw = await _context.OptionChainRaw.Where(x =>
+                    x.Data.RootElement.GetProperty("symbol").GetString() == ticker)
+                .OrderByDescending(x => x.Id).FirstOrDefaultAsync();
+
 
             var dates = JsonConvert
                 .DeserializeObject<Dictionary<string, Dictionary<string, OptionContract[]>>>(
-                    result.Data.RootElement.GetProperty("callExpDateMap").ToString() ?? "");
+                    chainRaw.Data.RootElement.GetProperty("callExpDateMap").ToString() ?? "");
 
-   
-            var list = new List<DateChainViewModel>();
-            foreach (var dat in dates)
+
+            var list = dates.Select(dat => new DateChainViewModel
             {
-                list.Add(
-                    new DateChainViewModel()
-                    {
-                        Symbol = ticker,
-                        ExpDate = dat.Key.Split(":").First(),
-                        Strikes = dat.Value.SelectMany(x => x.Value).Select(x => x.StrikePrice).ToArray()
+                Symbol = ticker, ExpDate = dat.Key.Split(":").First(),
+                Strikes = dat.Value.SelectMany(x => x.Value).Select(x => x.StrikePrice).ToArray()
+            }).ToList();
 
-                    });
-            }
             return View(list);
         }
 
