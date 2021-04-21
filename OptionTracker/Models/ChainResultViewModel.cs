@@ -9,7 +9,7 @@ namespace OptionTracker.Models
         public int Id { get; set; }
         public string Ticker { get; set; }
         public DateTime Created { get; set; }
-        
+
         [DisplayFormat(DataFormatString = "{0:C}")]
         [DataType(DataType.Currency)]
         [Display(Name = "Close Price")]

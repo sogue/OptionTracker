@@ -84,6 +84,13 @@
                 <th>
                     <a asp-controller="Tickers"
                        asp-action="Details"
+                       asp-route-id="volume">
+                        @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().Volume)
+                    </a>
+                </th>
+                <th>
+                    <a asp-controller="Tickers"
+                       asp-action="Details"
                        asp-route-id="true">
                         @Html.DisplayNameFor(model =>
                             model.OptionsResults.FirstOrDefault().TotalValue)
@@ -108,6 +115,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.OpenInterest)
                         <span>(@Html.DisplayFor(modelItem => item.OpenInterestChange))</span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Volume)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.TotalValue)
