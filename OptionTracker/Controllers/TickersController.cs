@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using OptionTracker.Data;
 using OptionTracker.Models;
 using OptionTracker.Services;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace OptionTracker.Controllers
 {
@@ -33,9 +34,9 @@ namespace OptionTracker.Controllers
         {
             ViewData["CurrentFilter"] = searchString;
 
-            var tickers =  _context.Ticker.Select(x => x).AsNoTracking().AsEnumerable().OrderBy(x=>x.Symbol).ToList();
+            var tickers = _context.Ticker.Select(x => x).OrderBy(x => x.Symbol).AsNoTracking().ToList();
 
-            if (!string.IsNullOrEmpty(searchString)) tickers = tickers.Where(s => s.Symbol.Contains(searchString)).ToList();
+            if (!string.IsNullOrEmpty(searchString)) tickers = tickers.Where(s => s.Symbol.Contains(searchString.ToUpper())).ToList();
 
             return View(tickers);
         }
@@ -76,32 +77,52 @@ namespace OptionTracker.Controllers
             {
                 var y = await _apiService.GetContractsByTickerName(ticker.Symbol);
 
-                var contracts =
-                    new ChainRaw
+
+                if (y  != null)
+                {
+                    var optionChainRaw = new OptionChainRaw
                     {
-                        Chain = new Chain
-                        {
-                            Symbol = y.RootElement.GetProperty("symbol").GetString(),
-                            UnderlyingPrice = y.RootElement.GetProperty("underlyingPrice").GetDecimal(),
-                            OptionContracts = JsonConvert
-                                .DeserializeObject<Dictionary<string, Dictionary<string, OptionContract[]>>>(
-                                    y.RootElement.GetProperty("callExpDateMap").ToString() ?? "")
-                                .SelectMany(a => a.Value.Values)
-                                .SelectMany(x => x).ToArray()
-                        }
+                        Data = y
                     };
 
-                _logger.LogWarning("Log - Poco Save Start:" + DateTime.Now);
-                await _context.ChainRaw.AddRangeAsync(contracts);
-                await _context.SaveChangesAsync();
-                _logger.LogWarning("Log - Poco Save Done:" + DateTime.Now);
+                    _logger.LogWarning("Log - Raw Save Start:" + DateTime.Now);
+                    await _context.OptionChainRaw.AddAsync(optionChainRaw);
+                    await _context.SaveChangesAsync();
+                    _logger.LogWarning("Log - Raw Save Done:" + DateTime.Now);
+                }
             }
 
-            var chainRaw = await _context.OptionChainRaw.Where(x =>
-                    x.Data.RootElement.GetProperty("symbol").GetString().Equals(ticker.Symbol))
-                .OrderByDescending(x=>x.Id).FirstOrDefaultAsync();
+            var chainRaw = new OptionChainRaw();
 
-           
+            try
+            {
+                chainRaw = await _context.OptionChainRaw.Where(x =>
+                        x.Data.RootElement.GetProperty("symbol").GetString() == ticker.Symbol)
+                    .OrderByDescending(x => x.Id).FirstOrDefaultAsync();
+            }
+            catch (Exception e)
+            {
+                var y = await _apiService.GetContractsByTickerName(ticker.Symbol);
+
+
+                if (y != null)
+                {
+                    var optionChainRaw = new OptionChainRaw
+                    {
+                        Data = y
+                    };
+
+                    _logger.LogWarning("Log - Raw Save Start:" + DateTime.Now);
+                    await _context.OptionChainRaw.AddAsync(optionChainRaw);
+                    await _context.SaveChangesAsync();
+                    _logger.LogWarning("Log - Raw Save Done:" + DateTime.Now);
+
+                    chainRaw = optionChainRaw;
+                }
+
+            }
+
+
             var s = JsonConvert
                 .DeserializeObject<Dictionary<string, Dictionary<string, OptionContract[]>>>(
                     chainRaw.Data.RootElement.GetProperty("callExpDateMap").ToString() ?? "")
@@ -110,62 +131,69 @@ namespace OptionTracker.Controllers
 
             var dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
             var dtDateTime = dt.AddMilliseconds(s[0].QuoteTimeInLong.GetValueOrDefault()).ToLocalTime();
-            var viewModelold = new ChainResultViewModel
-                {
-                    Ticker = ticker.Symbol,
-                    MarketCap = ticker.MarketCap,
-                    ClosePrice = ticker.ClosePrice,
-                    Created = dtDateTime,
+            var viewModel = new ChainResultViewModel
+            {
+                Ticker = ticker.Symbol,
+                MarketCap = ticker.MarketCap,
+                ClosePrice = ticker.ClosePrice,
+                Created = dtDateTime,
 
-                    OptionsResults = s
+                OptionsResults = s
                         .Select(both => new OptionResultViewModel
                         {
                             Description = both.Description,
                             Symbol = both.Symbol,
                             ChartCode = CreateChartCode(both.Description),
                             OpenInterest = both.OpenInterest,
+                            Volume = both.TotalVolume,
                             ClosePrice = both.ClosePrice,
                             OpenInterestChange = both.OpenInterest - both.OpenInterest,
                             ClosePriceChange = both.ClosePrice - both.ClosePrice
                         })
                         .ToList()
-                };
+            };
 
-           // var viewModels = await _context.ComparedChains.Include(s=>s.OptionsResults).Where(x => x.Ticker.Equals(symbol)).ToListAsync();
+            // var viewModels = await _context.ComparedChains.Include(s=>s.OptionsResults).Where(x => x.Ticker.Equals(symbol)).ToListAsync();
 
 
-          //  var viewModel = id != null && id.Equals("dWeek")
-                //                ? viewModels.FirstOrDefault(x => x.TimeChange > new TimeSpan(6, 23, 0, 0, 0))
-                //                : id != null && id.Equals("3d")
-                //                    ? viewModels.FirstOrDefault(x =>
-                //                        x.TimeChange > new TimeSpan(2, 23, 0, 0, 0) &&
-                //                        x.TimeChange < new TimeSpan(6, 23, 0, 0, 0))
-                //                    : viewModels.FirstOrDefault(x => x.TimeChange < new TimeSpan(1, 23, 0, 0, 0)) 
-                //;
+            //  var viewModel = id != null && id.Equals("dWeek")
+            //                ? viewModels.FirstOrDefault(x => x.TimeChange > new TimeSpan(6, 23, 0, 0, 0))
+            //                : id != null && id.Equals("3d")
+            //                    ? viewModels.FirstOrDefault(x =>
+            //                        x.TimeChange > new TimeSpan(2, 23, 0, 0, 0) &&
+            //                        x.TimeChange < new TimeSpan(6, 23, 0, 0, 0))
+            //                    : viewModels.FirstOrDefault(x => x.TimeChange < new TimeSpan(1, 23, 0, 0, 0)) 
+            //;
 
             //if (viewModel == null)
             //{
             //   // viewModel = await CreateChainResultViewModel(id, ticker);
             //}
+            if (id == null)
+                viewModel.OptionsResults =
+                viewModel.OptionsResults.OrderByDescending(x => x.OpenInterest).Take(50).ToList();
 
-            //if (id != null && id.Equals("true"))
-            //    viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.TotalValue).ToList();
+            if (id != null && id.Equals("true"))
+                viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.TotalValue).ToList();
 
-            //if (id != null && id.Equals("oChange"))
-            //    viewModel.OptionsResults =
-            //        viewModel.OptionsResults.OrderByDescending(x => x.OpenInterestChange).ToList();
+            if (id != null && id.Equals("oChange"))
+                viewModel.OptionsResults =
+                    viewModel.OptionsResults.OrderByDescending(x => x.OpenInterestChange).ToList();
 
-            //if (id != null && id.Equals("cChange"))
-            //    viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.ClosePriceChange).ToList();
+            if (id != null && id.Equals("cChange"))
+                viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.ClosePriceChange).ToList();
+
+            if (id != null && id.Equals("volume"))
+                viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.Volume).ToList();
 
             //if (id != null && (id.Equals("dWeek") || id.Equals("threeD")))
             //    viewModel.OptionsResults =
             //        viewModel.OptionsResults.OrderByDescending(x => x.OpenInterestChange).ToList();
 
-            viewModelold.OptionsResults =
-                viewModelold.OptionsResults.OrderByDescending(x => x.OpenInterest).Take(50).ToList();
+            viewModel.OptionsResults =
+                viewModel.OptionsResults.Take(50).ToList();
 
-            return View(viewModelold);
+            return View(viewModel);
         }
 
         private async Task<ChainResultViewModel> CreateChainResultViewModel(string id, Ticker ticker)
@@ -336,27 +364,22 @@ namespace OptionTracker.Controllers
 
             var sy = id.Split("_")[0];
 
+            var date = id.Split("_")[1].Substring(0, 6);
+            var chainRaw = await _context.HistoricalChains.Where(x =>
+                      x.ChainSymbol.Equals(sy)).Include(x => x.Dates).ThenInclude(s=>s.OptionContracts)
+                .FirstOrDefaultAsync();
 
-            var chainRaw = await _context.OptionChainRaw.Where(x =>
-                    x.Data.RootElement.GetProperty("symbol").GetString().Equals(sy))
-                .OrderByDescending(x => x.Id).FirstOrDefaultAsync();
-
-
-            var s = JsonConvert
-                .DeserializeObject<Dictionary<string, Dictionary<string, OptionContract[]>>>(
-                    chainRaw.Data.RootElement.GetProperty("callExpDateMap").ToString() ?? "")
-                .SelectMany(a => a.Value.Values)
-                .SelectMany(x => x).ToArray();
+            var os = chainRaw.Dates.FirstOrDefault(x => x.DateSymbol == date);
 
             var dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            var dtDateTime = dt.AddMilliseconds(s[0].QuoteTimeInLong.GetValueOrDefault()).ToLocalTime();
+           // var dtDateTime = dt.AddMilliseconds(s[0].QuoteTimeInLong.GetValueOrDefault()).ToLocalTime();
 
 
-            var p = s.Where(x => x.Symbol.Equals(id));
+            var p = os.OptionContracts.Where(x => x.ContractSymbol.Equals(id));
 
             var op = p.First();
             if (op == null) return NotFound();
-            return View(op);
+            return View(op.Contracts.First());
         }
 
         // POST: Ticker/Edit/5
@@ -375,7 +398,7 @@ namespace OptionTracker.Controllers
                     var defaultWatchlist = await _context.Watchlist.FirstOrDefaultAsync();
                     if (defaultWatchlist == null)
                     {
-                        var watchlist = new Watchlist {TickerList = new List<string>()};
+                        var watchlist = new Watchlist { TickerList = new List<string>() };
                         await _context.Watchlist.AddAsync(watchlist);
                         await _context.SaveChangesAsync();
                     }
@@ -418,8 +441,23 @@ namespace OptionTracker.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var ticker = await _context.Ticker.FindAsync(id);
-            _context.Ticker.Remove(ticker);
-            await _context.SaveChangesAsync();
+
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var trader = await _context.Traders.FirstOrDefaultAsync(x => x.IdentityUserId == userId);
+            if (trader == null)
+            {
+                var newTrader = new Trader() { IdentityUserId = userId };
+                await _context.Traders.AddAsync(newTrader);
+                ticker.Traders.Add(newTrader);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                ticker.Traders.Add(trader);
+                await _context.SaveChangesAsync();
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
