@@ -57,7 +57,17 @@
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().Description)
+                    @{
+                        var parms = new Dictionary<string, string>
+                        {
+                            { "Type", "put" },
+                            { "currentYear", "true" }
+                        };
+                    }
 
+                    <a asp-controller="Tickers"
+                       asp-action="Details"
+                       asp-all-route-data="parms">Show Puts</a>
 
                 </th>
                 <th>
@@ -131,3 +141,72 @@
         </table>
     </div>
 </div>
+
+<div>
+    <div id="donut-chart" class=""></div>
+</div>
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        var donutChart;
+        var donut;
+        $(document).ready(function () {
+            GetData();
+        });
+        function GetData() {
+            $.ajax({
+                url: '/Tickers/GetChartData/@Model.Ticker',
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.success) {
+                        if (data.series.length > 0) {
+                            LoadChart(data.series, data.labels);
+                        } else {
+                        }
+                    } else {
+                        alert(data.message);
+                    }
+                },
+                error: function (reponse) {
+                    console.log(reponse);
+                    alert("error : " + reponse);
+                }
+            });
+        }
+        function LoadChart(series, labels) {
+            // Donut Chart
+            donutChart = {
+                chart: {
+                    height: 300,
+                    type: 'donut',
+                    toolbar: {
+                        show: false,
+                    }
+                },
+                series: series,
+                labels: labels,
+                legend: {
+                    fontSize: '20px'
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 305
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            }
+            donut = new ApexCharts(
+                document.querySelector("#donut-chart"),
+                donutChart
+            );
+            donut.render();
+        }
+    </script>
+}
