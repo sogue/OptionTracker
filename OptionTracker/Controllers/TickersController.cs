@@ -74,53 +74,56 @@ namespace OptionTracker.Controllers
                 .FirstOrDefaultAsync(m => m.Symbol.Equals(symbol.ToUpper()));
 
             if (ticker == null) return NotFound();
-            if (id != null && id.Equals("update"))
-            {
-                var y = await _apiService.GetContractsByTickerName(ticker.Symbol);
-
-
-                if (y  != null)
-                {
-                    var optionChainRaw = new OptionChainRaw
-                    {
-                        Data = y
-                    };
-
-                    _logger.LogWarning("Log - Raw Save Start:" + DateTime.Now);
-                    await _context.OptionChainRaw.AddAsync(optionChainRaw);
-                    await _context.SaveChangesAsync();
-                    _logger.LogWarning("Log - Raw Save Done:" + DateTime.Now);
-                }
-            }
 
             var chainRaw = new OptionChainRaw();
 
-            try
-            {
-                chainRaw = await _context.OptionChainRaw.Where(x =>
-                        x.Data.RootElement.GetProperty("symbol").GetString() == ticker.Symbol)
-                    .OrderByDescending(x => x.Id).FirstOrDefaultAsync();
-            }
-            catch (Exception e)
+            if (id != null && id.Equals("update"))
             {
                 var y = await _apiService.GetContractsByTickerName(ticker.Symbol);
 
 
                 if (y != null)
                 {
-                    var optionChainRaw = new OptionChainRaw
+                    chainRaw = new OptionChainRaw
                     {
                         Data = y
                     };
 
-                    _logger.LogWarning("Log - Raw Save Start:" + DateTime.Now);
-                    await _context.OptionChainRaw.AddAsync(optionChainRaw);
-                    await _context.SaveChangesAsync();
-                    _logger.LogWarning("Log - Raw Save Done:" + DateTime.Now);
-
-                    chainRaw = optionChainRaw;
+                    //_logger.LogWarning("Log - Raw Save Start:" + DateTime.Now);
+                    // await _context.OptionChainRaw.AddAsync(optionChainRaw);
+                    // await _context.SaveChangesAsync();
+                    // _logger.LogWarning("Log - Raw Save Done:" + DateTime.Now);
                 }
+            }
+            else
+            {
+                try
+                {
+                    chainRaw = await _context.OptionChainRaw.Where(x =>
+                            x.Data.RootElement.GetProperty("symbol").GetString() == ticker.Symbol)
+                        .OrderByDescending(x => x.Id).FirstOrDefaultAsync();
+                }
+                catch (Exception e)
+                {
+                    var y = await _apiService.GetContractsByTickerName(ticker.Symbol);
 
+
+                    if (y != null)
+                    {
+                        var optionChainRaw = new OptionChainRaw
+                        {
+                            Data = y
+                        };
+
+                        _logger.LogWarning("Log - Raw Save Start:" + DateTime.Now);
+                        await _context.OptionChainRaw.AddAsync(optionChainRaw);
+                        await _context.SaveChangesAsync();
+                        _logger.LogWarning("Log - Raw Save Done:" + DateTime.Now);
+
+                        chainRaw = optionChainRaw;
+                    }
+
+                }
             }
 
             OptionContract[] s;
@@ -183,7 +186,7 @@ namespace OptionTracker.Controllers
             //{
             //   // viewModel = await CreateChainResultViewModel(id, ticker);
             //}
-            if (id == null)
+            if (id == null || id == "update")
                 viewModel.OptionsResults =
                 viewModel.OptionsResults.OrderByDescending(x => x.Volume).Take(50).ToList();
 

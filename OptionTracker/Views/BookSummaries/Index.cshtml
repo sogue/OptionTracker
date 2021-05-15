@@ -1,0 +1,149 @@
+﻿@model IEnumerable<Org.OpenAPITools.Models.BookSummary>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UnderlyingIndex)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Volume)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VolumeUsd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnderlyingPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BidPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OpenInterest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QuoteCurrency)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.High)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstimatedDeliveryPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Last)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MidPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InterestRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Funding8h)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MarkPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AskPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InstrumentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Low)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BaseCurrency)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationTimestamp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentFunding)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnderlyingIndex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Volume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VolumeUsd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnderlyingPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BidPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OpenInterest)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuoteCurrency)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.High)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstimatedDeliveryPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Last)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MidPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InterestRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Funding8h)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MarkPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AskPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InstrumentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Low)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BaseCurrency)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationTimestamp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentFunding)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

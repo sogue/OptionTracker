@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Org.OpenAPITools.Models.Instrument>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.QuoteCurrency)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Kind)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TickSize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContractSize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OptionType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MinTradeAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InstrumentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SettlementPeriod)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Strike)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BaseCurrency)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationTimestamp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpirationTimestamp)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuoteCurrency)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kind)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TickSize)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContractSize)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OptionType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinTradeAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InstrumentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SettlementPeriod)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Strike)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BaseCurrency)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationTimestamp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpirationTimestamp)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

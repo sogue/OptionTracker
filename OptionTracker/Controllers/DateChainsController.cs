@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using OptionTracker.Data;
 using OptionTracker.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OptionTracker.Controllers
 {
@@ -38,7 +35,8 @@ namespace OptionTracker.Controllers
 
             var list = dates.Select(dat => new DateChainViewModel
             {
-                Symbol = ticker, ExpDate = dat.Key.Split(":").First(),
+                Symbol = ticker,
+                ExpDate = dat.Key.Split(":").First(),
                 Strikes = dat.Value.SelectMany(x => x.Value).Select(x => x.StrikePrice).ToArray()
             }).ToList();
 
@@ -47,7 +45,7 @@ namespace OptionTracker.Controllers
 
         // GET: DateChains/Details/5
         [HttpGet("DateChains/{ticker}/{date}")]
-        public async Task<IActionResult> Details(string ticker,string? date)
+        public async Task<IActionResult> Details(string ticker, string? date)
         {
             if (date == null)
             {
@@ -73,8 +71,8 @@ namespace OptionTracker.Controllers
                     });
             }
 
-            var rView = list.First(x => x.ExpDate.Equals(date)).OptionContracts.OrderByDescending(x=>x.OpenInterest).ToList() ?? new List<OptionContract>();
-           
+            var rView = list.First(x => x.ExpDate.Equals(date)).OptionContracts.OrderByDescending(x => x.OpenInterest).ToList() ?? new List<OptionContract>();
+
 
             return View(rView);
         }

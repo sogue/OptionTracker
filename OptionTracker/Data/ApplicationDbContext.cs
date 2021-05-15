@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OptionTracker.Models;
+using Org.OpenAPITools.Models;
 
 namespace OptionTracker.Data
 {
@@ -11,6 +12,7 @@ namespace OptionTracker.Data
             : base(options)
         {
         }
+
         public DbSet<OptionResult> OptionResults { get; set; }
         public DbSet<Watchlist> Watchlist { get; set; }
         public DbSet<Trader> Traders { get; set; }
@@ -24,5 +26,9 @@ namespace OptionTracker.Data
         public DbSet<HistoricalOptionContract> HistoricalOptionContracts { get; set; }
         public DbSet<HistoricalDate> HistoricalDates { get; set; }
         public DbSet<HistoricalChain> HistoricalChains { get; set; }
+
+        public DbSet<Instrument> Instruments { get; set; }
+
+        public DbSet<BookSummary> BookSummaries { get; set; }
     }
 }

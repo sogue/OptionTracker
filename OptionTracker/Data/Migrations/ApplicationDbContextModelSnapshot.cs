@@ -19,8 +19,72 @@ namespace OptionTracker.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+            modelBuilder.Entity("FlowService.Models.ChainModels.HistoricalChain", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("ChainSymbol")
+                        .HasColumnType("text");
+
+                    b.Property<int>("TickerId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TickerId")
+                        .IsUnique();
+
+                    b.ToTable("HistoricalChains");
+                });
+
+            modelBuilder.Entity("FlowService.Models.ChainModels.HistoricalDate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("DateSymbol")
+                        .HasColumnType("text");
+
+                    b.Property<int>("HistoricalChainId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HistoricalChainId");
+
+                    b.ToTable("HistoricalDates");
+                });
+
+            modelBuilder.Entity("FlowService.Models.ChainModels.HistoricalOptionContract", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("ContractSymbol")
+                        .HasColumnType("text");
+
+                    b.Property<ICollection<OptionContract>>("Contracts")
+                        .HasColumnType("jsonb");
+
+                    b.Property<int>("HistoricalDateId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HistoricalDateId");
+
+                    b.ToTable("HistoricalOptionContracts");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -298,6 +362,162 @@ namespace OptionTracker.Migrations
                     b.ToTable("OptionChainRaw");
                 });
 
+            modelBuilder.Entity("OptionTracker.Models.OptionContract", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<decimal>("Ask")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("AskSize")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Bid")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("BidAskSize")
+                        .HasColumnType("text");
+
+                    b.Property<int>("BidSize")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("ClosePrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("DaysToExpiration")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("DeliverableNote")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Delta")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ExchangeName")
+                        .HasColumnType("text");
+
+                    b.Property<long>("ExpirationDate")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ExpirationType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Gamma")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("HighPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("HistoricalOptionContractId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("InTheMoney")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("IsIndexOption")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Last")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("LastSize")
+                        .HasColumnType("text");
+
+                    b.Property<long>("LastTradingDay")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("LowPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("Mark")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("MarkChange")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("MarkPercentChange")
+                        .HasColumnType("numeric");
+
+                    b.Property<bool>("Mini")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("Multiplier")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("NetChange")
+                        .HasColumnType("numeric");
+
+                    b.Property<bool>("NonStandard")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("OpenInterest")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("OpenPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("OptionDeliverablesList")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("PercentChange")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("PutCall")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("QuoteTimeInLong")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Rho")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SettlementType")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("StrikePrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Symbol")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TheoreticalOptionValue")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TheoreticalVolatility")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Theta")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("TimeValue")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("TotalVolume")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TradeDate")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("TradeTimeInLong")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Vega")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Volatility")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OptionContracts");
+                });
+
             modelBuilder.Entity("OptionTracker.Models.OptionResult", b =>
                 {
                     b.Property<int>("Id")
@@ -359,6 +579,9 @@ namespace OptionTracker.Migrations
                     b.Property<decimal>("VolatilityChange")
                         .HasColumnType("numeric");
 
+                    b.Property<int>("Volume")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChainResultViewModelId");
@@ -390,6 +613,21 @@ namespace OptionTracker.Migrations
                     b.ToTable("Ticker");
                 });
 
+            modelBuilder.Entity("OptionTracker.Models.Trader", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Traders");
+                });
+
             modelBuilder.Entity("OptionTracker.Models.Watchlist", b =>
                 {
                     b.Property<int>("Id")
@@ -400,6 +638,177 @@ namespace OptionTracker.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Watchlist");
+                });
+
+            modelBuilder.Entity("Org.OpenAPITools.Models.BookSummary", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<decimal?>("AskPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("BaseCurrency")
+                        .HasColumnType("text");
+
+                    b.Property<decimal?>("BidPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<long?>("CreationTimestamp")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal?>("CurrentFunding")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("EstimatedDeliveryPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("Funding8h")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("High")
+                        .HasColumnType("numeric");
+
+                    b.Property<int?>("InstrumentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("InstrumentName")
+                        .HasColumnType("text");
+
+                    b.Property<decimal?>("InterestRate")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("Last")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("Low")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("MarkPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("MidPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("OpenInterest")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("QuoteCurrency")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("RequestTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("UnderlyingIndex")
+                        .HasColumnType("text");
+
+                    b.Property<decimal?>("UnderlyingPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("Volume")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("VolumeUsd")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BookSummaries");
+                });
+
+            modelBuilder.Entity("Org.OpenAPITools.Models.Instrument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("BaseCurrency")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal?>("ContractSize")
+                        .HasColumnType("numeric");
+
+                    b.Property<long?>("CreationTimestamp")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ExpirationTimestamp")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("InstrumentName")
+                        .HasColumnType("text");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("Kind")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal?>("MinTradeAmount")
+                        .HasColumnType("numeric");
+
+                    b.Property<int?>("OptionType")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("QuoteCurrency")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SettlementPeriod")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal?>("Strike")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("TickSize")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Instruments");
+                });
+
+            modelBuilder.Entity("TickerTrader", b =>
+                {
+                    b.Property<int>("TickersId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TradersId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("TickersId", "TradersId");
+
+                    b.HasIndex("TradersId");
+
+                    b.ToTable("TickerTrader");
+                });
+
+            modelBuilder.Entity("FlowService.Models.ChainModels.HistoricalChain", b =>
+                {
+                    b.HasOne("OptionTracker.Models.Ticker", null)
+                        .WithOne("Chain")
+                        .HasForeignKey("FlowService.Models.ChainModels.HistoricalChain", "TickerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FlowService.Models.ChainModels.HistoricalDate", b =>
+                {
+                    b.HasOne("FlowService.Models.ChainModels.HistoricalChain", null)
+                        .WithMany("Dates")
+                        .HasForeignKey("HistoricalChainId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FlowService.Models.ChainModels.HistoricalOptionContract", b =>
+                {
+                    b.HasOne("FlowService.Models.ChainModels.HistoricalDate", null)
+                        .WithMany("OptionContracts")
+                        .HasForeignKey("HistoricalDateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -462,9 +871,39 @@ namespace OptionTracker.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TickerTrader", b =>
+                {
+                    b.HasOne("OptionTracker.Models.Ticker", null)
+                        .WithMany()
+                        .HasForeignKey("TickersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OptionTracker.Models.Trader", null)
+                        .WithMany()
+                        .HasForeignKey("TradersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FlowService.Models.ChainModels.HistoricalChain", b =>
+                {
+                    b.Navigation("Dates");
+                });
+
+            modelBuilder.Entity("FlowService.Models.ChainModels.HistoricalDate", b =>
+                {
+                    b.Navigation("OptionContracts");
+                });
+
             modelBuilder.Entity("OptionTracker.Models.ChainResultViewModel", b =>
                 {
                     b.Navigation("OptionsResults");
+                });
+
+            modelBuilder.Entity("OptionTracker.Models.Ticker", b =>
+                {
+                    b.Navigation("Chain");
                 });
 #pragma warning restore 612, 618
         }

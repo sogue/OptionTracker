@@ -7,9 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OptionTracker.Data;
 using OptionTracker.Services;
+using StackExchange.Profiling.Storage;
 using System;
 using System.Globalization;
-using StackExchange.Profiling.Storage;
 
 namespace OptionTracker
 {
@@ -103,7 +103,7 @@ namespace OptionTracker
 
             app.UseRouting();
             app.UseResponseCaching();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 

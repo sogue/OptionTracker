@@ -4,16 +4,16 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Tickers</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Add Ticker</a>
 </p>
 
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
-            Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            Find: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
             <input type="submit" value="Search" class="btn btn-default" /> |
             <a asp-action="Index">Back to Full List</a>
         </p>
@@ -26,25 +26,30 @@
             <th>
                 @Html.DisplayNameFor(model => model.Symbol)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClosePrice)
+            </th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Symbol)
-                </td>
-                <td>
-                    <a asp-controller="DateChains"
-                       asp-action="@item.Symbol">
-                        Date Chains
-                    </a> |
-                    <a asp-action="Details" asp-route-id="@item.Symbol">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Symbol)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClosePrice)
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.Id">Add to Watchlist</a> |
+                <a asp-controller="DateChains"
+                   asp-action="@item.Symbol">
+                    Option Chains
+                </a> |
+                <a asp-action="Details" asp-route-id="@item.Symbol">Most Active Options</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
