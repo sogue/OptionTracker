@@ -26,8 +26,9 @@ namespace Org.OpenAPITools.Models
     {
         public int Id { get; set; }
 
-        public int? InstrumentId { get; set; }
+        public int? InstrumentHistoryId { get; set; }
 
+       // [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd-MM-yyyy}")]
         public DateTime RequestTime { get; set; }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace Org.OpenAPITools.Models
         /// The current best bid price, &#x60;null&#x60; if there aren&#39;t any bids
         /// </summary>
         /// <value>The current best bid price, &#x60;null&#x60; if there aren&#39;t any bids</value>
-        
+        [DisplayFormat(DataFormatString = "{0:0.####}")]
         [DataMember(Name="bid_price", EmitDefaultValue=false)]
         public decimal? BidPrice { get; set; }
 
@@ -132,7 +133,7 @@ namespace Org.OpenAPITools.Models
         /// The current instrument market price
         /// </summary>
         /// <value>The current instrument market price</value>
-        
+        [DisplayFormat(DataFormatString = "{0:0.####}")]
         [DataMember(Name="mark_price", EmitDefaultValue=false)]
         public decimal? MarkPrice { get; set; }
 
@@ -140,7 +141,7 @@ namespace Org.OpenAPITools.Models
         /// The current best ask price, &#x60;null&#x60; if there aren&#39;t any asks
         /// </summary>
         /// <value>The current best ask price, &#x60;null&#x60; if there aren&#39;t any asks</value>
-        
+        [DisplayFormat(DataFormatString = "{0:0.####}")]
         [DataMember(Name="ask_price", EmitDefaultValue=false)]
         public decimal? AskPrice { get; set; }
 

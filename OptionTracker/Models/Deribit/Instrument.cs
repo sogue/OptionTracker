@@ -33,18 +33,24 @@ namespace Org.OpenAPITools.Models
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum QuoteCurrencyEnum
         {
-            
+
             /// <summary>
             /// Enum USDEnum for USD
             /// </summary>
             [EnumMember(Value = "USD")]
-            USDEnum = 1,
+            USDEnum = 0,
 
             /// <summary>
             /// Enum USDEnum for USD
             /// </summary>
             [EnumMember(Value = "BTC")]
-            BTCEnum = 0
+            BTCEnum = 1,
+
+            /// <summary>
+            /// Enum USDEnum for USD
+            /// </summary>
+            [EnumMember(Value = "ETH")]
+            ETHEnum = 2
         }
 
         /// <summary>

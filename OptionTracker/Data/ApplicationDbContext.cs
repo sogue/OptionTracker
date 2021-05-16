@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OptionTracker.Models;
+using OptionTracker.Models.Crypto;
 using Org.OpenAPITools.Models;
 
 namespace OptionTracker.Data
@@ -29,6 +30,7 @@ namespace OptionTracker.Data
 
         public DbSet<Instrument> Instruments { get; set; }
 
+        public DbSet<InstrumentHistory> InstrumentHistories { get; set; }
         public DbSet<BookSummary> BookSummaries { get; set; }
     }
 }

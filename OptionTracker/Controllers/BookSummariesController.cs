@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using OptionTracker.Data;
+using OptionTracker.Models.Crypto;
+using OptionTracker.Models.Deribit;
 using Org.OpenAPITools.Models;
+using Websocket.Client;
 
 namespace OptionTracker.Controllers
 {
@@ -20,9 +28,142 @@ namespace OptionTracker.Controllers
         }
 
         // GET: BookSummaries
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index
+            ([FromQuery]string currency, [FromQuery]string underlyingIndex, [FromQuery]int? count, [FromQuery]string strike, [FromQuery]int? searchStartTimestamp)
+         
         {
-            return View(await _context.BookSummaries.OrderByDescending(x=>x.OpenInterest).ToListAsync());
+            var ua = underlyingIndex ?? "dsfsdfdfdsf";
+            var listA = new List<InstrumentHistory>();
+            var btcUrl =
+           "https://www.deribit.com/api/v2/public/get_instruments?currency=BTC&kind=option&expired=false";
+
+            HttpClient clientBtc = new HttpClient();
+            var responseBtc = await clientBtc.GetFromJsonAsync<JsonDocument>(btcUrl);
+
+            var instrumentsBtc = JsonConvert.DeserializeObject<Instrument[]>(
+                        responseBtc.RootElement.GetProperty("result").ToString() ?? "");
+
+            var ethUrl =
+                "https://www.deribit.com/api/v2/public/get_instruments?currency=ETH&kind=option&expired=false";
+
+            HttpClient clientEth = new HttpClient();
+
+            var responseEth = await clientEth.GetFromJsonAsync<JsonDocument>(ethUrl);
+            var instrumentsEth = JsonConvert.DeserializeObject<Instrument[]>(
+                        responseEth.RootElement.GetProperty("result").ToString() ?? "");
+
+   
+            var newInstruments = instrumentsBtc.Concat(instrumentsEth).ToList();
+
+
+            var newHistories = newInstruments.Select(x => new InstrumentHistory
+            {
+                ActualInstrument = x,
+                InstrumentName = x.InstrumentName,
+                BookSummaries = new List<BookSummary>()
+            }).Where(x=>x.ActualInstrument.InstrumentName.Contains(ua));
+
+            if(newHistories != null && newHistories.Any())
+            {
+                listA.AddRange(newHistories);
+            }
+            
+
+            var newBookSummaries = new List<BookSummary>();
+
+            var wsUrl = new Uri("wss://www.deribit.com/ws/api/v2/");
+            var exitEvent = new ManualResetEvent(false);
+            var messages = new List<string>();
+            if(newHistories.Select(x => x.ActualInstrument).Any())
+            { 
+            for (int i = 0; i < newHistories.Select(x => x.ActualInstrument).Count(); i = i + 40)
+            {
+                var instrumentsBatch = newHistories.Select(x=>x.ActualInstrument).Skip(i).Take(40);
+
+                using (var client = new WebsocketClient(wsUrl))
+                {
+                    var messageString = "";
+
+                    client
+                       .MessageReceived
+                       .Subscribe(msg =>
+                       {
+                           messageString = msg.Text;
+                           messages.Add(messageString);
+
+                       });
+
+
+                    await client.Start();
+
+                    foreach (var instrument in instrumentsBatch)
+                    {
+                        var requestText = new
+                        {
+                            jsonrpc = "2.0",
+                            id = instrument.Id,
+                            method = "public/get_book_summary_by_instrument",
+                            @params = new
+                            {
+                                instrument_name = instrument.InstrumentName
+                            }
+                        };
+
+                        var jsonText = Newtonsoft.Json.Linq.JObject.FromObject(requestText).ToString();
+
+                        client.Send(jsonText);
+
+                    }
+                    exitEvent.WaitOne(TimeSpan.FromSeconds(3));
+                }
+            }
+            }
+            foreach (var mmm in messages)
+
+            {
+                var jsonResult = System.Text.Json.JsonSerializer.Deserialize<JsonDocument>(mmm);
+                var jString = jsonResult.RootElement.TryGetProperty("result", out var value) ? value.ToString() : "";
+                var bookSummary = JsonConvert.DeserializeObject<BookSummary[]>(jString).First();
+
+   
+                    bookSummary.RequestTime = DateTime.Today;
+                    listA.Where(d => d.InstrumentName == bookSummary.InstrumentName).FirstOrDefault().BookSummaries.Add(bookSummary);
+               
+            }
+      
+
+            var strike2 =  strike == null ? "0": strike;
+            double strikeInt = double.Parse(strike2);
+            //var result = await _context.BookSummaries
+            //    .Where(x=>x.UnderlyingIndex == underlyingIndex)
+            //    .OrderByDescending(x => x.InstrumentName).Take(100).ToListAsync();
+
+            var result = listA
+                .Where(x => x.BookSummaries.Any(x => x.UnderlyingIndex == underlyingIndex)
+                && x.ActualInstrument.OptionType.Value == Instrument.OptionTypeEnum.PutEnum).ToList();
+
+            var res2 = result.Where(x=> (double)x.ActualInstrument.Strike.Value > strikeInt)
+                .OrderBy(x => x.ActualInstrument.Strike).ToList();
+
+            var res = res2.Select(r=> new CspSummary {
+               VolumeUsd = r.BookSummaries.FirstOrDefault().MarkPrice * r.BookSummaries.FirstOrDefault().EstimatedDeliveryPrice,
+            Percentage = r.ActualInstrument.Strike / r.BookSummaries.FirstOrDefault().EstimatedDeliveryPrice,
+            CapitalMultiUsd = (decimal)0.1 * r.BookSummaries.FirstOrDefault().EstimatedDeliveryPrice * 15,
+            PremiumMultiUsd = r.BookSummaries.FirstOrDefault().MarkPrice * r.BookSummaries.FirstOrDefault().EstimatedDeliveryPrice * 15 * 4,
+            RiskUsd = r.ActualInstrument.Strike * 15,
+            RequestTime = r.BookSummaries.FirstOrDefault().RequestTime,
+            InstrumentName =r.InstrumentName,
+                AskPrice = r.BookSummaries.FirstOrDefault().AskPrice,
+                BidPrice = r.BookSummaries.FirstOrDefault().BidPrice,
+                Low = r.BookSummaries.FirstOrDefault().Low,
+                High = r.BookSummaries.FirstOrDefault().High,
+                MarkPrice = r.BookSummaries.FirstOrDefault().MarkPrice,
+            EstimatedDeliveryPrice = r.BookSummaries.FirstOrDefault().EstimatedDeliveryPrice,
+
+            });
+            
+
+            return View(res);
         }
 
         // GET: BookSummaries/Details/5
