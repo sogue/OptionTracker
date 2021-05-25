@@ -9,6 +9,8 @@ namespace OptionTracker.Models.Deribit
     public class CspSummary : BookSummary
     {
         public decimal? Percentage { get; set; }
+
+        public decimal? LiqStrike { get; set; }
         public decimal? RiskUsd { get; set; }
         public decimal? PremiumUsd { get; set; }
         public decimal? CapitalMultiUsd { get; set; }

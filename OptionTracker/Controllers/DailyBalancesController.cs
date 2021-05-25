@@ -6,28 +6,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OptionTracker.Data;
-using OptionTracker.Models.Crypto;
+using Org.OpenAPITools.Models;
 
 namespace OptionTracker.Controllers
 {
-    public class InstrumentHistoriesController : Controller
+    public class DailyBalancesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public InstrumentHistoriesController(ApplicationDbContext context)
+        public DailyBalancesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: InstrumentHistories
-        public async Task<IActionResult> Index
-        ([FromQuery]string currency, [FromQuery]string underlyingIndex, [FromQuery]int? count, [FromQuery]string strike, [FromQuery]int? searchStartTimestamp)
-         
+        // GET: DailyBalances
+        public async Task<IActionResult> Index()
         {
-            return View(await _context.InstrumentHistories.ToListAsync());
+            return View(await _context.DailyBalances.ToListAsync());
         }
 
-        // GET: InstrumentHistories/Details/5
+        // GET: DailyBalances/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,40 +33,39 @@ namespace OptionTracker.Controllers
                 return NotFound();
             }
 
-            var instrumentHistory = await _context.InstrumentHistories.Include(x=>x.BookSummaries)
+            var dailyBalance = await _context.DailyBalances
                 .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (instrumentHistory == null)
+            if (dailyBalance == null)
             {
                 return NotFound();
             }
 
-            return View(instrumentHistory);
+            return View(dailyBalance);
         }
 
-        // GET: InstrumentHistories/Create
+        // GET: DailyBalances/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: InstrumentHistories/Create
+        // POST: DailyBalances/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,InstrumentName")] InstrumentHistory instrumentHistory)
+        public async Task<IActionResult> Create([Bind("Id,BalanceDate")] DailyBalance dailyBalance)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(instrumentHistory);
+                _context.Add(dailyBalance);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(instrumentHistory);
+            return View(dailyBalance);
         }
 
-        // GET: InstrumentHistories/Edit/5
+        // GET: DailyBalances/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,22 +73,22 @@ namespace OptionTracker.Controllers
                 return NotFound();
             }
 
-            var instrumentHistory = await _context.InstrumentHistories.FindAsync(id);
-            if (instrumentHistory == null)
+            var dailyBalance = await _context.DailyBalances.FindAsync(id);
+            if (dailyBalance == null)
             {
                 return NotFound();
             }
-            return View(instrumentHistory);
+            return View(dailyBalance);
         }
 
-        // POST: InstrumentHistories/Edit/5
+        // POST: DailyBalances/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,InstrumentName")] InstrumentHistory instrumentHistory)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BalanceDate")] DailyBalance dailyBalance)
         {
-            if (id != instrumentHistory.Id)
+            if (id != dailyBalance.Id)
             {
                 return NotFound();
             }
@@ -100,12 +97,12 @@ namespace OptionTracker.Controllers
             {
                 try
                 {
-                    _context.Update(instrumentHistory);
+                    _context.Update(dailyBalance);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!InstrumentHistoryExists(instrumentHistory.Id))
+                    if (!DailyBalanceExists(dailyBalance.Id))
                     {
                         return NotFound();
                     }
@@ -116,10 +113,10 @@ namespace OptionTracker.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(instrumentHistory);
+            return View(dailyBalance);
         }
 
-        // GET: InstrumentHistories/Delete/5
+        // GET: DailyBalances/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -127,30 +124,30 @@ namespace OptionTracker.Controllers
                 return NotFound();
             }
 
-            var instrumentHistory = await _context.InstrumentHistories
+            var dailyBalance = await _context.DailyBalances
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (instrumentHistory == null)
+            if (dailyBalance == null)
             {
                 return NotFound();
             }
 
-            return View(instrumentHistory);
+            return View(dailyBalance);
         }
 
-        // POST: InstrumentHistories/Delete/5
+        // POST: DailyBalances/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var instrumentHistory = await _context.InstrumentHistories.FindAsync(id);
-            _context.InstrumentHistories.Remove(instrumentHistory);
+            var dailyBalance = await _context.DailyBalances.FindAsync(id);
+            _context.DailyBalances.Remove(dailyBalance);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool InstrumentHistoryExists(int id)
+        private bool DailyBalanceExists(int id)
         {
-            return _context.InstrumentHistories.Any(e => e.Id == id);
+            return _context.DailyBalances.Any(e => e.Id == id);
         }
     }
 }

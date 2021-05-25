@@ -32,5 +32,10 @@ namespace OptionTracker.Data
 
         public DbSet<InstrumentHistory> InstrumentHistories { get; set; }
         public DbSet<BookSummary> BookSummaries { get; set; }
+
+        public DbSet<PortfolioEth> PortfoliosEth { get; set; }
+        public DbSet<Position> Positions { get; set; }
+
+        public DbSet<DailyBalance> DailyBalances { get; set; }
     }
 }

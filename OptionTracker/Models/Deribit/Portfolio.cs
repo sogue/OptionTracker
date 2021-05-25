@@ -23,7 +23,9 @@ namespace Org.OpenAPITools.Models
     /// </summary>
     [DataContract]
     public partial class Portfolio : IEquatable<Portfolio>
-    { 
+    {
+        public int Id { get; set; }
+
         /// <summary>
         /// Gets or Sets Eth
         /// </summary>

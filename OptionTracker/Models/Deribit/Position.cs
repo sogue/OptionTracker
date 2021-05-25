@@ -23,7 +23,9 @@ namespace Org.OpenAPITools.Models
     /// </summary>
     [DataContract]
     public partial class Position : IEquatable<Position>
-    { 
+    {
+        public int Id { get; set; }
+
         /// <summary>
         /// direction, `buy` or `sell`
         /// </summary>

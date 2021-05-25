@@ -1,0 +1,143 @@
+﻿@model IEnumerable<Org.OpenAPITools.Models.Position>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Direction)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AveragePriceUsd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstimatedLiquidationPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FloatingProfitLoss)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FloatingProfitLossUsd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OpenOrdersMargin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalProfitLoss)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RealizedProfitLoss)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Delta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InitialMargin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Size)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaintenanceMargin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Kind)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MarkPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AveragePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SettlementPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IndexPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InstrumentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SizeCurrency)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Direction)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AveragePriceUsd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstimatedLiquidationPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FloatingProfitLoss)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FloatingProfitLossUsd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OpenOrdersMargin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalProfitLoss)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RealizedProfitLoss)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Delta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InitialMargin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Size)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaintenanceMargin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kind)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MarkPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AveragePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SettlementPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IndexPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InstrumentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SizeCurrency)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
