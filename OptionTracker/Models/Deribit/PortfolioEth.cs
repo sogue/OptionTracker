@@ -26,6 +26,7 @@ namespace Org.OpenAPITools.Models
     {
         public int Id { get; set; }
 
+        public decimal? EquityUsd { get; set; }
         /// <summary>
         /// Gets or Sets MaintenanceMargin
         /// </summary>

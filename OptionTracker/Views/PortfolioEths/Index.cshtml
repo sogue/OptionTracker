@@ -31,10 +31,13 @@
                 @Html.DisplayNameFor(model => model.MarginBalance)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Balance)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Equity)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Balance)
+                @Html.DisplayNameFor(model => model.EquityUsd)
             </th>
             <th></th>
         </tr>
@@ -60,11 +63,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.MarginBalance)
             </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Balance)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Equity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Balance)
+                @Html.DisplayFor(modelItem => item.EquityUsd)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
