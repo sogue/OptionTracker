@@ -12,7 +12,6 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
-            <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">OptionTracker</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,8 +39,28 @@
                                asp-action="Index">Crypto Options</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="BookDetails"
+                               asp-action="Index">Option Details</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Instruments"
                                asp-action="Index">Crypto Option Chains</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Positions"
+                               asp-action="Index">Positions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="PortfolioEths"
+                               asp-action="Index">PortfolioEths</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="InstrumentHistories"
+                               asp-action="Index">InstrumentHistories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="DailyBalances"
+                               asp-action="Index">DailyBalances</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home"
@@ -50,14 +69,11 @@
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
-            </div>
         </nav>
     </header>
-    <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
-    </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">

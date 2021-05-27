@@ -1,0 +1,138 @@
+﻿@model OptionTracker.Models.Crypto.BookDetail
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>BookDetail</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="RequestTime" class="control-label"></label>
+                <input asp-for="RequestTime" class="form-control" />
+                <span asp-validation-for="RequestTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="underlying_price" class="control-label"></label>
+                <input asp-for="underlying_price" class="form-control" />
+                <span asp-validation-for="underlying_price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="underlying_index" class="control-label"></label>
+                <input asp-for="underlying_index" class="form-control" />
+                <span asp-validation-for="underlying_index" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="timestamp" class="control-label"></label>
+                <input asp-for="timestamp" class="form-control" />
+                <span asp-validation-for="timestamp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="state" class="control-label"></label>
+                <input asp-for="state" class="form-control" />
+                <span asp-validation-for="state" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="settlement_price" class="control-label"></label>
+                <input asp-for="settlement_price" class="form-control" />
+                <span asp-validation-for="settlement_price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="open_interest" class="control-label"></label>
+                <input asp-for="open_interest" class="form-control" />
+                <span asp-validation-for="open_interest" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="min_price" class="control-label"></label>
+                <input asp-for="min_price" class="form-control" />
+                <span asp-validation-for="min_price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="max_price" class="control-label"></label>
+                <input asp-for="max_price" class="form-control" />
+                <span asp-validation-for="max_price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="mark_price" class="control-label"></label>
+                <input asp-for="mark_price" class="form-control" />
+                <span asp-validation-for="mark_price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="mark_iv" class="control-label"></label>
+                <input asp-for="mark_iv" class="form-control" />
+                <span asp-validation-for="mark_iv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="last_price" class="control-label"></label>
+                <input asp-for="last_price" class="form-control" />
+                <span asp-validation-for="last_price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="interest_rate" class="control-label"></label>
+                <input asp-for="interest_rate" class="form-control" />
+                <span asp-validation-for="interest_rate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="instrument_name" class="control-label"></label>
+                <input asp-for="instrument_name" class="form-control" />
+                <span asp-validation-for="instrument_name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="index_price" class="control-label"></label>
+                <input asp-for="index_price" class="form-control" />
+                <span asp-validation-for="index_price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="estimated_delivery_price" class="control-label"></label>
+                <input asp-for="estimated_delivery_price" class="form-control" />
+                <span asp-validation-for="estimated_delivery_price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="bid_iv" class="control-label"></label>
+                <input asp-for="bid_iv" class="form-control" />
+                <span asp-validation-for="bid_iv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="best_bid_price" class="control-label"></label>
+                <input asp-for="best_bid_price" class="form-control" />
+                <span asp-validation-for="best_bid_price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="best_bid_amount" class="control-label"></label>
+                <input asp-for="best_bid_amount" class="form-control" />
+                <span asp-validation-for="best_bid_amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="best_ask_price" class="control-label"></label>
+                <input asp-for="best_ask_price" class="form-control" />
+                <span asp-validation-for="best_ask_price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="best_ask_amount" class="control-label"></label>
+                <input asp-for="best_ask_amount" class="form-control" />
+                <span asp-validation-for="best_ask_amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ask_iv" class="control-label"></label>
+                <input asp-for="ask_iv" class="form-control" />
+                <span asp-validation-for="ask_iv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

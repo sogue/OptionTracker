@@ -29,9 +29,10 @@ namespace OptionTracker.Controllers
 
         // GET: BookSummaries
         public async Task<IActionResult> Index
-            ([FromQuery]string currency, [FromQuery]string underlyingIndex, [FromQuery]int? count, [FromQuery]string strike, [FromQuery]int? searchStartTimestamp)
-         
+            ([FromQuery]string currency, [FromQuery]string underlyingIndex, [FromQuery]int? multiplier, [FromQuery]string strike, [FromQuery]int? searchStartTimestamp)
+
         {
+            var multi = multiplier ?? 1;
             var ua = underlyingIndex ?? "dsfsdfdfdsf";
             var listA = new List<InstrumentHistory>();
             var btcUrl =
@@ -142,16 +143,24 @@ namespace OptionTracker.Controllers
                 .Where(x => x.BookSummaries.Any(x => x.UnderlyingIndex == underlyingIndex)
                 && x.ActualInstrument.OptionType.Value == Instrument.OptionTypeEnum.PutEnum).ToList();
 
-            var res2 = result.Where(x=> (double)x.ActualInstrument.Strike.Value > strikeInt)
-                .OrderBy(x => x.ActualInstrument.Strike).ToList();
+            var res2 = result.Where(x=> (double)x.ActualInstrument.Strike.Value >= strikeInt)
+                .OrderBy(x => x.ActualInstrument.Strike).Take(10).ToList();
+
+
+            var port =await _context.DailyBalances
+                .Where(x=>x.BalanceDate.Date == DateTime.Today)
+                .Include(x=>x.PortfolioEth).FirstOrDefaultAsync();
+
 
             var res = res2.Select(r=> new CspSummary {
                VolumeUsd = r.BookSummaries.FirstOrDefault().MarkPrice * r.BookSummaries.FirstOrDefault().EstimatedDeliveryPrice,
             Percentage = r.ActualInstrument.Strike / r.BookSummaries.FirstOrDefault().EstimatedDeliveryPrice,
-            CapitalMultiUsd = (decimal)0.1 * r.BookSummaries.FirstOrDefault().EstimatedDeliveryPrice * 15,
-            PremiumMultiUsd = r.BookSummaries.FirstOrDefault().MarkPrice * r.BookSummaries.FirstOrDefault().EstimatedDeliveryPrice * 15,
-            RiskUsd = r.ActualInstrument.Strike * 15,
-            LiqStrike = r.ActualInstrument.Strike - 300, 
+            Multiplier = multi,
+            CapitalMultiUsd = (decimal)0.1 * r.BookSummaries.FirstOrDefault().EstimatedDeliveryPrice * multi,
+            PremiumMultiUsd = r.BookSummaries.FirstOrDefault().MarkPrice * r.BookSummaries.FirstOrDefault().EstimatedDeliveryPrice * multi,
+            PremiumMultiUsdMonth = r.BookSummaries.FirstOrDefault().MarkPrice * r.BookSummaries.FirstOrDefault().EstimatedDeliveryPrice * multi * 4,
+                RiskUsd = r.ActualInstrument.Strike * multi,
+            LiqStrike = r.ActualInstrument.Strike - ((decimal)0.1 * r.BookSummaries.FirstOrDefault().EstimatedDeliveryPrice / multi ), 
             RequestTime = r.BookSummaries.FirstOrDefault().RequestTime,
             InstrumentName =r.InstrumentName,
                 AskPrice = r.BookSummaries.FirstOrDefault().AskPrice,
@@ -160,9 +169,10 @@ namespace OptionTracker.Controllers
                 High = r.BookSummaries.FirstOrDefault().High,
                 MarkPrice = r.BookSummaries.FirstOrDefault().MarkPrice,
             EstimatedDeliveryPrice = r.BookSummaries.FirstOrDefault().EstimatedDeliveryPrice,
-
+            ActualLeverage = r.ActualInstrument.Strike * multi / port.PortfolioEth.EquityUsd,
+            ActualCapital = port.PortfolioEth.EquityUsd,
+            ActualLiqStrike = r.ActualInstrument.Strike - (port.PortfolioEth.EquityUsd / multi),
             });
-            
 
             return View(res);
         }

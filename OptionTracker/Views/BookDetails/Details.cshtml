@@ -1,0 +1,150 @@
+﻿@model OptionTracker.Models.Crypto.BookDetail
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>BookDetail</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RequestTime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RequestTime)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.underlying_price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.underlying_price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.underlying_index)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.underlying_index)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.timestamp)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.timestamp)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.state)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.state)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.settlement_price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.settlement_price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.open_interest)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.open_interest)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.min_price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.min_price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.max_price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.max_price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.mark_price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.mark_price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.mark_iv)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.mark_iv)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.last_price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.last_price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.interest_rate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.interest_rate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.instrument_name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.instrument_name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.index_price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.index_price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.estimated_delivery_price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.estimated_delivery_price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.bid_iv)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.bid_iv)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.best_bid_price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.best_bid_price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.best_bid_amount)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.best_bid_amount)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.best_ask_price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.best_ask_price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.best_ask_amount)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.best_ask_amount)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ask_iv)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ask_iv)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

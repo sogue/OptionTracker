@@ -12,5 +12,6 @@ namespace OptionTracker.Models.Crypto
         public string InstrumentName { get; set; }
         public Instrument ActualInstrument { get; set; }
         public ICollection<BookSummary> BookSummaries { get; set; }
+        public ICollection<BookDetail> BookDetails { get; set; }
     }
 }

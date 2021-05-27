@@ -13,7 +13,9 @@ namespace OptionTracker.Data
             : base(options)
         {
         }
-
+        public DbSet<BookDetail> BookDetails { get; set; }
+        public DbSet<Greeks> Greeks { get; set; }
+        public DbSet<Stats> Stats { get; set; }
         public DbSet<OptionResult> OptionResults { get; set; }
         public DbSet<Watchlist> Watchlist { get; set; }
         public DbSet<Trader> Traders { get; set; }
@@ -37,5 +39,10 @@ namespace OptionTracker.Data
         public DbSet<Position> Positions { get; set; }
 
         public DbSet<DailyBalance> DailyBalances { get; set; }
+        public DbSet<TickerOptionHistory> TickerOptionHistories { get; set; }
+
+        public DbSet<Stock> Stocks { get; set; }
+        public DbSet<StockOption> StockOptions { get; set; }
+        public DbSet<StockOptionHistory> StockOptionHistories { get; set; }
     }
 }

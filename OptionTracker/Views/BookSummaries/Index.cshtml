@@ -3,9 +3,10 @@
 @{
     ViewData["Title"] = "Index";
     var parms = new Dictionary<string, string>{};
-    parms.Add("underlyingIndex", "ETH-28MAY21");
-    parms.Add("type", "call");
-    parms.Add("strike", "3000");
+    parms.Add("underlyingIndex", "ETH-4JUN21");
+    parms.Add("type", "put");
+    parms.Add("strike", "2000");
+    parms.Add("multiplier", "10");
 }
 
     <h1>Index</h1>
@@ -19,6 +20,7 @@
                 <input type="text" name="underlyingIndex" value="@parms["underlyingIndex"]" />
                 <input type="text" name="strike" value="@parms["strike"]" />
                 <input type="text" name="type" value="@parms["type"]" />
+                <input type="text" name="multiplier" value="@parms["multiplier"]" />
                 <input type="submit" value="Filter" class="btn btn-default" />
             </p>
         </div>
@@ -55,6 +57,7 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.PremiumMultiUsd)
+                    (Month)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.CapitalMultiUsd)
@@ -65,7 +68,15 @@
                 <th>
                     @Html.DisplayNameFor(model => model.RiskUsd)
                 </th>
-                <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ActualLeverage)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ActualCapital)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ActualLiqStrike)
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -101,6 +112,7 @@
                 </th>
                 <th>
                     @Html.DisplayFor(modelItem => item.PremiumMultiUsd)
+                    (@Html.DisplayFor(modelItem => item.PremiumMultiUsdMonth))
                 </th>
                 <th>
                     @Html.DisplayFor(modelItem => item.CapitalMultiUsd)
@@ -110,6 +122,15 @@
                 </th>
                 <th>
                     @Html.DisplayFor(modelItem => item.RiskUsd)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.ActualLeverage)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.ActualCapital)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.ActualLiqStrike)
                 </th>
             </tr>
             }

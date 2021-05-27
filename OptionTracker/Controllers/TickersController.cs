@@ -30,13 +30,35 @@ namespace OptionTracker.Controllers
         }
 
         // GET: Ticker
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index([FromQuery]int? pU, [FromQuery] int? pD, string searchString)
         {
             ViewData["CurrentFilter"] = searchString;
+            
+            var page = 1;
 
-            var tickers = _context.Ticker.Select(x => x).OrderBy(x => x.Symbol).AsNoTracking().ToList();
+            ViewData["Page"] = page;
+            
+            if (pU != null)
+            {
+                page = pU.Value;
+                ViewData["Page"] = ++page;
+            }
+            if (pD != null)
+            {
+                page = pD.Value;
+                ViewData["Page"] = --page;
+            }
+            if (pU < 0 || pD <= 1)
+            {
+                page = 1;
+                ViewData["Page"] = page;
+            }
 
-            if (!string.IsNullOrEmpty(searchString)) tickers = tickers.Where(s => s.Symbol.Contains(searchString.ToUpper())).ToList();
+
+
+            var tickers = _context.Ticker.Select(x => x).OrderBy(x => x.Symbol).Skip(page * 50 - 50).Take(page * 50).ToList();
+
+            if (!string.IsNullOrEmpty(searchString)) tickers = _context.Ticker.Where(s => s.Symbol.Contains(searchString.ToUpper())).ToList();
 
             return View(tickers);
         }
@@ -163,9 +185,9 @@ namespace OptionTracker.Controllers
                             ChartCode = CreateChartCode(both.Description),
                             OpenInterest = both.OpenInterest,
                             Volume = both.TotalVolume,
-                            ClosePrice = both.ClosePrice,
+                            ClosePrice = both.Last,
                             OpenInterestChange = both.OpenInterest - both.OpenInterest,
-                            ClosePriceChange = both.ClosePrice - both.ClosePrice
+                            ClosePriceChange = both.Last - both.Last
                         })
                         .ToList()
             };
@@ -319,9 +341,9 @@ namespace OptionTracker.Controllers
                             Symbol = both.Symbol,
                             ChartCode = CreateChartCode(both.Description),
                             OpenInterest = both.OpenInterest,
-                            ClosePrice = both.ClosePrice,
+                            ClosePrice = both.Last,
                             OpenInterestChange = both.OpenInterest - both.OpenInterest,
-                            ClosePriceChange = both.ClosePrice - both.ClosePrice
+                            ClosePriceChange = both.Last - both.Last
                         })
                         .ToList()
                 };
@@ -347,9 +369,9 @@ namespace OptionTracker.Controllers
                             Symbol = a.Symbol,
                             OpenInterest = a.OpenInterest,
                             ChartCode = CreateChartCode(a.Description),
-                            ClosePrice = a.ClosePrice,
+                            ClosePrice = a.Last,
                             OpenInterestChange = b.OpenInterest - a.OpenInterest,
-                            ClosePriceChange = b.ClosePrice - a.ClosePrice
+                            ClosePriceChange = b.Last - a.Last
                         };
                         listOp.Add(s);
                     }

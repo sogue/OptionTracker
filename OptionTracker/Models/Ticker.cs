@@ -9,6 +9,10 @@ namespace OptionTracker.Models
     {
         public int Id { get; set; }
         public string Symbol { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:C}")]
+        [DataType(DataType.Currency)]
+        [Display(Name = "Market Cap")]
         public int MarketCap { get; set; }
         public DateTime NextEarnings { get; set; }
 
