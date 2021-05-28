@@ -52,7 +52,9 @@ namespace OptionTracker.Controllers
                 return NotFound();
             }
 
-            var result = await _context.OptionChainRaw.FirstOrDefaultAsync(x => x.Data.RootElement.GetProperty("symbol").GetString().Equals(ticker));
+            var result = await _context.OptionChainRaw
+                .OrderByDescending(x=>x.Id)
+                .FirstOrDefaultAsync(x => x.Symbol.Equals(ticker));
 
             var dates = JsonConvert
                 .DeserializeObject<Dictionary<string, Dictionary<string, OptionContract[]>>>(
