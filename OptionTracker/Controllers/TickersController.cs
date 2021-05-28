@@ -237,7 +237,6 @@ namespace OptionTracker.Controllers
                 viewModel = CreateChainResultViewModel(chainRaws,id,ticker);
                 
             }
-              
 
             viewModel.OptionsResults =
                 viewModel.OptionsResults.Take(50).ToList();

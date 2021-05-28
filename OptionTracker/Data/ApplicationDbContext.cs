@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OptionTracker.Models;
+using OptionTracker.Models.Anal;
 using OptionTracker.Models.Crypto;
 using Org.OpenAPITools.Models;
 
@@ -44,5 +45,7 @@ namespace OptionTracker.Data
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<StockOption> StockOptions { get; set; }
         public DbSet<StockOptionHistory> StockOptionHistories { get; set; }
+        public DbSet<VolumeAnal> VolumeAnals { get; set; }
+        public DbSet<VolumeData> VolumeDatas { get; set; }
     }
 }
