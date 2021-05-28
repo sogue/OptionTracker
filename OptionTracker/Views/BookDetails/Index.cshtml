@@ -1,0 +1,161 @@
+﻿@model IEnumerable<OptionTracker.Models.Crypto.BookDetail>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.underlying_price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.underlying_index)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.timestamp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.state)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.settlement_price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.open_interest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.min_price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.max_price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mark_price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mark_iv)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.last_price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.interest_rate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.instrument_name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.index_price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.estimated_delivery_price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.bid_iv)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.best_bid_price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.best_bid_amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.best_ask_price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.best_ask_amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ask_iv)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.underlying_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.underlying_index)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.timestamp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.state)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.settlement_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.open_interest)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.min_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.max_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mark_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mark_iv)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.last_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.interest_rate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.instrument_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.index_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.estimated_delivery_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.bid_iv)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.best_bid_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.best_bid_amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.best_ask_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.best_ask_amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ask_iv)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

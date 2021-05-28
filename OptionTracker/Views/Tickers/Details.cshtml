@@ -1,0 +1,212 @@
+﻿@model ChainResultViewModel
+
+@{
+    ViewData["Title"] = @Model.Ticker;
+}
+
+<div>
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Ticker)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Ticker)
+                <a asp-controller="DateChains"
+                   asp-action="@Model.Ticker">
+                    Date Chains
+                </a>
+                <a asp-controller="Tickers"
+                   asp-action="Details"
+                   asp-route-id="update">
+                    Update Contracts
+                </a>
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.MarketCap)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.MarketCap)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ClosePrice)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ClosePrice)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Created)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Created)
+                @Html.DisplayFor(model => model.TimeChange)
+                <a asp-controller="Tickers"
+                   asp-action="Details"
+                   asp-route-id="threeD">
+                    3 Days
+                </a>
+                <a asp-controller="Tickers"
+                   asp-action="Details"
+                   asp-route-id="dWeek">
+                    7 Days
+                </a>
+            </dd>
+        </dl>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().Description)
+                    @{
+                        var parms = new Dictionary<string, string>
+                        {
+                            { "Type", "put" },
+                            { "currentYear", "true" }
+                        };
+                    }
+
+                    <a asp-controller="Tickers"
+                       asp-action="Details"
+                       asp-all-route-data="parms">Show Puts</a>
+
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().ClosePrice)
+
+                    <a asp-controller="Tickers"
+                       asp-action="Details"
+                       asp-route-id="cChange">
+                        (By Change)
+                    </a>
+                </th>
+                <th>
+                    <a asp-controller="Tickers"
+                       asp-action="Details"
+                       asp-route-id="false">
+                        @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().OpenInterest)
+                    </a>
+                    <a asp-controller="Tickers"
+                       asp-action="Details"
+                       asp-route-id="oChange">
+                        (By Change)
+                    </a>
+                </th>
+                <th>
+                    <a asp-controller="Tickers"
+                       asp-action="Details"
+                       asp-route-id="volume">
+                        @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().Volume)
+                    </a>
+                </th>
+                <th>
+                    <a asp-controller="Tickers"
+                       asp-action="Details"
+                       asp-route-id="true">
+                        @Html.DisplayNameFor(model =>
+                            model.OptionsResults.FirstOrDefault().TotalValue)
+
+                    </a>
+                </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.OptionsResults)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                        @Html.DisplayFor(modelItem => item.ChartCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClosePrice)
+                        <span>(@Html.DisplayFor(modelItem => item.ClosePriceChange))</span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OpenInterest)
+                        <span>(@Html.DisplayFor(modelItem => item.OpenInterestChange))</span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Volume)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalValue)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Symbol">Details</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <div id="donut-chart" class=""></div>
+</div>
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        var donutChart;
+        var donut;
+        $(document).ready(function () {
+            GetData();
+        });
+        function GetData() {
+            $.ajax({
+                url: '/Tickers/GetChartData/@Model.Ticker',
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.success) {
+                        if (data.series.length > 0) {
+                            LoadChart(data.series, data.labels);
+                        } else {
+                        }
+                    } else {
+                        alert(data.message);
+                    }
+                },
+                error: function (reponse) {
+                    console.log(reponse);
+                    alert("error : " + reponse);
+                }
+            });
+        }
+        function LoadChart(series, labels) {
+            // Donut Chart
+            donutChart = {
+                chart: {
+                    height: 300,
+                    type: 'donut',
+                    toolbar: {
+                        show: false,
+                    }
+                },
+                series: series,
+                labels: labels,
+                legend: {
+                    fontSize: '20px'
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 305
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            }
+            donut = new ApexCharts(
+                document.querySelector("#donut-chart"),
+                donutChart
+            );
+            donut.render();
+        }
+    </script>
+}

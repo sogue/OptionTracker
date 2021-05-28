@@ -1,0 +1,111 @@
+﻿@model OptionTracker.Models.Crypto.InstrumentHistory
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>InstrumentHistory</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.InstrumentName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InstrumentName)
+        </dd>
+    </dl>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BookSummaries.First().RequestTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookSummaries.First().InstrumentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookSummaries.First().OpenInterest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookSummaries.First().Volume)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookSummaries.First().UnderlyingPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookSummaries.First().EstimatedDeliveryPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookSummaries.First().AskPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookSummaries.First().BidPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookSummaries.First().Low)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookSummaries.First().High)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookSummaries.First().MarkPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookSummaries.First().CreationTimestamp)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.BookSummaries.OrderByDescending(x=>x.RequestTime))
+        {
+            <tr>
+                <th>
+                    @Html.DisplayFor(modelItem => item.RequestTime)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.InstrumentName)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.OpenInterest)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Volume)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.UnderlyingPrice)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.EstimatedDeliveryPrice)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.AskPrice)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.BidPrice)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Low)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.High)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.MarkPrice)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.CreationTimestamp)
+                </th>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

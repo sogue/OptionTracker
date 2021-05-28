@@ -1,0 +1,138 @@
+﻿@model IEnumerable<OptionTracker.Models.Deribit.CspSummary>
+
+@{
+    ViewData["Title"] = "Index";
+    var parms = new Dictionary<string, string>{};
+    parms.Add("underlyingIndex", "ETH-4JUN21");
+    parms.Add("type", "put");
+    parms.Add("strike", "2000");
+    parms.Add("multiplier", "10");
+}
+
+    <h1>Index</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                <input type="text" name="underlyingIndex" value="@parms["underlyingIndex"]" />
+                <input type="text" name="strike" value="@parms["strike"]" />
+                <input type="text" name="type" value="@parms["type"]" />
+                <input type="text" name="multiplier" value="@parms["multiplier"]" />
+                <input type="submit" value="Filter" class="btn btn-default" />
+            </p>
+        </div>
+    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.InstrumentName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EstimatedDeliveryPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AskPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BidPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Low)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.High)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MarkPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VolumeUsd)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Percentage)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PremiumMultiUsd)
+                    (Month)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CapitalMultiUsd)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LiqStrike)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RiskUsd)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ActualLeverage)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ActualCapital)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ActualLiqStrike)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <th>
+                    @Html.DisplayFor(modelItem => item.InstrumentName)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.EstimatedDeliveryPrice)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.AskPrice)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.BidPrice)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Low)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.High)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.MarkPrice)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.VolumeUsd)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Percentage)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.PremiumMultiUsd)
+                    (@Html.DisplayFor(modelItem => item.PremiumMultiUsdMonth))
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.CapitalMultiUsd)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.LiqStrike)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.RiskUsd)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.ActualLeverage)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.ActualCapital)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.ActualLiqStrike)
+                </th>
+            </tr>
+            }
+        </tbody>
+    </table>

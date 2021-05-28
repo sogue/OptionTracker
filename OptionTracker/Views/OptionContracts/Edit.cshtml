@@ -1,0 +1,264 @@
+﻿@model OptionTracker.Models.OptionContract
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>OptionContract</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Symbol" />
+            <div class="form-group">
+                <label asp-for="PutCall" class="control-label"></label>
+                <input asp-for="PutCall" class="form-control" />
+                <span asp-validation-for="PutCall" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Symbol" class="control-label"></label>
+                <input asp-for="Symbol" class="form-control" />
+                <span asp-validation-for="Symbol" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExchangeName" class="control-label"></label>
+                <input asp-for="ExchangeName" class="form-control" />
+                <span asp-validation-for="ExchangeName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Bid" class="control-label"></label>
+                <input asp-for="Bid" class="form-control" />
+                <span asp-validation-for="Bid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ask" class="control-label"></label>
+                <input asp-for="Ask" class="form-control" />
+                <span asp-validation-for="Ask" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Last" class="control-label"></label>
+                <input asp-for="Last" class="form-control" />
+                <span asp-validation-for="Last" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mark" class="control-label"></label>
+                <input asp-for="Mark" class="form-control" />
+                <span asp-validation-for="Mark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BidSize" class="control-label"></label>
+                <input asp-for="BidSize" class="form-control" />
+                <span asp-validation-for="BidSize" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AskSize" class="control-label"></label>
+                <input asp-for="AskSize" class="form-control" />
+                <span asp-validation-for="AskSize" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BidAskSize" class="control-label"></label>
+                <input asp-for="BidAskSize" class="form-control" />
+                <span asp-validation-for="BidAskSize" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastSize" class="control-label"></label>
+                <input asp-for="LastSize" class="form-control" />
+                <span asp-validation-for="LastSize" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HighPrice" class="control-label"></label>
+                <input asp-for="HighPrice" class="form-control" />
+                <span asp-validation-for="HighPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LowPrice" class="control-label"></label>
+                <input asp-for="LowPrice" class="form-control" />
+                <span asp-validation-for="LowPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OpenPrice" class="control-label"></label>
+                <input asp-for="OpenPrice" class="form-control" />
+                <span asp-validation-for="OpenPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClosePrice" class="control-label"></label>
+                <input asp-for="ClosePrice" class="form-control" />
+                <span asp-validation-for="ClosePrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalVolume" class="control-label"></label>
+                <input asp-for="TotalVolume" class="form-control" />
+                <span asp-validation-for="TotalVolume" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TradeDate" class="control-label"></label>
+                <input asp-for="TradeDate" class="form-control" />
+                <span asp-validation-for="TradeDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TradeTimeInLong" class="control-label"></label>
+                <input asp-for="TradeTimeInLong" class="form-control" />
+                <span asp-validation-for="TradeTimeInLong" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QuoteTimeInLong" class="control-label"></label>
+                <input asp-for="QuoteTimeInLong" class="form-control" />
+                <span asp-validation-for="QuoteTimeInLong" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NetChange" class="control-label"></label>
+                <input asp-for="NetChange" class="form-control" />
+                <span asp-validation-for="NetChange" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Volatility" class="control-label"></label>
+                <input asp-for="Volatility" class="form-control" />
+                <span asp-validation-for="Volatility" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Delta" class="control-label"></label>
+                <input asp-for="Delta" class="form-control" />
+                <span asp-validation-for="Delta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gamma" class="control-label"></label>
+                <input asp-for="Gamma" class="form-control" />
+                <span asp-validation-for="Gamma" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Theta" class="control-label"></label>
+                <input asp-for="Theta" class="form-control" />
+                <span asp-validation-for="Theta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vega" class="control-label"></label>
+                <input asp-for="Vega" class="form-control" />
+                <span asp-validation-for="Vega" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rho" class="control-label"></label>
+                <input asp-for="Rho" class="form-control" />
+                <span asp-validation-for="Rho" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OpenInterest" class="control-label"></label>
+                <input asp-for="OpenInterest" class="form-control" />
+                <span asp-validation-for="OpenInterest" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TimeValue" class="control-label"></label>
+                <input asp-for="TimeValue" class="form-control" />
+                <span asp-validation-for="TimeValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TheoreticalOptionValue" class="control-label"></label>
+                <input asp-for="TheoreticalOptionValue" class="form-control" />
+                <span asp-validation-for="TheoreticalOptionValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TheoreticalVolatility" class="control-label"></label>
+                <input asp-for="TheoreticalVolatility" class="form-control" />
+                <span asp-validation-for="TheoreticalVolatility" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OptionDeliverablesList" class="control-label"></label>
+                <input asp-for="OptionDeliverablesList" class="form-control" />
+                <span asp-validation-for="OptionDeliverablesList" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StrikePrice" class="control-label"></label>
+                <input asp-for="StrikePrice" class="form-control" />
+                <span asp-validation-for="StrikePrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpirationDate" class="control-label"></label>
+                <input asp-for="ExpirationDate" class="form-control" />
+                <span asp-validation-for="ExpirationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DaysToExpiration" class="control-label"></label>
+                <input asp-for="DaysToExpiration" class="form-control" />
+                <span asp-validation-for="DaysToExpiration" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpirationType" class="control-label"></label>
+                <input asp-for="ExpirationType" class="form-control" />
+                <span asp-validation-for="ExpirationType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastTradingDay" class="control-label"></label>
+                <input asp-for="LastTradingDay" class="form-control" />
+                <span asp-validation-for="LastTradingDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Multiplier" class="control-label"></label>
+                <input asp-for="Multiplier" class="form-control" />
+                <span asp-validation-for="Multiplier" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SettlementType" class="control-label"></label>
+                <input asp-for="SettlementType" class="form-control" />
+                <span asp-validation-for="SettlementType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DeliverableNote" class="control-label"></label>
+                <input asp-for="DeliverableNote" class="form-control" />
+                <span asp-validation-for="DeliverableNote" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsIndexOption" class="control-label"></label>
+                <input asp-for="IsIndexOption" class="form-control" />
+                <span asp-validation-for="IsIndexOption" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PercentChange" class="control-label"></label>
+                <input asp-for="PercentChange" class="form-control" />
+                <span asp-validation-for="PercentChange" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MarkChange" class="control-label"></label>
+                <input asp-for="MarkChange" class="form-control" />
+                <span asp-validation-for="MarkChange" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MarkPercentChange" class="control-label"></label>
+                <input asp-for="MarkPercentChange" class="form-control" />
+                <span asp-validation-for="MarkPercentChange" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="NonStandard" /> @Html.DisplayNameFor(model => model.NonStandard)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Mini" /> @Html.DisplayNameFor(model => model.Mini)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="InTheMoney" /> @Html.DisplayNameFor(model => model.InTheMoney)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

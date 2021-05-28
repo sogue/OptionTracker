@@ -1,0 +1,68 @@
+﻿@model Org.OpenAPITools.Models.PortfolioEth
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>PortfolioEth</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MaintenanceMargin" class="control-label"></label>
+                <input asp-for="MaintenanceMargin" class="form-control" />
+                <span asp-validation-for="MaintenanceMargin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AvailableWithdrawalFunds" class="control-label"></label>
+                <input asp-for="AvailableWithdrawalFunds" class="form-control" />
+                <span asp-validation-for="AvailableWithdrawalFunds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InitialMargin" class="control-label"></label>
+                <input asp-for="InitialMargin" class="form-control" />
+                <span asp-validation-for="InitialMargin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AvailableFunds" class="control-label"></label>
+                <input asp-for="AvailableFunds" class="form-control" />
+                <span asp-validation-for="AvailableFunds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Currency" class="control-label"></label>
+                <input asp-for="Currency" class="form-control" />
+                <span asp-validation-for="Currency" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MarginBalance" class="control-label"></label>
+                <input asp-for="MarginBalance" class="form-control" />
+                <span asp-validation-for="MarginBalance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Equity" class="control-label"></label>
+                <input asp-for="Equity" class="form-control" />
+                <span asp-validation-for="Equity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Balance" class="control-label"></label>
+                <input asp-for="Balance" class="form-control" />
+                <span asp-validation-for="Balance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

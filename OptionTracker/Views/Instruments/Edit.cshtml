@@ -1,0 +1,94 @@
+﻿@model Org.OpenAPITools.Models.Instrument
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Instrument</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="QuoteCurrency" class="control-label"></label>
+                <input asp-for="QuoteCurrency" class="form-control" />
+                <span asp-validation-for="QuoteCurrency" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Kind" class="control-label"></label>
+                <input asp-for="Kind" class="form-control" />
+                <span asp-validation-for="Kind" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TickSize" class="control-label"></label>
+                <input asp-for="TickSize" class="form-control" />
+                <span asp-validation-for="TickSize" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContractSize" class="control-label"></label>
+                <input asp-for="ContractSize" class="form-control" />
+                <span asp-validation-for="ContractSize" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsActive" class="control-label"></label>
+                <input asp-for="IsActive" class="form-control" />
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OptionType" class="control-label"></label>
+                <input asp-for="OptionType" class="form-control" />
+                <span asp-validation-for="OptionType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MinTradeAmount" class="control-label"></label>
+                <input asp-for="MinTradeAmount" class="form-control" />
+                <span asp-validation-for="MinTradeAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InstrumentName" class="control-label"></label>
+                <input asp-for="InstrumentName" class="form-control" />
+                <span asp-validation-for="InstrumentName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SettlementPeriod" class="control-label"></label>
+                <input asp-for="SettlementPeriod" class="form-control" />
+                <span asp-validation-for="SettlementPeriod" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Strike" class="control-label"></label>
+                <input asp-for="Strike" class="form-control" />
+                <span asp-validation-for="Strike" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BaseCurrency" class="control-label"></label>
+                <input asp-for="BaseCurrency" class="form-control" />
+                <span asp-validation-for="BaseCurrency" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreationTimestamp" class="control-label"></label>
+                <input asp-for="CreationTimestamp" class="form-control" />
+                <span asp-validation-for="CreationTimestamp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpirationTimestamp" class="control-label"></label>
+                <input asp-for="ExpirationTimestamp" class="form-control" />
+                <span asp-validation-for="ExpirationTimestamp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

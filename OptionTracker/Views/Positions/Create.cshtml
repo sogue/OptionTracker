@@ -1,0 +1,123 @@
+﻿@model Org.OpenAPITools.Models.Position
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Position</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Direction" class="control-label"></label>
+                <input asp-for="Direction" class="form-control" />
+                <span asp-validation-for="Direction" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AveragePriceUsd" class="control-label"></label>
+                <input asp-for="AveragePriceUsd" class="form-control" />
+                <span asp-validation-for="AveragePriceUsd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EstimatedLiquidationPrice" class="control-label"></label>
+                <input asp-for="EstimatedLiquidationPrice" class="form-control" />
+                <span asp-validation-for="EstimatedLiquidationPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FloatingProfitLoss" class="control-label"></label>
+                <input asp-for="FloatingProfitLoss" class="form-control" />
+                <span asp-validation-for="FloatingProfitLoss" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FloatingProfitLossUsd" class="control-label"></label>
+                <input asp-for="FloatingProfitLossUsd" class="form-control" />
+                <span asp-validation-for="FloatingProfitLossUsd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OpenOrdersMargin" class="control-label"></label>
+                <input asp-for="OpenOrdersMargin" class="form-control" />
+                <span asp-validation-for="OpenOrdersMargin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalProfitLoss" class="control-label"></label>
+                <input asp-for="TotalProfitLoss" class="form-control" />
+                <span asp-validation-for="TotalProfitLoss" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RealizedProfitLoss" class="control-label"></label>
+                <input asp-for="RealizedProfitLoss" class="form-control" />
+                <span asp-validation-for="RealizedProfitLoss" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Delta" class="control-label"></label>
+                <input asp-for="Delta" class="form-control" />
+                <span asp-validation-for="Delta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InitialMargin" class="control-label"></label>
+                <input asp-for="InitialMargin" class="form-control" />
+                <span asp-validation-for="InitialMargin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Size" class="control-label"></label>
+                <input asp-for="Size" class="form-control" />
+                <span asp-validation-for="Size" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaintenanceMargin" class="control-label"></label>
+                <input asp-for="MaintenanceMargin" class="form-control" />
+                <span asp-validation-for="MaintenanceMargin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Kind" class="control-label"></label>
+                <input asp-for="Kind" class="form-control" />
+                <span asp-validation-for="Kind" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MarkPrice" class="control-label"></label>
+                <input asp-for="MarkPrice" class="form-control" />
+                <span asp-validation-for="MarkPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AveragePrice" class="control-label"></label>
+                <input asp-for="AveragePrice" class="form-control" />
+                <span asp-validation-for="AveragePrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SettlementPrice" class="control-label"></label>
+                <input asp-for="SettlementPrice" class="form-control" />
+                <span asp-validation-for="SettlementPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IndexPrice" class="control-label"></label>
+                <input asp-for="IndexPrice" class="form-control" />
+                <span asp-validation-for="IndexPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InstrumentName" class="control-label"></label>
+                <input asp-for="InstrumentName" class="form-control" />
+                <span asp-validation-for="InstrumentName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SizeCurrency" class="control-label"></label>
+                <input asp-for="SizeCurrency" class="form-control" />
+                <span asp-validation-for="SizeCurrency" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

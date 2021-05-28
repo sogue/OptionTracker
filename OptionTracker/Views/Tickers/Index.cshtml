@@ -1,0 +1,76 @@
+﻿@model IEnumerable<OptionTracker.Models.Ticker>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>Tickers</h3>
+<div class="input-group-sm">
+    <div>
+        <a asp-action="Create">Add Ticker</a>
+    </div>
+</div>
+<form asp-action="Index" method="get">
+    <div class="input-group-sm">
+        <p>
+            Find: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+<form asp-action="Index" method="get">
+    <div class="input-group-sm">
+            <input type="hidden" name="pD" value="@ViewData["Page"]" />
+            <input type="submit" value="Prev" class="btn" />
+    </div>
+</form>
+<form asp-action="Index" method="get">
+    <div class="input-group-sm">
+            <input type="hidden" name="pU" value="@ViewData["Page"]" />
+            <input type="submit" value="Next" class="btn" />
+    </div>
+</form>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Symbol)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClosePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MarketCap)
+            </th>
+            <th>
+                Options
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Symbol)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClosePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MarketCap)
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.Id">Add to Watchlist</a> |
+                <a asp-controller="DateChains"
+                   asp-action="@item.Symbol">
+                    Option Chains
+                </a> |
+                <a asp-action="Details" asp-route-id="@item.Symbol">Most Active Options</a>
+                | <a asp-controller="VolumeAnals" asp-action="Details" asp-route-id="@item.Symbol">Daily Option Volume</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

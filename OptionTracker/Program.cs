@@ -1,14 +1,11 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using OptionTracker.Data;
+using System;
+using System.Threading.Tasks;
 
 namespace OptionTracker
 {
@@ -16,7 +13,7 @@ namespace OptionTracker
     {
         public static async Task Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build();
             IHost host = CreateHostBuilder(args).Build();
             using IServiceScope scope = host.Services.CreateScope();
             IServiceProvider services = scope.ServiceProvider;

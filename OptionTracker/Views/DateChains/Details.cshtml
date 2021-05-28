@@ -1,0 +1,148 @@
+﻿@using System.Globalization
+@model IEnumerable<OptionContract>
+
+@{
+    ViewData["Title"] = string.Join(" ",
+        Model.FirstOrDefault()?.Description.Split(" ").Reverse().Skip(2).Reverse() ?? Array.Empty<string>());
+}
+
+<h2>@Html.ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Bid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ask)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ClosePrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalVolume)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NetChange)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Volatility)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Delta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Gamma)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Theta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Vega)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Rho)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OpenInterest)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TimeValue)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StrikePrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DaysToExpiration)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PercentChange)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MarkChange)
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <a asp-controller="Tickers"
+                   asp-action="Edit"
+                   asp-route-id="@item.Symbol">
+                    @Html.DisplayFor(modelItem => item.Description)
+                </a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ask)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClosePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalVolume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NetChange)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Volatility)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Delta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gamma)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Theta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vega)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rho)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OpenInterest)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StrikePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DaysToExpiration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PercentChange)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MarkChange)
+            </td>
+            <td>
+                @{
+                    var parms = new Dictionary<string, string>
+                    {
+                        {"s", item.Symbol}
+                    };
+                }
+
+                <a asp-controller="Tickers"
+                   asp-action="Edit"
+                   asp-route-id="@item.Symbol">
+                </a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

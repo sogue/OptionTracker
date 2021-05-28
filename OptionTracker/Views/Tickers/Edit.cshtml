@@ -1,0 +1,444 @@
+﻿@model OptionContract
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<div>
+    <h4>OptionContract</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PutCall)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PutCall)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Symbol)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Symbol)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ExchangeName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ExchangeName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Bid)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Bid)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ask)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ask)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Last)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Last)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Mark)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Mark)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BidSize)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BidSize)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AskSize)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.AskSize)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.BidAskSize)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BidAskSize)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LastSize)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LastSize)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HighPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HighPrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LowPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LowPrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.OpenPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.OpenPrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ClosePrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ClosePrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalVolume)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TotalVolume)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TradeDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TradeDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TradeTimeInLong)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TradeTimeInLong)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.QuoteTimeInLong)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.QuoteTimeInLong)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NetChange)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NetChange)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Volatility)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Volatility)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Delta)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Delta)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Gamma)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Gamma)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Theta)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Theta)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Vega)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Vega)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Rho)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Rho)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.OpenInterest)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.OpenInterest)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TimeValue)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TimeValue)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TheoreticalOptionValue)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TheoreticalOptionValue)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TheoreticalVolatility)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TheoreticalVolatility)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.OptionDeliverablesList)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.OptionDeliverablesList)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StrikePrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StrikePrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ExpirationDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ExpirationDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DaysToExpiration)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DaysToExpiration)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ExpirationType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ExpirationType)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LastTradingDay)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LastTradingDay)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Multiplier)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Multiplier)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SettlementType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SettlementType)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DeliverableNote)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DeliverableNote)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsIndexOption)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsIndexOption)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PercentChange)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PercentChange)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MarkChange)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MarkChange)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MarkPercentChange)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MarkPercentChange)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NonStandard)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NonStandard)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Mini)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Mini)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.InTheMoney)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.InTheMoney)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<div class="jumbotron">
+    <div id="chart-candlestick" class="chart-candlestick"></div>
+    <div id="chart-bar" class="chart-bar"></div>
+</div>
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        var seriesData = [
+            {
+                x: new Date(1538778600000),
+                y: [6629.81, 6650.5, 6623.04, 6633.33]
+            },
+            {
+                x: new Date(1538780400000),
+                y: [6632.01, 6643.59, 6620, 6630.11]
+            },
+            {
+                x: new Date(1538782200000),
+                y: [6630.71, 6648.95, 6623.34, 6635.65]
+            },
+            {
+                x: new Date(1538784000000),
+                y: [6635.65, 6651, 6629.67, 6638.24]
+            }
+            ];
+        var seriesDataLinear =  [1,2,3,4];
+        $(document).ready(function () {
+            GetData();
+        });
+        function GetData() {
+            $.ajax({
+                url: '/Tickers/GetChart/@Model.Symbol',
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    console.log(data);
+                    if (data.success) {
+                        if (data.series.length > 0) {
+                          //  seriesData = data.series;
+                        } else {
+                        }
+                    } else {
+                        alert(data.message);
+                    }
+                },
+                error: function (reponse) {
+                    console.log(reponse);
+                    alert("error : " + reponse);
+                }
+            });
+        }
+        var options = {
+            series: [{
+                data: seriesData
+            }],
+            chart: {
+                type: 'candlestick',
+                height: 290,
+                id: 'candles',
+                toolbar: {
+                    autoSelected: 'pan',
+                    show: false
+                },
+                zoom: {
+                    enabled: false
+                },
+            },
+            plotOptions: {
+                candlestick: {
+                    colors: {
+                        upward: '#3C90EB',
+                        downward: '#DF7D46'
+                    }
+                }
+            },
+            xaxis: {
+                type: 'datetime'
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart-candlestick"), options);
+        chart.render();
+
+        var optionsBar = {
+            series: [{
+                name: 'volume',
+                data: seriesDataLinear
+            }],
+            chart: {
+                height: 160,
+                type: 'bar',
+                brush: {
+                    enabled: true,
+                    target: 'candles'
+                },
+                selection: {
+                    enabled: true,
+                    fill: {
+                        color: '#ccc',
+                        opacity: 0.4
+                    },
+                    stroke: {
+                        color: '#0D47A1',
+                    }
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: '80%',
+                    colors: {
+                        ranges: [{
+                            from: -1000,
+                            to: 0,
+                            color: '#F15B46'
+                        }, {
+                            from: 1,
+                            to: 10000,
+                            color: '#FEB019'
+                        }],
+
+                    },
+                }
+            },
+            stroke: {
+                width: 0
+            },
+            xaxis: {
+                type: 'datetime',
+                axisBorder: {
+                    offsetX: 13
+                }
+            },
+            yaxis: {
+                labels: {
+                    show: false
+                }
+            }
+        };
+
+        var chartBar = new ApexCharts(document.querySelector("#chart-bar"), optionsBar);
+        chartBar.render();
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
