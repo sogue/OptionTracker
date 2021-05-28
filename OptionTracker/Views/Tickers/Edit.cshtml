@@ -294,10 +294,9 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
-<div class="jumbotron">
-    <div id="chart-candlestick" class="chart-candlestick"></div>
-    <div id="chart-bar" class="chart-bar"></div>
+<div>
+    <div id="chart-candlestick"></div>
+    <div id="chart-bar"></div>
 </div>
 @section scripts{
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -319,21 +318,38 @@
                 x: new Date(1538784000000),
                 y: [6635.65, 6651, 6629.67, 6638.24]
             }
-            ];
-        var seriesDataLinear =  [1,2,3,4];
+        ];
+        var seriesDataLinear = [
+            {
+                x: new Date(1538778600000),
+                y: [60]
+            },
+            {
+                x: new Date(1538780400000),
+                y: [70]
+            },
+            {
+                x: new Date(1538782200000),
+                y: [80]
+            },
+            {
+                x: new Date(1538784000000),
+                y: [90]
+            }
+        ];
         $(document).ready(function () {
             GetData();
         });
         function GetData() {
             $.ajax({
-                url: '/Tickers/GetChart/@Model.Symbol',
+                url: '/Tickers/GetOptionChartData/@Model.Symbol',
                 cache: false,
                 type: "POST",
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     if (data.success) {
                         if (data.series.length > 0) {
-                          //  seriesData = data.series;
+                            LoadChart(data.series, data.labels);
                         } else {
                         }
                     } else {
@@ -346,99 +362,101 @@
                 }
             });
         }
-        var options = {
-            series: [{
-                data: seriesData
-            }],
-            chart: {
-                type: 'candlestick',
-                height: 290,
-                id: 'candles',
-                toolbar: {
-                    autoSelected: 'pan',
-                    show: false
+        function LoadChart(series, labels) {
+            var options = {
+                series: [{
+                    data: series
+                }],
+                chart: {
+                    type: 'line',
+                    height: 290,
+                    id: 'candles',
+                    toolbar: {
+                        autoSelected: 'pan',
+                        show: false
+                    },
+                    zoom: {
+                        enabled: false
+                    },
                 },
-                zoom: {
+                plotOptions: {
+                    candlestick: {
+                        colors: {
+                            upward: '#3C90EB',
+                            downward: '#DF7D46'
+                        }
+                    }
+                },
+                xaxis: {
+                    type: 'datetime'
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart-candlestick"), options);
+            chart.render();
+
+            var optionsBar = {
+                series: [{
+                    name: 'volume',
+                    data: labels
+                }],
+                chart: {
+                    height: 160,
+                    type: 'bar',
+                    brush: {
+                        enabled: true,
+                        target: 'candles'
+                    },
+                    selection: {
+                        enabled: true,
+                        fill: {
+                            color: '#ccc',
+                            opacity: 0.4
+                        },
+                        stroke: {
+                            color: '#0D47A1',
+                        }
+                    },
+                },
+                dataLabels: {
                     enabled: false
                 },
-            },
-            plotOptions: {
-                candlestick: {
-                    colors: {
-                        upward: '#3C90EB',
-                        downward: '#DF7D46'
-                    }
-                }
-            },
-            xaxis: {
-                type: 'datetime'
-            }
-        };
+                plotOptions: {
+                    bar: {
+                        columnWidth: '80%',
+                        colors: {
+                            ranges: [{
+                                from: -1000,
+                                to: 0,
+                                color: '#F15B46'
+                            }, {
+                                from: 1,
+                                to: 10000,
+                                color: '#FEB019'
+                            }],
 
-        var chart = new ApexCharts(document.querySelector("#chart-candlestick"), options);
-        chart.render();
-
-        var optionsBar = {
-            series: [{
-                name: 'volume',
-                data: seriesDataLinear
-            }],
-            chart: {
-                height: 160,
-                type: 'bar',
-                brush: {
-                    enabled: true,
-                    target: 'candles'
-                },
-                selection: {
-                    enabled: true,
-                    fill: {
-                        color: '#ccc',
-                        opacity: 0.4
-                    },
-                    stroke: {
-                        color: '#0D47A1',
+                        },
                     }
                 },
-            },
-            dataLabels: {
-                enabled: false
-            },
-            plotOptions: {
-                bar: {
-                    columnWidth: '80%',
-                    colors: {
-                        ranges: [{
-                            from: -1000,
-                            to: 0,
-                            color: '#F15B46'
-                        }, {
-                            from: 1,
-                            to: 10000,
-                            color: '#FEB019'
-                        }],
+                stroke: {
+                    width: 0
+                },
+                xaxis: {
+                    type: 'datetime',
+                    axisBorder: {
+                        offsetX: 13
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        show: true
+                    }
+                }
+            };
 
-                    },
-                }
-            },
-            stroke: {
-                width: 0
-            },
-            xaxis: {
-                type: 'datetime',
-                axisBorder: {
-                    offsetX: 13
-                }
-            },
-            yaxis: {
-                labels: {
-                    show: false
-                }
-            }
-        };
-
-        var chartBar = new ApexCharts(document.querySelector("#chart-bar"), optionsBar);
-        chartBar.render();
+            var chartBar = new ApexCharts(document.querySelector("#chart-bar"), optionsBar);
+            chartBar.render();
+        }
     </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

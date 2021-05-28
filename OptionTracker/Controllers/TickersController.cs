@@ -12,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using OptionTracker.Models.Anal;
 
 namespace OptionTracker.Controllers
 {
@@ -82,6 +83,42 @@ namespace OptionTracker.Controllers
                 result = result.OrderByDescending(x => x.ClosePriceChange).ToList();
 
             return View(result);
+        }
+
+        [Microsoft.AspNetCore.Mvc.HttpPost("Tickers/GetOptionChartData/{ticker}")]
+        public JsonResult GetOptionChartData(string ticker)
+        {
+            try
+            {
+                var sp = ticker.Split("_");
+               var volumeAnal = _context.OptionChainRaw
+                   .Where(m => m.Symbol == sp[0]).ToList();
+              
+               var dates = volumeAnal.Select(x=> JsonConvert
+                   .DeserializeObject<Dictionary<string, Dictionary<string, OptionContract[]>>>(
+                       x.Data.RootElement.GetProperty("callExpDateMap").ToString()));
+
+               var opData = dates
+                   .SelectMany(x=>x.Values)
+                   .SelectMany(x=>x.Values)
+                   .SelectMany(x=>x)
+                   .Where(x=>x.Symbol == ticker)
+                   .OrderByDescending(x=>x.QuoteTimeInLong)
+                   .Take(30)
+                   .ToList();
+
+               var graph1 = opData.Select(x=>new {x=x.QuoteTimeInLong , y= new[]{ x.Last , x.ClosePrice , x.LowPrice , x.HighPrice } }).ToArray();
+                var SeriesVal = graph1;
+
+                var graph2 = opData.Select(x => new { x = x.QuoteTimeInLong, y = new[] { x.TotalVolume } }).ToArray();
+
+                var LabelsVal = graph2;
+                return Json(new { success = true, series = SeriesVal, labels = LabelsVal, message = "success.!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Some thing went Wrong.! unsuccessfull!" });
+            }
         }
 
         // GET: Ticker/Details/5
