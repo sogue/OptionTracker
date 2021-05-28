@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OptionTracker.Data;
@@ -12,9 +13,10 @@ using OptionTracker.Models;
 namespace OptionTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210528064134_SummaryExtended")]
+    partial class SummaryExtended
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1049,30 +1051,37 @@ namespace OptionTracker.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<decimal?>("AvailableFunds")
+                        .IsRequired()
                         .HasColumnType("numeric");
 
                     b.Property<decimal?>("AvailableWithdrawalFunds")
+                        .IsRequired()
                         .HasColumnType("numeric");
 
                     b.Property<decimal?>("Balance")
+                        .IsRequired()
                         .HasColumnType("numeric");
 
-                    b.Property<int?>("Currency")
+                    b.Property<int>("Currency")
                         .HasColumnType("integer");
 
                     b.Property<decimal?>("Equity")
+                        .IsRequired()
                         .HasColumnType("numeric");
 
                     b.Property<decimal?>("EquityUsd")
                         .HasColumnType("numeric");
 
                     b.Property<decimal?>("InitialMargin")
+                        .IsRequired()
                         .HasColumnType("numeric");
 
                     b.Property<decimal?>("MaintenanceMargin")
+                        .IsRequired()
                         .HasColumnType("numeric");
 
                     b.Property<decimal?>("MarginBalance")
+                        .IsRequired()
                         .HasColumnType("numeric");
 
                     b.Property<long>("creation_timestamp")
@@ -1090,29 +1099,32 @@ namespace OptionTracker.Migrations
                     b.Property<decimal?>("futures_session_upl")
                         .HasColumnType("numeric");
 
-                    b.Property<decimal?>("options_delta")
-                        .HasColumnType("numeric");
+                    b.Property<int>("options_delta")
+                        .HasColumnType("integer");
 
-                    b.Property<decimal?>("options_gamma")
-                        .HasColumnType("numeric");
+                    b.Property<int>("options_gamma")
+                        .HasColumnType("integer");
 
-                    b.Property<decimal?>("options_pl")
-                        .HasColumnType("numeric");
+                    b.Property<int>("options_pl")
+                        .HasColumnType("integer");
 
-                    b.Property<decimal?>("options_session_rpl")
-                        .HasColumnType("numeric");
+                    b.Property<int>("options_session_rpl")
+                        .HasColumnType("integer");
 
-                    b.Property<decimal?>("options_session_upl")
-                        .HasColumnType("numeric");
+                    b.Property<int>("options_session_upl")
+                        .HasColumnType("integer");
 
-                    b.Property<decimal?>("options_theta")
-                        .HasColumnType("numeric");
+                    b.Property<int>("options_theta")
+                        .HasColumnType("integer");
 
-                    b.Property<decimal?>("options_value")
-                        .HasColumnType("numeric");
+                    b.Property<int>("options_value")
+                        .HasColumnType("integer");
 
-                    b.Property<decimal?>("options_vega")
-                        .HasColumnType("numeric");
+                    b.Property<int>("options_vega")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("portfolio_margining_enabled")
+                        .HasColumnType("boolean");
 
                     b.Property<decimal?>("projected_delta_total")
                         .HasColumnType("numeric");
@@ -1129,8 +1141,17 @@ namespace OptionTracker.Migrations
                     b.Property<decimal?>("session_upl")
                         .HasColumnType("numeric");
 
+                    b.Property<string>("system_name")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("tfa_enabled")
+                        .HasColumnType("boolean");
+
                     b.Property<decimal?>("total_pl")
                         .HasColumnType("numeric");
+
+                    b.Property<string>("type")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
