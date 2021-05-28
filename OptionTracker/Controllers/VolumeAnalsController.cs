@@ -57,7 +57,6 @@ namespace OptionTracker.Controllers
         {
             try
             {
-               
                 var volumeAnal = _context.VolumeAnals.Include(x => x.VolumeDatas)
                     .First(m => m.Symbol == ticker);
 
@@ -108,7 +107,7 @@ namespace OptionTracker.Controllers
                 }
 
                 var chainRaw = volumeAnal.VolumeDatas
-                    .OrderByDescending(x => x.Time).ToList();
+                    .OrderByDescending(x => x.Time).Take(30).ToList();
 
                 int[] SeriesVal = chainRaw.Select(x => x.Volume).ToArray();
                 string[] LabelsVal = chainRaw.Select(x => x.Time.Date.ToShortDateString()).ToArray();
