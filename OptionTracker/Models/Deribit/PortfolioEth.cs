@@ -27,6 +27,8 @@ namespace Org.OpenAPITools.Models
         /// Gets or Sets MaintenanceMargin
         /// </summary>
 
+        public DateTime PortfolioDate { get; set; }
+
         [DataMember(Name = "maintenance_margin", EmitDefaultValue = false)]
         public decimal? MaintenanceMargin { get; set; }
 
@@ -106,8 +108,10 @@ namespace Org.OpenAPITools.Models
         public decimal? futures_pl { get; set; }
         [DataMember(Name = "session_upl", EmitDefaultValue = false)]
         public decimal? session_upl { get; set; }
+
         [DataMember(Name = "creation_timestamp", EmitDefaultValue = false)]
         public long creation_timestamp { get; set; }
+
         [DataMember(Name = "options_pl", EmitDefaultValue = false)]
         public decimal? options_pl { get; set; }
         // [DataMember(Name = "system_name", EmitDefaultValue = false)]

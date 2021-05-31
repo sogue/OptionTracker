@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OptionTracker.Data;
@@ -12,9 +13,10 @@ using OptionTracker.Models;
 namespace OptionTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210531200510_volDataCall")]
+    partial class volDataCall
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -306,8 +308,9 @@ namespace OptionTracker.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("OptionType")
-                        .HasColumnType("integer");
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("timestamp without time zone");
@@ -315,14 +318,11 @@ namespace OptionTracker.Migrations
                     b.Property<int>("Volume")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("VolumeAnalId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("VolumeAnalId");
-
                     b.ToTable("VolumeDatas");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("VolumeData");
                 });
 
             modelBuilder.Entity("OptionTracker.Models.ChainRaw", b =>
@@ -1288,6 +1288,31 @@ namespace OptionTracker.Migrations
                     b.ToTable("TickerTrader");
                 });
 
+            modelBuilder.Entity("OptionTracker.Models.Anal.VolumeDataCall", b =>
+                {
+                    b.HasBaseType("OptionTracker.Models.Anal.VolumeData");
+
+                    b.Property<int?>("VolumeAnalId")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("VolumeAnalId");
+
+                    b.HasDiscriminator().HasValue("VolumeDataCall");
+                });
+
+            modelBuilder.Entity("OptionTracker.Models.Anal.VolumeDataPut", b =>
+                {
+                    b.HasBaseType("OptionTracker.Models.Anal.VolumeData");
+
+                    b.Property<int?>("VolumeAnalId")
+                        .HasColumnType("integer")
+                        .HasColumnName("VolumeDataPut_VolumeAnalId");
+
+                    b.HasIndex("VolumeAnalId");
+
+                    b.HasDiscriminator().HasValue("VolumeDataPut");
+                });
+
             modelBuilder.Entity("FlowService.Models.ChainModels.HistoricalChain", b =>
                 {
                     b.HasOne("OptionTracker.Models.Ticker", null)
@@ -1364,13 +1389,6 @@ namespace OptionTracker.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("OptionTracker.Models.Anal.VolumeData", b =>
-                {
-                    b.HasOne("OptionTracker.Models.Anal.VolumeAnal", null)
-                        .WithMany("VolumeDatas")
-                        .HasForeignKey("VolumeAnalId");
                 });
 
             modelBuilder.Entity("OptionTracker.Models.Crypto.BookDetail", b =>
@@ -1480,6 +1498,20 @@ namespace OptionTracker.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("OptionTracker.Models.Anal.VolumeDataCall", b =>
+                {
+                    b.HasOne("OptionTracker.Models.Anal.VolumeAnal", null)
+                        .WithMany("VolumeDataCalls")
+                        .HasForeignKey("VolumeAnalId");
+                });
+
+            modelBuilder.Entity("OptionTracker.Models.Anal.VolumeDataPut", b =>
+                {
+                    b.HasOne("OptionTracker.Models.Anal.VolumeAnal", null)
+                        .WithMany("VolumeDataPuts")
+                        .HasForeignKey("VolumeAnalId");
+                });
+
             modelBuilder.Entity("FlowService.Models.ChainModels.HistoricalChain", b =>
                 {
                     b.Navigation("Dates");
@@ -1492,7 +1524,9 @@ namespace OptionTracker.Migrations
 
             modelBuilder.Entity("OptionTracker.Models.Anal.VolumeAnal", b =>
                 {
-                    b.Navigation("VolumeDatas");
+                    b.Navigation("VolumeDataCalls");
+
+                    b.Navigation("VolumeDataPuts");
                 });
 
             modelBuilder.Entity("OptionTracker.Models.ChainResultViewModel", b =>

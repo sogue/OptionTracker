@@ -7,30 +7,31 @@
 <h2> @Html.DisplayFor(model => model.Symbol)</h2>
 
 <div>
-    <h4>Last 30 Days Option Volume</h4>
+    <a asp-controller="Traders" asp-action="Index">Back to List</a>
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
-</div>
-<div>
-    <div id="chart" class=""></div>
+    <h4>Last 30 Days Call Option Volume</h4>
+    <div id="chartCall" class=""></div>
+    <h4>Last 30 Days Put Option Volume</h4>
+    <div id="chartPut" class=""></div>
 </div>
 @section scripts{
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         $(document).ready(function () {
-            GetData();
+            GetDataCall();
+            GetDataPut();
         });
-        function GetData() {
+        function GetDataCall() {
             $.ajax({
-                url: '/VolumeAnals/GetChartData/@Model.Symbol',
+                url: '/VolumeAnals/GetChartDataCall/@Model.Symbol',
                 cache: false,
                 type: "POST",
                 success: function (data) {
                     //console.log(data);
                     if (data.success) {
                         if (data.series.length > 0) {
-                            LoadChart(data.series, data.labels);
+                            LoadChartCall(data.series, data.labels);
                         } else {
                         }
                     } else {
@@ -43,12 +44,12 @@
                 }
             });
         }
-        function LoadChart(series, labels) {
+        function LoadChartCall(seriesCall, labelsCall) {
             var options = {
                 series: [
                     {
                         name: 'Volume',
-                        data: series
+                        data: seriesCall
                     }
                 ],
                 chart: {
@@ -76,7 +77,7 @@
                 },
 
                 xaxis: {
-                    categories: labels,
+                    categories: labelsCall,
                     position: 'top',
                     axisBorder: {
                         show: false
@@ -126,7 +127,116 @@
                 }
             };
 
-            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            var chart = new ApexCharts(document.querySelector("#chartCall"), options);
+            chart.render();
+        }
+
+        function GetDataPut() {
+            $.ajax({
+                url: '/VolumeAnals/GetChartDataPut/@Model.Symbol',
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.success) {
+                        if (data.series.length > 0) {
+                            LoadChartPut(data.series, data.labels);
+                        } else {
+                        }
+                    } else {
+                        alert(data.message);
+                    }
+                },
+                error: function (reponse) {
+                    console.log(reponse);
+                    alert("error : " + reponse);
+                }
+            });
+        }
+        function LoadChartPut(seriesPut, labelsPut) {
+            var options = {
+                series: [
+                    {
+                        name: 'Volume',
+                        data: seriesPut
+                    }
+                ],
+                chart: {
+                    height: 350,
+                    type: 'bar',
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 5,
+                        dataLabels: {
+                            position: 'top', // top, center, bottom
+                        },
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        return val;
+                    },
+                    offsetY: -20,
+                    style: {
+                        fontSize: '12px',
+                        colors: ["#304758"]
+                    }
+                },
+
+                xaxis: {
+                    categories: labelsPut,
+                    position: 'top',
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false
+                    },
+                    crosshairs: {
+                        fill: {
+                            type: 'gradient',
+                            gradient: {
+                                colorFrom: '#D8E3F0',
+                                colorTo: '#BED1E6',
+                                stops: [0, 100],
+                                opacityFrom: 0.4,
+                                opacityTo: 0.5,
+                            }
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                    }
+                },
+                yaxis: {
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                    labels: {
+                        show: false,
+                        formatter: function (val) {
+                            return val + "%";
+                        }
+                    }
+
+                },
+                title: {
+                    text: 'Daily Option Volume',
+                    floating: true,
+                    offsetY: 330,
+                    align: 'center',
+                    style: {
+                        color: '#444'
+                    }
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chartPut"), options);
             chart.render();
         }
     </script>

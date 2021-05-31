@@ -11,74 +11,188 @@
 </p>
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.MaintenanceMargin)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AvailableWithdrawalFunds)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InitialMargin)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AvailableFunds)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Currency)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MarginBalance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Balance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Equity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EquityUsd)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PortfolioDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaintenanceMargin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AvailableWithdrawalFunds)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InitialMargin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AvailableFunds)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.options_session_upl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.options_gamma)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.options_theta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.delta_total)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.futures_session_rpl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.total_pl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.options_session_rpl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.options_delta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.futures_pl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.session_upl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.options_pl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.projected_initial_margin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.projected_maintenance_margin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.session_rpl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.options_vega)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.projected_delta_total)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.futures_session_upl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.options_value)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Currency)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MarginBalance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Equity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EquityUsd)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Balance)
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaintenanceMargin)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AvailableWithdrawalFunds)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InitialMargin)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AvailableFunds)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Currency)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MarginBalance)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Balance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Equity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EquityUsd)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.PortfolioDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaintenanceMargin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AvailableWithdrawalFunds)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InitialMargin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AvailableFunds)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.options_session_upl)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.options_gamma)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.options_theta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.delta_total)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.futures_session_rpl)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.total_pl)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.options_session_rpl)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.options_delta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.futures_pl)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.session_upl)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.options_pl)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.projected_initial_margin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.projected_maintenance_margin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.session_rpl)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.options_vega)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.projected_delta_total)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.futures_session_upl)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.options_value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Currency)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MarginBalance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Equity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EquityUsd)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Balance)
+        </td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </td>
+    </tr>
 }
     </tbody>
 </table>

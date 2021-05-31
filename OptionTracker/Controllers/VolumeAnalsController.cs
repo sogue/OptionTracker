@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using OptionTracker.Data;
 using OptionTracker.Models;
 using OptionTracker.Models.Anal;
+using Org.OpenAPITools.Models;
 
 namespace OptionTracker.Controllers
 {
@@ -52,62 +53,41 @@ namespace OptionTracker.Controllers
             return View(volumeAnal);
         }
 
-        [Microsoft.AspNetCore.Mvc.HttpPost("VolumeAnals/GetChartData/{ticker}")]
-        public JsonResult GetChartData(string ticker)
+        [Microsoft.AspNetCore.Mvc.HttpPost("VolumeAnals/GetChartDataCall/{ticker}")]
+        public JsonResult GetChartDataCall(string ticker)
         {
             try
             {
                 var volumeAnal = _context.VolumeAnals.Include(x => x.VolumeDatas)
                     .First(m => m.Symbol == ticker);
 
-                if (volumeAnal?.VolumeDatas == null || volumeAnal.VolumeDatas.Count == 0)
-                {
-                    var result2 =  _context.OptionChainRaw.Where(x =>
-                        x.Symbol == ticker).OrderByDescending(x => x.Id).Take(30).ToList();
+           
+                var chainRaw = volumeAnal.VolumeDatas
+                    .OrderByDescending(x => x.Time)
+                    .Where(x=>x.OptionType == Instrument.OptionTypeEnum.CallEnum).Take(30).ToList();
 
-                    var totalGraph = new Dictionary<long, int>();
+                int[] SeriesVal = chainRaw.Select(x => x.Volume).ToArray();
+                string[] LabelsVal = chainRaw.Select(x => x.Time.Date.ToShortDateString()).ToArray();
+                return Json(new { success = true, series = SeriesVal, labels = LabelsVal, message = "success.!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Some thing went Wrong.! unsuccessfull!" });
+            }
+        }
 
-                    foreach (var res in result2)
-                    {
-                        var dates = JsonConvert
-                            .DeserializeObject<Dictionary<string, Dictionary<string, OptionContract[]>>>(
-                                res.Data.RootElement.GetProperty("callExpDateMap").ToString() ?? "");
+        [Microsoft.AspNetCore.Mvc.HttpPost("VolumeAnals/GetChartDataPut/{ticker}")]
+        public JsonResult GetChartDataPut(string ticker)
+        {
+            try
+            {
+                var volumeAnal = _context.VolumeAnals.Include(x => x.VolumeDatas)
+                    .First(m => m.Symbol == ticker);
 
-                        var list = new List<int>();
-                        long date = Int64.MinValue;
-                        foreach (var dat in dates)
-                        {
-                            var asd = dat.Value.SelectMany(x => x.Value).Select(x => x.TotalVolume).ToList();
-                            list.AddRange(asd);
-                            date = dat.Value.FirstOrDefault().Value.FirstOrDefault().QuoteTimeInLong.Value;
-                        }
-
-                        var total = list.Sum();
-                        if (!totalGraph.ContainsKey(date))
-                        {
-                            totalGraph.Add(date, total);
-                        }
-                        else
-                        {
-                        }
-
-                    }
-
-                    volumeAnal.Symbol = ticker;
-                    volumeAnal.VolumeDatas = totalGraph.Select(x => new VolumeData()
-                    {
-                        Time = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
-                            .AddMilliseconds(x.Key)
-                            .ToLocalTime(),
-                        Volume = x.Value
-                    }).ToList();
-                    _context.SaveChanges();
-                     
-
-                }
 
                 var chainRaw = volumeAnal.VolumeDatas
-                    .OrderByDescending(x => x.Time).Take(30).ToList();
+                    .OrderByDescending(x => x.Time)
+                    .Where(x => x.OptionType == Instrument.OptionTypeEnum.PutEnum).Take(30).ToList();
 
                 int[] SeriesVal = chainRaw.Select(x => x.Volume).ToArray();
                 string[] LabelsVal = chainRaw.Select(x => x.Time.Date.ToShortDateString()).ToArray();

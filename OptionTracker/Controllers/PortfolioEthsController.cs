@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +25,19 @@ namespace OptionTracker.Controllers
         // GET: PortfolioEths
         public async Task<IActionResult> Index()
         {
-            return View(await _context.PortfoliosEth.ToListAsync());
+            var db = await _context.DailyBalances
+                .Include(x => x.PortfolioEth)
+                .OrderByDescending(x=>x.BalanceDate)
+                .ToListAsync();
+
+            var vie = db.Select(x => x.PortfolioEth);
+
+            foreach (var VARIABLE in db)
+            {
+                VARIABLE.PortfolioEth.PortfolioDate = VARIABLE.BalanceDate;
+            }
+
+            return View(db.Select(x=>x.PortfolioEth));
         }
 
         // GET: PortfolioEths/Details/5
