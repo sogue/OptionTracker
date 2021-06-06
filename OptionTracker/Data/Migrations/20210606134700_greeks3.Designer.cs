@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OptionTracker.Data;
@@ -12,9 +13,10 @@ using OptionTracker.Models;
 namespace OptionTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210606134700_greeks3")]
+    partial class greeks3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -374,78 +376,88 @@ namespace OptionTracker.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<decimal?>("AskIv")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("BestAskAmount")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("BestAskPrice")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("BestBidAmount")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("BestBidPrice")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("BidIv")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("EstimatedDeliveryPrice")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("IndexPrice")
-                        .HasColumnType("numeric");
-
                     b.Property<int?>("InstrumentHistoryId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("InstrumentName")
-                        .HasColumnType("text");
-
-                    b.Property<decimal?>("InterestRate")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("LastPrice")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("MarkIv")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("MarkPrice")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("MaxPrice")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("MinPrice")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("OpenInterest")
-                        .HasColumnType("numeric");
 
                     b.Property<DateTime>("RequestTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<decimal?>("SettlementPrice")
+                    b.Property<decimal?>("ask_iv")
                         .HasColumnType("numeric");
 
-                    b.Property<string>("State")
+                    b.Property<decimal?>("best_ask_amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("best_ask_price")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("best_bid_amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("best_bid_price")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("bid_iv")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("estimated_delivery_price")
+                        .HasColumnType("numeric");
+
+                    b.Property<int?>("greeksId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal?>("index_price")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("instrument_name")
                         .HasColumnType("text");
 
-                    b.Property<long>("Timestamp")
+                    b.Property<decimal?>("interest_rate")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("last_price")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("mark_iv")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("mark_price")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("max_price")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("min_price")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("open_interest")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("settlement_price")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("state")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("statsId")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("timestamp")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("UnderlyingIndex")
+                    b.Property<string>("underlying_index")
                         .HasColumnType("text");
 
-                    b.Property<decimal?>("UnderlyingPrice")
+                    b.Property<decimal?>("underlying_price")
                         .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
                     b.HasIndex("InstrumentHistoryId");
+
+                    b.HasIndex("greeksId");
+
+                    b.HasIndex("statsId");
 
                     b.ToTable("BookDetails");
                 });
@@ -457,34 +469,25 @@ namespace OptionTracker.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("BookDetailId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal?>("Delta")
+                    b.Property<decimal?>("delta")
                         .HasColumnType("numeric");
 
-                    b.Property<decimal?>("Gamma")
+                    b.Property<decimal?>("gamma")
                         .HasColumnType("numeric");
 
-                    b.Property<string>("InstrumentName")
+                    b.Property<string>("instrument_name")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("RequestTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<decimal?>("Rho")
+                    b.Property<decimal?>("rho")
                         .HasColumnType("numeric");
 
-                    b.Property<decimal?>("Theta")
+                    b.Property<decimal?>("theta")
                         .HasColumnType("numeric");
 
-                    b.Property<decimal?>("Vega")
+                    b.Property<decimal?>("vega")
                         .HasColumnType("numeric");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookDetailId")
-                        .IsUnique();
 
                     b.ToTable("Greeks");
                 });
@@ -516,31 +519,22 @@ namespace OptionTracker.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("BookDetailId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal?>("High")
+                    b.Property<decimal?>("high")
                         .HasColumnType("numeric");
 
-                    b.Property<string>("InstrumentName")
+                    b.Property<string>("instrument_name")
                         .HasColumnType("text");
 
-                    b.Property<decimal?>("Low")
+                    b.Property<decimal?>("low")
                         .HasColumnType("numeric");
 
-                    b.Property<decimal?>("PriceChange")
+                    b.Property<decimal?>("price_change")
                         .HasColumnType("numeric");
 
-                    b.Property<DateTime>("RequestTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<decimal?>("Volume")
+                    b.Property<decimal?>("volume")
                         .HasColumnType("numeric");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookDetailId")
-                        .IsUnique();
 
                     b.ToTable("Stats");
                 });
@@ -1392,13 +1386,18 @@ namespace OptionTracker.Migrations
                     b.HasOne("OptionTracker.Models.Crypto.InstrumentHistory", null)
                         .WithMany("BookDetails")
                         .HasForeignKey("InstrumentHistoryId");
-                });
 
-            modelBuilder.Entity("OptionTracker.Models.Crypto.Greeks", b =>
-                {
-                    b.HasOne("OptionTracker.Models.Crypto.BookDetail", null)
-                        .WithOne("Greeks")
-                        .HasForeignKey("OptionTracker.Models.Crypto.Greeks", "BookDetailId");
+                    b.HasOne("OptionTracker.Models.Crypto.Greeks", "greeks")
+                        .WithMany()
+                        .HasForeignKey("greeksId");
+
+                    b.HasOne("OptionTracker.Models.Crypto.Stats", "stats")
+                        .WithMany()
+                        .HasForeignKey("statsId");
+
+                    b.Navigation("greeks");
+
+                    b.Navigation("stats");
                 });
 
             modelBuilder.Entity("OptionTracker.Models.Crypto.InstrumentHistory", b =>
@@ -1408,13 +1407,6 @@ namespace OptionTracker.Migrations
                         .HasForeignKey("ActualInstrumentId");
 
                     b.Navigation("ActualInstrument");
-                });
-
-            modelBuilder.Entity("OptionTracker.Models.Crypto.Stats", b =>
-                {
-                    b.HasOne("OptionTracker.Models.Crypto.BookDetail", null)
-                        .WithOne("Stats")
-                        .HasForeignKey("OptionTracker.Models.Crypto.Stats", "BookDetailId");
                 });
 
             modelBuilder.Entity("OptionTracker.Models.Crypto.StockOption", b =>
@@ -1514,13 +1506,6 @@ namespace OptionTracker.Migrations
             modelBuilder.Entity("OptionTracker.Models.ChainResultViewModel", b =>
                 {
                     b.Navigation("OptionsResults");
-                });
-
-            modelBuilder.Entity("OptionTracker.Models.Crypto.BookDetail", b =>
-                {
-                    b.Navigation("Greeks");
-
-                    b.Navigation("Stats");
                 });
 
             modelBuilder.Entity("OptionTracker.Models.Crypto.InstrumentHistory", b =>

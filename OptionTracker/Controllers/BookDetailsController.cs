@@ -22,7 +22,12 @@ namespace OptionTracker.Controllers
         // GET: BookDetails
         public async Task<IActionResult> Index()
         {
-            return View(await _context.BookDetails.ToListAsync());
+            var today = await _context.BookDetails.Where(x=>x.RequestTime > DateTime.Today && x.Stats.Volume.HasValue)
+                .Include(x => x.Stats)
+                .OrderByDescending(x=>x.Stats.Volume)
+                .ToListAsync();
+
+            return View(today);
         }
 
         // GET: BookDetails/Details/5
