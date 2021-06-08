@@ -22,6 +22,14 @@
                     Update Contracts
                 </a>
             </dd>
+            <dd>
+                <a asp-controller="DateChains"
+                   asp-action="@Model.Ticker">
+                    Option Chains
+                </a> |
+                <a asp-action="Details" asp-route-id="@Model.Ticker">Most Active Options</a>
+                | <a asp-controller="VolumeAnals" asp-action="Details" asp-route-id="@Model.Ticker">Daily Option Volume</a>
+            </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.MarketCap)
             </dt>
