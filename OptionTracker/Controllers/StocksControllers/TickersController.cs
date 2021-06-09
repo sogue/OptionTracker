@@ -9,10 +9,16 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using System.Web;
+using Microsoft.AspNetCore.Http;
 using OptionTracker.Models.Anal;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace OptionTracker.Controllers
 {
@@ -31,36 +37,44 @@ namespace OptionTracker.Controllers
         }
 
         // GET: Ticker
-        public async Task<IActionResult> Index([FromQuery]int? pU, [FromQuery] int? pD, string searchString)
+        public async Task<IActionResult> Index([FromQuery] string? page, [FromQuery]string? pageMove, string searchString)
         {
-            ViewData["CurrentFilter"] = searchString;
+            ViewData["Page"] = page ?? "1";
+            var pageString = ViewData["Page"].ToString() ?? 1.ToString();
+            if (pageMove == "up")
+            {
+                var pN = Int32.Parse(ViewData["Page"].ToString());
+                pageString = (pN + 1).ToString();
+                ViewData["Page"] = pageString;
+            }
+            if (pageMove == "down")
+            {
+                var pN = Int32.Parse(ViewData["Page"].ToString());
+                pageString = pN - 1 >= 1 ? (pN - 1).ToString(): (1).ToString();
+                ViewData["Page"] = pageString;
+            }
+            var client = new HttpClient();
+
+            string longurl = "https://localhost:44303/api/Products";
+            var uriBuilder = new UriBuilder(longurl);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["PageSize"] = "50";
+            query["PageIndex"] = pageString;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query["Search"] = searchString;
+            }
             
-            var page = 1;
+            uriBuilder.Query = query.ToString();
+            longurl = uriBuilder.ToString();
 
-            ViewData["Page"] = page;
+            var answer = await client.GetFromJsonAsync<JsonDocument>(longurl);
             
-            if (pU != null)
-            {
-                page = pU.Value;
-                ViewData["Page"] = ++page;
-            }
-            if (pD != null)
-            {
-                page = pD.Value;
-                ViewData["Page"] = --page;
-            }
-            if (pU < 0 || pD <= 1)
-            {
-                page = 1;
-                ViewData["Page"] = page;
-            }
+            var tickers = JsonConvert
+                .DeserializeObject<Ticker[]>(answer.RootElement.GetProperty("data").ToString()).ToList();
 
-
-
-            var tickers = _context.Ticker.Select(x => x).OrderBy(x => x.Symbol).Skip(page * 50 - 50).Take(page * 50).ToList();
-
-            if (!string.IsNullOrEmpty(searchString)) tickers = _context.Ticker.Where(s => s.Symbol.Contains(searchString.ToUpper())).ToList();
-
+          
             return View(tickers);
         }
 
