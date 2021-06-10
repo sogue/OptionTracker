@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OptionTracker.Data;
 using OptionTracker.Models;
@@ -45,7 +46,7 @@ namespace OptionTracker.Controllers
 
             if (trader == null)
             {
-                return NotFound();
+                return View(new List<Ticker>());
             }
 
             return View(trader.Tickers);
