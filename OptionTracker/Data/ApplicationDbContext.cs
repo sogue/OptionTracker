@@ -1,4 +1,5 @@
-﻿using FlowService.Models.ChainModels;
+﻿using FlowService.Models.Anal;
+using FlowService.Models.ChainModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OptionTracker.Models;
@@ -38,14 +39,14 @@ namespace OptionTracker.Data
 
         public DbSet<PortfolioEth> PortfoliosEth { get; set; }
         public DbSet<Position> Positions { get; set; }
-
         public DbSet<DailyBalance> DailyBalances { get; set; }
-        public DbSet<TickerOptionHistory> TickerOptionHistories { get; set; }
 
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<StockOption> StockOptions { get; set; }
         public DbSet<StockOptionHistory> StockOptionHistories { get; set; }
         public DbSet<VolumeAnal> VolumeAnals { get; set; }
         public DbSet<VolumeData> VolumeDatas { get; set; }
+
+        public DbSet<OptionActivity> OptionActivities { get; set; }
     }
 }

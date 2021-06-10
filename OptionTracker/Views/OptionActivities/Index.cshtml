@@ -1,0 +1,65 @@
+﻿@model IEnumerable<FlowService.Models.Anal.OptionActivity>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Ticker)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActivityDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CallVolume)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PutVolume)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalVolume)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CallPutRatio)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ticker)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActivityDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CallVolume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PutVolume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalVolume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CallPutRatio)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
