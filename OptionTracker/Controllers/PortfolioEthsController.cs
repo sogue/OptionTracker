@@ -1,12 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OptionTracker.Data;
 using Org.OpenAPITools.Models;
 
-namespace OptionTracker.Controllers.PortfoliosControllers
+namespace OptionTracker.Controllers
 {
     [Authorize]
     public class PortfolioEthsController : Controller

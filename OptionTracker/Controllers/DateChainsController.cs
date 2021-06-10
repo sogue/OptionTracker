@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace OptionTracker.Controllers
 {
-    public class ExpirationDatesController : Controller
+    public class DateChainsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ExpirationDatesController(ApplicationDbContext context)
+        public DateChainsController(ApplicationDbContext context)
         {
             _context = context;
         }

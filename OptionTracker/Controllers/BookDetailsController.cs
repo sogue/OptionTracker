@@ -1,30 +1,36 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OptionTracker.Data;
-using Org.OpenAPITools.Models;
+using OptionTracker.Models.Crypto;
 
-namespace OptionTracker.Controllers.PortfoliosControllers
+namespace OptionTracker.Controllers
 {
-    [Authorize]
-    public class PositionsController : Controller
+    public class BookDetailsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public PositionsController(ApplicationDbContext context)
+        public BookDetailsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Positions
+        // GET: BookDetails
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Positions.ToListAsync());
+            var today = await _context.BookDetails.Where(x=>x.RequestTime > DateTime.Today && x.Stats.Volume.HasValue)
+                .Include(x => x.Stats)
+                .OrderByDescending(x=>x.Stats.Volume)
+                .ToListAsync();
+
+            return View(today);
         }
 
-        // GET: Positions/Details/5
+        // GET: BookDetails/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,39 +38,39 @@ namespace OptionTracker.Controllers.PortfoliosControllers
                 return NotFound();
             }
 
-            var position = await _context.Positions
+            var bookDetail = await _context.BookDetails
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (position == null)
+            if (bookDetail == null)
             {
                 return NotFound();
             }
 
-            return View(position);
+            return View(bookDetail);
         }
 
-        // GET: Positions/Create
+        // GET: BookDetails/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Positions/Create
+        // POST: BookDetails/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Direction,AveragePriceUsd,EstimatedLiquidationPrice,FloatingProfitLoss,FloatingProfitLossUsd,OpenOrdersMargin,TotalProfitLoss,RealizedProfitLoss,Delta,InitialMargin,Size,MaintenanceMargin,Kind,MarkPrice,AveragePrice,SettlementPrice,IndexPrice,InstrumentName,SizeCurrency")] Position position)
+        public async Task<IActionResult> Create([Bind("Id,RequestTime,underlying_price,underlying_index,timestamp,state,settlement_price,open_interest,min_price,max_price,mark_price,mark_iv,last_price,interest_rate,instrument_name,index_price,estimated_delivery_price,bid_iv,best_bid_price,best_bid_amount,best_ask_price,best_ask_amount,ask_iv")] BookDetail bookDetail)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(position);
+                _context.Add(bookDetail);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(position);
+            return View(bookDetail);
         }
 
-        // GET: Positions/Edit/5
+        // GET: BookDetails/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,22 +78,22 @@ namespace OptionTracker.Controllers.PortfoliosControllers
                 return NotFound();
             }
 
-            var position = await _context.Positions.FindAsync(id);
-            if (position == null)
+            var bookDetail = await _context.BookDetails.FindAsync(id);
+            if (bookDetail == null)
             {
                 return NotFound();
             }
-            return View(position);
+            return View(bookDetail);
         }
 
-        // POST: Positions/Edit/5
+        // POST: BookDetails/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Direction,AveragePriceUsd,EstimatedLiquidationPrice,FloatingProfitLoss,FloatingProfitLossUsd,OpenOrdersMargin,TotalProfitLoss,RealizedProfitLoss,Delta,InitialMargin,Size,MaintenanceMargin,Kind,MarkPrice,AveragePrice,SettlementPrice,IndexPrice,InstrumentName,SizeCurrency")] Position position)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,RequestTime,underlying_price,underlying_index,timestamp,state,settlement_price,open_interest,min_price,max_price,mark_price,mark_iv,last_price,interest_rate,instrument_name,index_price,estimated_delivery_price,bid_iv,best_bid_price,best_bid_amount,best_ask_price,best_ask_amount,ask_iv")] BookDetail bookDetail)
         {
-            if (id != position.Id)
+            if (id != bookDetail.Id)
             {
                 return NotFound();
             }
@@ -96,12 +102,12 @@ namespace OptionTracker.Controllers.PortfoliosControllers
             {
                 try
                 {
-                    _context.Update(position);
+                    _context.Update(bookDetail);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PositionExists(position.Id))
+                    if (!BookDetailExists(bookDetail.Id))
                     {
                         return NotFound();
                     }
@@ -112,10 +118,10 @@ namespace OptionTracker.Controllers.PortfoliosControllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(position);
+            return View(bookDetail);
         }
 
-        // GET: Positions/Delete/5
+        // GET: BookDetails/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,30 +129,30 @@ namespace OptionTracker.Controllers.PortfoliosControllers
                 return NotFound();
             }
 
-            var position = await _context.Positions
+            var bookDetail = await _context.BookDetails
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (position == null)
+            if (bookDetail == null)
             {
                 return NotFound();
             }
 
-            return View(position);
+            return View(bookDetail);
         }
 
-        // POST: Positions/Delete/5
+        // POST: BookDetails/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var position = await _context.Positions.FindAsync(id);
-            _context.Positions.Remove(position);
+            var bookDetail = await _context.BookDetails.FindAsync(id);
+            _context.BookDetails.Remove(bookDetail);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PositionExists(int id)
+        private bool BookDetailExists(int id)
         {
-            return _context.Positions.Any(e => e.Id == id);
+            return _context.BookDetails.Any(e => e.Id == id);
         }
     }
 }

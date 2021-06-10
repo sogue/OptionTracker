@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Index";
-
 }
 
 <h3>Tickers</h3>
@@ -22,16 +21,14 @@
 </form>
 <form asp-action="Index" method="get">
     <div class="input-group-sm">
-        <input type="hidden" name="page" value="@ViewData["Page"]" />
-        <input type="hidden" name="pageMove" value="down" />
-        <input type="submit" value="Prev" class="btn" />
+            <input type="hidden" name="pD" value="@ViewData["Page"]" />
+            <input type="submit" value="Prev" class="btn" />
     </div>
 </form>
 <form asp-action="Index" method="get">
     <div class="input-group-sm">
-        <input type="hidden" name="page" value="@ViewData["Page"]" />
-        <input type="hidden" name="pageMove" value="up" />
-        <input type="submit" value="Next" class="btn" />
+            <input type="hidden" name="pU" value="@ViewData["Page"]" />
+            <input type="submit" value="Next" class="btn" />
     </div>
 </form>
 <table class="table table-striped table-hover">

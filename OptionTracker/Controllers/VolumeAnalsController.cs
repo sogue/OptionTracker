@@ -13,11 +13,11 @@ using Org.OpenAPITools.Models;
 
 namespace OptionTracker.Controllers
 {
-    public class OptionVolumesController : Controller
+    public class VolumeAnalsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public OptionVolumesController(ApplicationDbContext context)
+        public VolumeAnalsController(ApplicationDbContext context)
         {
             _context = context;
         }

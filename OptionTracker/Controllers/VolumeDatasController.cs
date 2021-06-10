@@ -1,28 +1,50 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using OptionTracker.Data;
-using Org.OpenAPITools.Models;
+using OptionTracker.Models;
+using OptionTracker.Models.Anal;
 
-namespace OptionTracker.Controllers.PortfoliosControllers
+namespace OptionTracker.Controllers
 {
-    public class DailyBalancesController : Controller
+    public class VolumeDatasController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public DailyBalancesController(ApplicationDbContext context)
+        [Microsoft.AspNetCore.Mvc.HttpPost("VolumeDatas/GetChartData/")]
+        public JsonResult GetChartData(string ticker)
+        {
+            try
+            {
+                var chainRaw = _context.VolumeDatas
+                    .OrderByDescending(x=>x.Time).ToList();
+
+                int[] SeriesVal = chainRaw.Select(x => x.Volume).ToArray();
+                string[] LabelsVal = chainRaw.Select(x => x.Time.Date.ToShortDateString()).ToArray();
+            return Json(new { success = true, series = SeriesVal, labels = LabelsVal, message = "success.!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Some thing went Wrong.! unsuccessfull!" });
+            }
+        }
+        public VolumeDatasController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: DailyBalances
+        // GET: VolumeDatas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.DailyBalances.ToListAsync());
+            return View(await _context.VolumeDatas.ToListAsync());
         }
 
-        // GET: DailyBalances/Details/5
+        // GET: VolumeDatas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -30,39 +52,39 @@ namespace OptionTracker.Controllers.PortfoliosControllers
                 return NotFound();
             }
 
-            var dailyBalance = await _context.DailyBalances
+            var volumeData = await _context.VolumeDatas
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (dailyBalance == null)
+            if (volumeData == null)
             {
                 return NotFound();
             }
 
-            return View(dailyBalance);
+            return View(volumeData);
         }
 
-        // GET: DailyBalances/Create
+        // GET: VolumeDatas/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: DailyBalances/Create
+        // POST: VolumeDatas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BalanceDate")] DailyBalance dailyBalance)
+        public async Task<IActionResult> Create([Bind("Id,Time,Volume")] VolumeData volumeData)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(dailyBalance);
+                _context.Add(volumeData);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(dailyBalance);
+            return View(volumeData);
         }
 
-        // GET: DailyBalances/Edit/5
+        // GET: VolumeDatas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -70,22 +92,22 @@ namespace OptionTracker.Controllers.PortfoliosControllers
                 return NotFound();
             }
 
-            var dailyBalance = await _context.DailyBalances.FindAsync(id);
-            if (dailyBalance == null)
+            var volumeData = await _context.VolumeDatas.FindAsync(id);
+            if (volumeData == null)
             {
                 return NotFound();
             }
-            return View(dailyBalance);
+            return View(volumeData);
         }
 
-        // POST: DailyBalances/Edit/5
+        // POST: VolumeDatas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BalanceDate")] DailyBalance dailyBalance)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Time,Volume")] VolumeData volumeData)
         {
-            if (id != dailyBalance.Id)
+            if (id != volumeData.Id)
             {
                 return NotFound();
             }
@@ -94,12 +116,12 @@ namespace OptionTracker.Controllers.PortfoliosControllers
             {
                 try
                 {
-                    _context.Update(dailyBalance);
+                    _context.Update(volumeData);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DailyBalanceExists(dailyBalance.Id))
+                    if (!VolumeDataExists(volumeData.Id))
                     {
                         return NotFound();
                     }
@@ -110,10 +132,10 @@ namespace OptionTracker.Controllers.PortfoliosControllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(dailyBalance);
+            return View(volumeData);
         }
 
-        // GET: DailyBalances/Delete/5
+        // GET: VolumeDatas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -121,30 +143,30 @@ namespace OptionTracker.Controllers.PortfoliosControllers
                 return NotFound();
             }
 
-            var dailyBalance = await _context.DailyBalances
+            var volumeData = await _context.VolumeDatas
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (dailyBalance == null)
+            if (volumeData == null)
             {
                 return NotFound();
             }
 
-            return View(dailyBalance);
+            return View(volumeData);
         }
 
-        // POST: DailyBalances/Delete/5
+        // POST: VolumeDatas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var dailyBalance = await _context.DailyBalances.FindAsync(id);
-            _context.DailyBalances.Remove(dailyBalance);
+            var volumeData = await _context.VolumeDatas.FindAsync(id);
+            _context.VolumeDatas.Remove(volumeData);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DailyBalanceExists(int id)
+        private bool VolumeDataExists(int id)
         {
-            return _context.DailyBalances.Any(e => e.Id == id);
+            return _context.VolumeDatas.Any(e => e.Id == id);
         }
     }
 }
