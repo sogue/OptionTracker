@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace FlowService.Models.Anal
@@ -13,6 +16,8 @@ namespace FlowService.Models.Anal
         public decimal CallVolume { get; set; }
         public decimal PutVolume { get; set; }
         public decimal TotalVolume { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:P2}")]
         public decimal CallPutRatio  { get; set; }
     }
 }
