@@ -38,16 +38,20 @@
             </th>
             <th>
                 <form asp-action="Index" method="get">
-                    <div class="input-group-sm">
-                            <input type="hidden" name="Sort" value="priceDesc"/>
-                            <input type="submit" value="@Html.DisplayNameFor(model => model.Data.FirstOrDefault().ClosePrice)" class="btn"/>
-                    </div>
+                    <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
+                    <input type="hidden" name="PageSize" value="@Model.PageSize" />
+                    <input type="hidden" name="Sort" value="priceDesc" />
+                    <input type="submit" value="@Html.DisplayNameFor(model => model.Data.FirstOrDefault().ClosePrice)" />
                 </form>
-               
             </th>
-            <th><a asp-action="Index" method="get" asp-route-Sort="capDesc">@Html.DisplayNameFor(model => model.Data.FirstOrDefault().MarketCap)
-                </a>
-              </th>
+            <th>
+                <form asp-action="Index" method="get">
+                    <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
+                    <input type="hidden" name="PageSize" value="@Model.PageSize" />
+                    <input type="hidden" name="Sort" value="capDesc" />
+                    <input type="submit" value="@Html.DisplayNameFor(model => model.Data.FirstOrDefault().MarketCap)" />
+                </form>
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Data.FirstOrDefault().LastOptionVolume)
             </th>

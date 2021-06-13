@@ -49,30 +49,36 @@ namespace OptionTracker.Controllers
             var uriBuilder = new UriBuilder(longurl);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
 
-            query["PageSize"] = "50";
+          
             query["PageIndex"] = productParams.PageIndex.ToString();
+            query["PageSize"] = "50";
 
-            if (!string.IsNullOrEmpty(productParams.Search))
-            {
-                query["Search"] = productParams.Search;
-            }
             if (!string.IsNullOrEmpty(productParams.Sort))
             {
                 query["Sort"] = productParams.Sort;
             }
+            if (!string.IsNullOrEmpty(productParams.Search))
+            {
+                query["Search"] = productParams.Search;
+            }
+           
 
             uriBuilder.Query = query.ToString();
             longurl = uriBuilder.ToString();
-
+            // Products?Sort=capDesc
+            // Products?PageSize=50&PageIndex=1&Sort=capDesc
+            // Products?PageIndex=2&PageSize=2&Sort=capDesc
             var answer = await client.GetFromJsonAsync<JsonDocument>(longurl);
 
             var tickers = JsonConvert
                 .DeserializeObject<Ticker[]>(answer.RootElement.GetProperty("data").ToString()).ToList();
 
+            var count = answer.RootElement.GetProperty("count").GetInt32();
+
 
 
             return View(new Pagination<Ticker>(productParams.PageIndex,
-                productParams.PageSize, 100, tickers));
+                productParams.PageSize, count, tickers));
         }
 
         // GET: Ticker/Details/5
