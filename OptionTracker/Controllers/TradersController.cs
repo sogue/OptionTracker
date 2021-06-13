@@ -6,6 +6,7 @@ using OptionTracker.Models;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace OptionTracker.Controllers
 {
@@ -19,9 +20,29 @@ namespace OptionTracker.Controllers
         }
 
         // GET: Traders
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id)
         {
-            return View(await _context.Traders.ToListAsync());
+            Trader trader;
+
+            if (id == null)
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                trader = await _context.Traders.Include(x => x.Tickers).FirstOrDefaultAsync(x => x.IdentityUserId == userId);
+
+            }
+            else
+            {
+                trader = await _context.Traders.Include(x => x.Tickers)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+            }
+
+            if (trader == null)
+            {
+                return View(new List<Ticker>());
+            }
+
+            return View(trader.Tickers);
         }
 
         // GET: Traders/Details/5
@@ -133,14 +154,17 @@ namespace OptionTracker.Controllers
                 return NotFound();
             }
 
-            var trader = await _context.Traders
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var trader = await _context.Traders.Include(x => x.Tickers).FirstOrDefaultAsync(x => x.IdentityUserId == userId);
+
             if (trader == null)
             {
                 return NotFound();
             }
 
-            return View(trader);
+
+            return View(trader.Tickers.FirstOrDefault(x=>x.Id == id));
         }
 
         // POST: Traders/Delete/5
@@ -148,8 +172,16 @@ namespace OptionTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var trader = await _context.Traders.FindAsync(id);
-            _context.Traders.Remove(trader);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var trader = await _context.Traders
+                .Include(x => x.Tickers)
+                .FirstOrDefaultAsync(x => x.IdentityUserId == userId);
+
+            var ticker = trader.Tickers.FirstOrDefault(x => x.Id == id);
+
+            trader.Tickers.Remove(ticker);
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

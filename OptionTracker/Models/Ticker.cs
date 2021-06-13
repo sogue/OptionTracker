@@ -17,6 +17,8 @@ namespace OptionTracker.Models
         [Display(Name = "Market Cap")]
 
         public int MarketCap { get; set; }
+
+        public int LastOptionVolume { get; set; }
         public DateTime NextEarnings { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C}")]
@@ -26,5 +28,8 @@ namespace OptionTracker.Models
         public float ClosePrice { get; set; }
         public HistoricalChain Chain { get; set; }
         public ICollection<Trader> Traders { get; set; } = new List<Trader>();
+
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public decimal OptionVolumeChange { get; set; }
     }
 }

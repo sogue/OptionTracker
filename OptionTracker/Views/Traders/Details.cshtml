@@ -44,6 +44,15 @@
                 @Html.DisplayNameFor(model => model.MarketCap)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.LastOptionVolume)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OptionVolumeChange)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NextEarnings)
+            </th>
+            <th>
                 Options
             </th>
         </tr>
@@ -51,26 +60,35 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Symbol)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClosePrice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MarketCap)
-                </td>
-                <td>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete from Watchlist</a> |
-                    <a asp-controller="DateChains"
-                       asp-action="@item.Symbol">
-                        Option Chains
-                    </a> |
-                    <a asp-action="Details" asp-route-id="@item.Symbol">Most Active Options</a>
-                    | <a asp-controller="VolumeAnals" asp-action="Details" asp-route-id="@item.Symbol">Daily Option Volume</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Symbol)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClosePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MarketCap)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastOptionVolume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OptionVolumeChange)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NextEarnings)
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete from Watchlist</a> |
+                <a asp-controller="DateChains"
+                   asp-action="@item.Symbol">
+                    Option Chains
+                </a> |
+                <a asp-action="Details" asp-route-id="@item.Symbol">Most Active Options</a>
+                | <a asp-controller="VolumeAnals" asp-action="Details" asp-route-id="@item.Symbol">Daily Option Volume</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

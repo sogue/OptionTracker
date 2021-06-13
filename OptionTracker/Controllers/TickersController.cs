@@ -9,10 +9,18 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using System.Web;
+using API.Helpers;
+using Core.Specifications;
+using Microsoft.AspNetCore.Http;
 using OptionTracker.Models.Anal;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace OptionTracker.Controllers
 {
@@ -31,37 +39,40 @@ namespace OptionTracker.Controllers
         }
 
         // GET: Ticker
-        public async Task<IActionResult> Index([FromQuery]int? pU, [FromQuery] int? pD, string searchString)
+        public async Task<IActionResult> Index([FromQuery] TickerSpecParams productParams)
         {
-            ViewData["CurrentFilter"] = searchString;
             
-            var page = 1;
+            var client = new HttpClient();
 
-            ViewData["Page"] = page;
-            
-            if (pU != null)
+            string longurl = "https://core-api-qepiuuzgya-uc.a.run.app/api/Products";
+
+            var uriBuilder = new UriBuilder(longurl);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+
+            query["PageSize"] = "50";
+            query["PageIndex"] = productParams.PageIndex.ToString();
+
+            if (!string.IsNullOrEmpty(productParams.Search))
             {
-                page = pU.Value;
-                ViewData["Page"] = ++page;
+                query["Search"] = productParams.Search;
             }
-            if (pD != null)
+            if (!string.IsNullOrEmpty(productParams.Sort))
             {
-                page = pD.Value;
-                ViewData["Page"] = --page;
-            }
-            if (pU < 0 || pD <= 1)
-            {
-                page = 1;
-                ViewData["Page"] = page;
+                query["Sort"] = productParams.Sort;
             }
 
+            uriBuilder.Query = query.ToString();
+            longurl = uriBuilder.ToString();
+
+            var answer = await client.GetFromJsonAsync<JsonDocument>(longurl);
+
+            var tickers = JsonConvert
+                .DeserializeObject<Ticker[]>(answer.RootElement.GetProperty("data").ToString()).ToList();
 
 
-            var tickers = _context.Ticker.Select(x => x).OrderBy(x => x.Symbol).Skip(page * 50 - 50).Take(page * 50).ToList();
 
-            if (!string.IsNullOrEmpty(searchString)) tickers = _context.Ticker.Where(s => s.Symbol.Contains(searchString.ToUpper())).ToList();
-
-            return View(tickers);
+            return View(new Pagination<Ticker>(productParams.PageIndex,
+                productParams.PageSize, 100, tickers));
         }
 
         // GET: Ticker/Details/5

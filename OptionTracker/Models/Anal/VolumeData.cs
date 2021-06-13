@@ -8,6 +8,7 @@ namespace OptionTracker.Models.Anal
     public class VolumeData
     {
         public int Id { get; set; }
+        public string Symbol { get; set; }
         public DateTime Time { get; set; }
         public int Volume { get; set; }
         public Instrument.OptionTypeEnum? OptionType { get; set; }
