@@ -49,13 +49,15 @@ namespace OptionTracker.Controllers
             var uriBuilder = new UriBuilder(longurl);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
 
-          
+            productParams.PageSize = 50;
+
             query["PageIndex"] = productParams.PageIndex.ToString();
-            query["PageSize"] = "50";
+            query["PageSize"] = productParams.PageSize.ToString();
 
             if (!string.IsNullOrEmpty(productParams.Sort))
             {
                 query["Sort"] = productParams.Sort;
+                ViewData["Sort"] = productParams.Sort;
             }
             if (!string.IsNullOrEmpty(productParams.Search))
             {

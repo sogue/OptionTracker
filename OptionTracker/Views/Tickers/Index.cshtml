@@ -23,6 +23,9 @@
     <div class="input-group-sm">
         <div>
             <input type="number" class="form-control col-3" name="PageIndex" value="@Model.PageIndex" />
+            <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
+            <input type="hidden" name="PageSize" value="@Model.PageSize" />
+            <input type="hidden" name="Sort" value="@ViewData["Sort"]" />
         </div>
         <div>
             <input type="submit" class="btn col-3" value="Go"/>
@@ -34,14 +37,18 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Data.FirstOrDefault().Symbol)
+                <form asp-action="Index" method="get">
+                    <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
+                    <input type="hidden" name="PageSize" value="@Model.PageSize" />
+                    <input type="submit" class="btn" value="@Html.DisplayNameFor(model => model.Data.FirstOrDefault().Symbol)" />
+                </form>
             </th>
             <th>
                 <form asp-action="Index" method="get">
                     <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
                     <input type="hidden" name="PageSize" value="@Model.PageSize" />
                     <input type="hidden" name="Sort" value="priceDesc" />
-                    <input type="submit" value="@Html.DisplayNameFor(model => model.Data.FirstOrDefault().ClosePrice)" />
+                    <input type="submit" class="btn" value="@Html.DisplayNameFor(model => model.Data.FirstOrDefault().ClosePrice)" />
                 </form>
             </th>
             <th>
@@ -49,14 +56,24 @@
                     <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
                     <input type="hidden" name="PageSize" value="@Model.PageSize" />
                     <input type="hidden" name="Sort" value="capDesc" />
-                    <input type="submit" value="@Html.DisplayNameFor(model => model.Data.FirstOrDefault().MarketCap)" />
+                    <input type="submit" class="btn" value="@Html.DisplayNameFor(model => model.Data.FirstOrDefault().MarketCap)" />
                 </form>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Data.FirstOrDefault().LastOptionVolume)
+                <form asp-action="Index" method="get">
+                    <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
+                    <input type="hidden" name="PageSize" value="@Model.PageSize" />
+                    <input type="hidden" name="Sort" value="volumeDesc" />
+                    <input type="submit" class="btn" value="@Html.DisplayNameFor(model => model.Data.FirstOrDefault().LastOptionVolume)" />
+                </form>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Data.FirstOrDefault().OptionVolumeChange)
+                <form asp-action="Index" method="get">
+                    <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
+                    <input type="hidden" name="PageSize" value="@Model.PageSize" />
+                    <input type="hidden" name="Sort" value="changeDesc" />
+                    <input type="submit" class="btn" value="@Html.DisplayNameFor(model => model.Data.FirstOrDefault().OptionVolumeChange)" />
+                </form>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Data.FirstOrDefault().NextEarnings)
