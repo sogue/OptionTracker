@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OptionTracker.Data;
@@ -12,9 +13,10 @@ using OptionTracker.Models;
 namespace OptionTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210614194710_opVolCha")]
+    partial class opVolCha
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,9 +34,6 @@ namespace OptionTracker.Migrations
                     b.Property<DateTime>("ActivityDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("AssetType")
-                        .HasColumnType("text");
-
                     b.Property<decimal>("CallPutRatio")
                         .HasColumnType("numeric");
 
@@ -49,9 +48,6 @@ namespace OptionTracker.Migrations
 
                     b.Property<string>("Ticker")
                         .HasColumnType("text");
-
-                    b.Property<int>("TickerId")
-                        .HasColumnType("integer");
 
                     b.Property<decimal>("TotalVolume")
                         .HasColumnType("numeric");
@@ -928,9 +924,6 @@ namespace OptionTracker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("AssetType")
-                        .HasColumnType("text");
 
                     b.Property<float>("ClosePrice")
                         .HasColumnType("real");

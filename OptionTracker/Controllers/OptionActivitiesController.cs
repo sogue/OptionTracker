@@ -26,7 +26,7 @@ namespace OptionTracker.Controllers
         {
             DateTime dateTime = date != null ? DateTime.ParseExact(date, "ddMMyy", null) : DateTime.Today.AddDays(-1);
             var a = await _context.OptionActivities
-                .Where(x => x.ActivityDate == dateTime)
+                .Where(x => x.ActivityDate == dateTime && x.AssetType != "ETF")
                 .OrderByDescending(x => x.TotalVolume).Take(50).ToListAsync();
             return View(a.OrderByDescending(x=>x.TotalVolume));
         }

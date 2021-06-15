@@ -11,6 +11,7 @@ namespace FlowService.Models.Anal
     public class OptionActivity
     {
         public int Id { get; set; }
+        public int TickerId { get; set; }
         public string Ticker { get; set; }
         public DateTime ActivityDate { get; set; }
         public decimal CallVolume { get; set; }
@@ -19,5 +20,9 @@ namespace FlowService.Models.Anal
 
         [DisplayFormat(DataFormatString = "{0:P2}")]
         public decimal CallPutRatio  { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        public decimal OptionVolumeChange { get; set; }
+        public string AssetType { get; internal set; }
     }
 }

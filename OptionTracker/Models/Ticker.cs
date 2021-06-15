@@ -6,8 +6,11 @@ using FlowService.Models.ChainModels;
 
 namespace OptionTracker.Models
 {
+    [DataContract]
     public class Ticker
     {
+        public string AssetType { get; set; }
+
         public int Id { get; set; }
         [DataMember(Name = "symbol", EmitDefaultValue = false)]
         public string Symbol { get; set; }
@@ -15,7 +18,7 @@ namespace OptionTracker.Models
         [DisplayFormat(DataFormatString = "{0:C}")]
         [DataType(DataType.Currency)]
         [Display(Name = "Market Cap")]
-
+        [DataMember(Name = "marketCap", EmitDefaultValue = false)]
         public int MarketCap { get; set; }
 
         public int LastOptionVolume { get; set; }
