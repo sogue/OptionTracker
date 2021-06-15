@@ -1,4 +1,7 @@
-﻿using FlowService.Models.Anal;
+﻿using System;
+using System.Reflection;
+using Core.Entities;
+using FlowService.Models.Anal;
 using FlowService.Models.ChainModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +18,7 @@ namespace OptionTracker.Data
             : base(options)
         {
         }
+
         public DbSet<BookDetail> BookDetails { get; set; }
         public DbSet<Greeks> Greeks { get; set; }
         public DbSet<Stats> Stats { get; set; }
@@ -22,6 +26,7 @@ namespace OptionTracker.Data
         public DbSet<Watchlist> Watchlist { get; set; }
         public DbSet<Trader> Traders { get; set; }
         public DbSet<Ticker> Ticker { get; set; }
+        public DbSet<Core.Entities.Legacy.Ticker> Tickers { get; set; }
         public DbSet<OptionChainRaw> OptionChainRaw { get; set; }
         public DbSet<ChainRaw> ChainRaw { get; set; }
         public DbSet<OptionResultViewModel> CompareRaw { get; set; }
@@ -48,5 +53,11 @@ namespace OptionTracker.Data
         public DbSet<VolumeData> VolumeDatas { get; set; }
 
         public DbSet<OptionActivity> OptionActivities { get; set; }
+
+        public DbSet<TickerSector> TickerSectors { get; set; }
+        public DbSet<TickerType> TickerTypes { get; set; }
     }
+
+
 }
+

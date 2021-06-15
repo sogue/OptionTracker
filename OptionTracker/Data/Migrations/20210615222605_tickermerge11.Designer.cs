@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OptionTracker.Data;
@@ -12,9 +13,10 @@ using OptionTracker.Models;
 namespace OptionTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210615222605_tickermerge11")]
+    partial class tickermerge11
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,6 +260,7 @@ namespace OptionTracker.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("LastOptionVolume")
@@ -267,7 +270,9 @@ namespace OptionTracker.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("character varying(5)");
 
                     b.Property<DateTime>("NextEarnings")
                         .HasColumnType("timestamp without time zone");
@@ -276,10 +281,11 @@ namespace OptionTracker.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<string>("PictureUrl")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric(18,2)");
 
                     b.Property<int>("TickerSectorId")
                         .HasColumnType("integer");
@@ -323,7 +329,7 @@ namespace OptionTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TickerSectors");
+                    b.ToTable("TickerSector");
                 });
 
             modelBuilder.Entity("Core.Entities.TickerType", b =>
@@ -338,7 +344,7 @@ namespace OptionTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TickerTypes");
+                    b.ToTable("TickerType");
                 });
 
             modelBuilder.Entity("FlowService.Models.Anal.OptionActivity", b =>
