@@ -13,7 +13,7 @@ namespace OptionTracker.Models
         [DisplayFormat(DataFormatString = "{0:C}")]
         [DataType(DataType.Currency)]
         [Display(Name = "Close Price")]
-        public float ClosePrice { get; set; }
+        public decimal ClosePrice { get; set; }
         [DisplayFormat(DataFormatString = "{0:C}")]
         [DataType(DataType.Currency)]
         [Display(Name = "Market Cap")]

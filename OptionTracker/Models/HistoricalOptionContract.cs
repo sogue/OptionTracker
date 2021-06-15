@@ -9,7 +9,6 @@ namespace FlowService.Models.ChainModels
         public int Id { get; set; }
         public int HistoricalDateId { get; set; }
         public string ContractSymbol { get; set; }
-
         [Column(TypeName = "jsonb")]
         public ICollection<OptionContract> Contracts { get; set; }
 

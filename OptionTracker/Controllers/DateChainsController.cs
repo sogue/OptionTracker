@@ -90,7 +90,7 @@ namespace OptionTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Symbol,ExpDate,OptionContracts")] DateChain dateChain)
+        public async Task<IActionResult> Create([Bind("Id,Name,ExpDate,OptionContracts")] DateChain dateChain)
         {
             if (ModelState.IsValid)
             {
@@ -122,7 +122,7 @@ namespace OptionTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Symbol,ExpDate,OptionContracts")] DateChain dateChain)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ExpDate,OptionContracts")] DateChain dateChain)
         {
             if (id != dateChain.Id)
             {

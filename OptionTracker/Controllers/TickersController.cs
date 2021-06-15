@@ -149,7 +149,7 @@ namespace OptionTracker.Controllers
         {
             if (symbol == null) return NotFound();
             var ticker = await _context.Ticker
-                .FirstOrDefaultAsync(m => m.Symbol.Equals(symbol.ToUpper()));
+                .FirstOrDefaultAsync(m => m.Name.Equals(symbol.ToUpper()));
 
             if (ticker == null) return NotFound();
 
@@ -157,7 +157,7 @@ namespace OptionTracker.Controllers
 
             if (id != null && id.Equals("update"))
             {
-                var y = await _apiService.GetContractsByTickerName(ticker.Symbol);
+                var y = await _apiService.GetContractsByTickerName(ticker.Name);
 
 
                 if (y != null)
@@ -178,12 +178,12 @@ namespace OptionTracker.Controllers
                 try
                 {
                     chainRaw = await _context.OptionChainRaw.Where(x =>
-                            x.Data.RootElement.GetProperty("symbol").GetString() == ticker.Symbol)
+                            x.Data.RootElement.GetProperty("symbol").GetString() == ticker.Name)
                         .OrderByDescending(x => x.Id).FirstOrDefaultAsync();
                 }
                 catch (Exception e)
                 {
-                    var y = await _apiService.GetContractsByTickerName(ticker.Symbol);
+                    var y = await _apiService.GetContractsByTickerName(ticker.Name);
 
 
                     if (y != null)
@@ -228,7 +228,7 @@ namespace OptionTracker.Controllers
             var dtDateTime = dt.AddMilliseconds(s[0].QuoteTimeInLong.GetValueOrDefault()).ToLocalTime();
             var viewModel = new ChainResultViewModel
             {
-                Ticker = ticker.Symbol,
+                Ticker = ticker.Name,
                 MarketCap = ticker.MarketCap,
                 ClosePrice = ticker.ClosePrice,
                 Created = dtDateTime,
@@ -287,7 +287,7 @@ namespace OptionTracker.Controllers
             if (id != null && (id.Equals("dWeek") || id.Equals("threeD")))
             {
                 var chainRaws = await _context.OptionChainRaw.Where(x =>
-                        x.Data.RootElement.GetProperty("symbol").GetString() == ticker.Symbol)
+                        x.Data.RootElement.GetProperty("symbol").GetString() == ticker.Name)
                     .OrderByDescending(x => x.Id).Take(7).ToListAsync();
 
                 viewModel = CreateChainResultViewModel(chainRaws,id,ticker);
@@ -484,16 +484,16 @@ namespace OptionTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Microsoft.AspNetCore.Mvc.HttpPost]
         [Microsoft.AspNetCore.Mvc.ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Microsoft.AspNetCore.Mvc.Bind("Id,Symbol")] Ticker ticker)
+        public async Task<IActionResult> Create([Microsoft.AspNetCore.Mvc.Bind("Id,Name")] Ticker ticker)
         {
             if (ModelState.IsValid)
             {
-                if (!_context.Ticker.Any(x => x.Symbol == ticker.Symbol))
+                if (!_context.Ticker.Any(x => x.Name == ticker.Name))
                 {
                     _context.Add(ticker);
                     await _context.SaveChangesAsync();
 
-                    var y = await _apiService.GetContractsByTickerName(ticker.Symbol);
+                    var y = await _apiService.GetContractsByTickerName(ticker.Name);
 
                     var contracts =
                         new ChainRaw
@@ -558,7 +558,7 @@ namespace OptionTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Microsoft.AspNetCore.Mvc.HttpPost]
         [Microsoft.AspNetCore.Mvc.ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Microsoft.AspNetCore.Mvc.Bind("Id,Symbol")] Ticker ticker)
+        public async Task<IActionResult> Edit(int id, [Microsoft.AspNetCore.Mvc.Bind("Id,Name")] Ticker ticker)
         {
             if (id != ticker.Id) return NotFound();
 
@@ -576,7 +576,7 @@ namespace OptionTracker.Controllers
 
                     var updatedList = await _context.Watchlist.FirstOrDefaultAsync();
 
-                    updatedList.TickerList.Add(ticker.Symbol);
+                    updatedList.TickerList.Add(ticker.Name);
 
                     await _context.SaveChangesAsync();
                 }

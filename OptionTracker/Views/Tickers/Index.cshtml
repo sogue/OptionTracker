@@ -40,7 +40,7 @@
                 <form asp-action="Index" method="get">
                     <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
                     <input type="hidden" name="PageSize" value="@Model.PageSize" />
-                    <input type="submit" class="btn" value="@Html.DisplayNameFor(model => model.Data.FirstOrDefault().Symbol)" />
+                    <input type="submit" class="btn" value="@Html.DisplayNameFor(model => model.Data.FirstOrDefault().Name)" />
                 </form>
             </th>
             <th>
@@ -88,7 +88,7 @@
         {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Symbol)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ClosePrice)
@@ -108,11 +108,11 @@
             <td>
                 <a asp-action="Delete" asp-route-id="@item.Id">Add to Watchlist</a> |
                 <a asp-controller="DateChains"
-                   asp-action="@item.Symbol">
+                   asp-action="@item.Name">
                     Option Chains
                 </a> |
-                <a asp-action="Details" asp-route-id="@item.Symbol">Most Active Options</a>
-                | <a asp-controller="VolumeAnals" asp-action="Details" asp-route-id="@item.Symbol">Daily Option Volume</a>
+                <a asp-action="Details" asp-route-id="@item.Name">Most Active Options</a>
+                | <a asp-controller="VolumeAnals" asp-action="Details" asp-route-id="@item.Name">Daily Option Volume</a>
             </td>
         </tr>
         }
