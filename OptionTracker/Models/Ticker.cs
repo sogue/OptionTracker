@@ -9,6 +9,8 @@ namespace OptionTracker.Models
     [DataContract]
     public class Ticker
     {
+
+        [DataMember(Name = "assetType", EmitDefaultValue = false)]
         public string AssetType { get; set; }
 
         public int Id { get; set; }
@@ -20,7 +22,7 @@ namespace OptionTracker.Models
         [Display(Name = "Market Cap")]
         [DataMember(Name = "marketCap", EmitDefaultValue = false)]
         public int MarketCap { get; set; }
-
+        [DataMember(Name = "lastOptionVolume", EmitDefaultValue = false)]
         public int LastOptionVolume { get; set; }
         public DateTime NextEarnings { get; set; }
 
@@ -32,6 +34,7 @@ namespace OptionTracker.Models
         public HistoricalChain Chain { get; set; }
         public ICollection<Trader> Traders { get; set; } = new List<Trader>();
 
+        [DataMember(Name = "optionVolumeChange", EmitDefaultValue = false)]
         [DisplayFormat(DataFormatString = "{0:P2}")]
         public decimal OptionVolumeChange { get; set; }
     }
