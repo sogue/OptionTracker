@@ -16,6 +16,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
+using API.Dtos;
 using API.Helpers;
 using Core.Specifications;
 using Microsoft.AspNetCore.Http;
@@ -73,13 +74,13 @@ namespace OptionTracker.Controllers
             var answer = await client.GetFromJsonAsync<JsonDocument>(longurl);
 
             var tickers = JsonConvert
-                .DeserializeObject<Ticker[]>(answer.RootElement.GetProperty("data").ToString()).ToList();
+                .DeserializeObject<TickerToReturnDto[]>(answer.RootElement.GetProperty("data").ToString()).ToList();
 
             var count = answer.RootElement.GetProperty("count").GetInt32();
 
 
 
-            return View(new Pagination<Ticker>(productParams.PageIndex,
+            return View(new Pagination<TickerToReturnDto>(productParams.PageIndex,
                 productParams.PageSize, count, tickers));
         }
 
@@ -484,7 +485,7 @@ namespace OptionTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Microsoft.AspNetCore.Mvc.HttpPost]
         [Microsoft.AspNetCore.Mvc.ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Microsoft.AspNetCore.Mvc.Bind("Id,Name")] Ticker ticker)
+        public async Task<IActionResult> Create([Microsoft.AspNetCore.Mvc.Bind("Id,Name")] TickerToReturnDto ticker)
         {
             if (ModelState.IsValid)
             {
@@ -558,7 +559,7 @@ namespace OptionTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Microsoft.AspNetCore.Mvc.HttpPost]
         [Microsoft.AspNetCore.Mvc.ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Microsoft.AspNetCore.Mvc.Bind("Id,Name")] Ticker ticker)
+        public async Task<IActionResult> Edit(int id, [Microsoft.AspNetCore.Mvc.Bind("Id,Name")] API.Dtos.TickerToReturnDto ticker)
         {
             if (id != ticker.Id) return NotFound();
 

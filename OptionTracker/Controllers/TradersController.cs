@@ -6,6 +6,7 @@ using OptionTracker.Models;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using API.Dtos;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace OptionTracker.Controllers
@@ -39,7 +40,7 @@ namespace OptionTracker.Controllers
 
             if (trader == null)
             {
-                return View(new List<Ticker>());
+                return View(new List<TickerToReturnDto>());
             }
 
             return View(trader.Tickers);

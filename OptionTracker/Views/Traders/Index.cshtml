@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OptionTracker.Models.Ticker>
+﻿@model List<API.Dtos.TickerToReturnDto>
 
 @{
     ViewData["Title"] = "Index";
@@ -35,13 +35,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Name))
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ClosePrice)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().ClosePrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MarketCap)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().MarketCap)
             </th>
             <th>
                 Options
