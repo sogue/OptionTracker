@@ -519,33 +519,33 @@ namespace OptionTracker.Controllers
         {
             if (id != ticker.Id) return NotFound();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var defaultWatchlist = await _context.Watchlist.FirstOrDefaultAsync();
-                    if (defaultWatchlist == null)
-                    {
-                        var watchlist = new Watchlist { TickerList = new List<string>() };
-                        await _context.Watchlist.AddAsync(watchlist);
-                        await _context.SaveChangesAsync();
-                    }
+            //if (ModelState.IsValid)
+            //{
+            //    //try
+            //    //{
+            //    //    var defaultWatchlist = await _context.Watchlist.FirstOrDefaultAsync();
+            //    //    if (defaultWatchlist == null)
+            //    //    {
+            //    //        var watchlist = new Watchlist { TickerList = new List<string>() };
+            //    //        await _context.Watchlist.AddAsync(watchlist);
+            //    //        await _context.SaveChangesAsync();
+            //    //    }
 
-                    var updatedList = await _context.Watchlist.FirstOrDefaultAsync();
+            //    //    var updatedList = await _context.Watchlist.FirstOrDefaultAsync();
 
-                    updatedList.TickerList.Add(ticker.Name);
+            //    //    updatedList.TickerList.Add(ticker.Name);
 
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TickerExists(ticker.Id))
-                        return NotFound();
-                    throw;
-                }
+            //    //    await _context.SaveChangesAsync();
+            //    }
+            //    catch (DbUpdateConcurrencyException)
+            //    {
+            //        if (!TickerExists(ticker.Id))
+            //            return NotFound();
+            //        throw;
+            //    }
 
-                return RedirectToAction(nameof(Index));
-            }
+            //    return RedirectToAction(nameof(Index));
+            //}
 
             return View(ticker);
         }
@@ -568,23 +568,23 @@ namespace OptionTracker.Controllers
         [Microsoft.AspNetCore.Mvc.ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ticker = await _context.Ticker.FindAsync(id);
+            //var ticker = await _context.Ticker.FindAsync(id);
 
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var trader = await _context.Traders.FirstOrDefaultAsync(x => x.IdentityUserId == userId);
-            if (trader == null)
-            {
-                var newTrader = new Trader() { IdentityUserId = userId };
-                await _context.Traders.AddAsync(newTrader);
-               // ticker.Traders.Add(newTrader);
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-               // ticker.Traders.Add(trader);
-                await _context.SaveChangesAsync();
-            }
+            //var trader = await _context.Traders.FirstOrDefaultAsync(x => x.IdentityUserId == userId);
+            //if (trader == null)
+            //{
+            //    var newTrader = new Trader() { IdentityUserId = userId };
+            //    await _context.Traders.AddAsync(newTrader);
+            //   // ticker.Traders.Add(newTrader);
+            //    await _context.SaveChangesAsync();
+            //}
+            //else
+            //{
+            //   // ticker.Traders.Add(trader);
+            //    await _context.SaveChangesAsync();
+            //}
 
             return RedirectToAction(nameof(Index));
         }

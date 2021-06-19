@@ -735,41 +735,9 @@ namespace OptionTracker.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<int?>("TraderId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TraderId");
 
                     b.ToTable("Ticker");
-                });
-
-            modelBuilder.Entity("OptionTracker.Models.Trader", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("IdentityUserId")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Traders");
-                });
-
-            modelBuilder.Entity("OptionTracker.Models.Watchlist", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Watchlist");
                 });
 
             modelBuilder.Entity("Org.OpenAPITools.Models.BookSummary", b =>
@@ -1196,13 +1164,6 @@ namespace OptionTracker.Migrations
                         .HasForeignKey("OptionTracker.Models.Crypto.Stats", "BookDetailId");
                 });
 
-            modelBuilder.Entity("OptionTracker.Models.Ticker", b =>
-                {
-                    b.HasOne("OptionTracker.Models.Trader", null)
-                        .WithMany("Tickers")
-                        .HasForeignKey("TraderId");
-                });
-
             modelBuilder.Entity("Org.OpenAPITools.Models.BookSummary", b =>
                 {
                     b.HasOne("OptionTracker.Models.Crypto.InstrumentHistory", null)
@@ -1243,11 +1204,6 @@ namespace OptionTracker.Migrations
                     b.Navigation("BookDetails");
 
                     b.Navigation("BookSummaries");
-                });
-
-            modelBuilder.Entity("OptionTracker.Models.Trader", b =>
-                {
-                    b.Navigation("Tickers");
                 });
 
             modelBuilder.Entity("Org.OpenAPITools.Models.DailyBalance", b =>

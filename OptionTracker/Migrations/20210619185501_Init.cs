@@ -211,6 +211,28 @@ namespace OptionTracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Ticker",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    AssetType = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    PictureUrl = table.Column<string>(type: "text", nullable: true),
+                    MarketCap = table.Column<int>(type: "integer", nullable: false),
+                    ClosePrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    LastOptionVolume = table.Column<int>(type: "integer", nullable: false),
+                    OptionVolumeChange = table.Column<decimal>(type: "numeric", nullable: false),
+                    NextEarnings = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ticker", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tickers",
                 columns: table => new
                 {
@@ -233,19 +255,6 @@ namespace OptionTracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Traders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    IdentityUserId = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Traders", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "VolumeAnals",
                 columns: table => new
                 {
@@ -256,18 +265,6 @@ namespace OptionTracker.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_VolumeAnals", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Watchlist",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Watchlist", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -412,35 +409,6 @@ namespace OptionTracker.Migrations
                         name: "FK_DailyBalances_PortfoliosEth_PortfolioEthId",
                         column: x => x.PortfolioEthId,
                         principalTable: "PortfoliosEth",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Ticker",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Price = table.Column<decimal>(type: "numeric", nullable: false),
-                    AssetType = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    PictureUrl = table.Column<string>(type: "text", nullable: true),
-                    MarketCap = table.Column<int>(type: "integer", nullable: false),
-                    ClosePrice = table.Column<decimal>(type: "numeric", nullable: false),
-                    LastOptionVolume = table.Column<int>(type: "integer", nullable: false),
-                    OptionVolumeChange = table.Column<decimal>(type: "numeric", nullable: false),
-                    NextEarnings = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    TraderId = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ticker", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Ticker_Traders_TraderId",
-                        column: x => x.TraderId,
-                        principalTable: "Traders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -713,11 +681,6 @@ namespace OptionTracker.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ticker_TraderId",
-                table: "Ticker",
-                column: "TraderId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_VolumeDatas_VolumeAnalId",
                 table: "VolumeDatas",
                 column: "VolumeAnalId");
@@ -771,9 +734,6 @@ namespace OptionTracker.Migrations
                 name: "VolumeDatas");
 
             migrationBuilder.DropTable(
-                name: "Watchlist");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -784,9 +744,6 @@ namespace OptionTracker.Migrations
 
             migrationBuilder.DropTable(
                 name: "BookDetails");
-
-            migrationBuilder.DropTable(
-                name: "Traders");
 
             migrationBuilder.DropTable(
                 name: "VolumeAnals");

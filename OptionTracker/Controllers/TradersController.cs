@@ -20,59 +20,59 @@ namespace OptionTracker.Controllers
             _context = context;
         }
 
-        // GET: Traders
-        public async Task<IActionResult> Index(int id)
-        {
-            Trader trader;
+        //// GET: Traders
+        //public async Task<IActionResult> Index(int id)
+        //{
+        //    Trader trader = null;
 
-            if (id == null)
-            {
-                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    if (id == null)
+        //    {
+        //        var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                trader = await _context.Traders.Include(x => x.Tickers).FirstOrDefaultAsync(x => x.IdentityUserId == userId);
+        //  //      trader = await _context.Traders.Include(x => x.Tickers).FirstOrDefaultAsync(x => x.IdentityUserId == userId);
 
-            }
-            else
-            {
-                trader = await _context.Traders.Include(x => x.Tickers)
-                    .FirstOrDefaultAsync(m => m.Id == id);
-            }
+        //    }
+        //    else
+        //    {
+        //      //  trader = await _context.Traders.Include(x => x.Tickers)
+        //      //      .FirstOrDefaultAsync(m => m.Id == id);
+        //    }
 
-            if (trader == null)
-            {
-                return View(new List<TickerToReturnDto>());
-            }
+        //    if (trader == null)
+        //    {
+        //        return View(new List<TickerToReturnDto>());
+        //    }
 
-            return View(trader.Tickers);
-        }
+        //    return View(trader.Tickers);
+        //}
 
         // GET: Traders/Details/5
-        [HttpGet("Traders/Details/{id}")]
-        [Route("Traders/Details")]
-        public async Task<IActionResult> Details(int? id)
-        {
-            Trader trader;
+        //[HttpGet("Traders/Details/{id}")]
+        //[Route("Traders/Details")]
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    Trader trader;
 
-            if (id == null)
-            {
-                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    if (id == null)
+        //    {
+        //        var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                trader = await _context.Traders.Include(x => x.Tickers).FirstOrDefaultAsync(x => x.IdentityUserId == userId);
+        //    //    trader = await _context.Traders.Include(x => x.Tickers).FirstOrDefaultAsync(x => x.IdentityUserId == userId);
 
-            }
-            else
-            {
-                trader = await _context.Traders.Include(x => x.Tickers)
-                    .FirstOrDefaultAsync(m => m.Id == id);
-            }
+        //    }
+        //    else
+        //    {
+        //     //   trader = await _context.Traders.Include(x => x.Tickers)
+        //     //       .FirstOrDefaultAsync(m => m.Id == id);
+        //    }
 
-            if (trader == null)
-            {
-                return View(new List<Ticker>());
-            }
+        //    if (trader == null)
+        //    {
+        //        return View(new List<Ticker>());
+        //    }
 
-            return View(trader.Tickers);
-        }
+        //    return View(trader.Tickers);
+        //}
 
         // GET: Traders/Create
         public IActionResult Create()
@@ -80,116 +80,116 @@ namespace OptionTracker.Controllers
             return View();
         }
 
-        // POST: Traders/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdentityUserId")] Trader trader)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(trader);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(trader);
-        }
+        //// POST: Traders/Create
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("Id,IdentityUserId")] Trader trader)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(trader);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(trader);
+        //}
 
         // GET: Traders/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var trader = await _context.Traders.FindAsync(id);
-            if (trader == null)
-            {
-                return NotFound();
-            }
-            return View(trader);
-        }
+        //   var trader = await _context.Traders.FindAsync(id);
+        //    if (trader == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(trader);
+        //}
 
         // POST: Traders/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IdentityUserId")] Trader trader)
-        {
-            if (id != trader.Id)
-            {
-                return NotFound();
-            }
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("Id,IdentityUserId")] Trader trader)
+        //{
+        //    if (id != trader.Id)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(trader);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TraderExists(trader.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(trader);
-        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(trader);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!TraderExists(trader.Id))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(trader);
+        //}
 
-        // GET: Traders/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //// GET: Traders/Delete/5
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var trader = await _context.Traders.Include(x => x.Tickers).FirstOrDefaultAsync(x => x.IdentityUserId == userId);
+        //    var trader = await _context.Traders.Include(x => x.Tickers).FirstOrDefaultAsync(x => x.IdentityUserId == userId);
 
-            if (trader == null)
-            {
-                return NotFound();
-            }
+        //    if (trader == null)
+        //    {
+        //        return NotFound();
+        //    }
 
 
-            return View(trader.Tickers.FirstOrDefault(x=>x.Id == id));
-        }
+        //    return View(trader.Tickers.FirstOrDefault(x=>x.Id == id));
+        //}
 
         // POST: Traders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var trader = await _context.Traders
-                .Include(x => x.Tickers)
-                .FirstOrDefaultAsync(x => x.IdentityUserId == userId);
+        //    var trader = await _context.Traders
+        //        .Include(x => x.Tickers)
+        //        .FirstOrDefaultAsync(x => x.IdentityUserId == userId);
 
-            var ticker = trader.Tickers.FirstOrDefault(x => x.Id == id);
+        //    var ticker = trader.Tickers.FirstOrDefault(x => x.Id == id);
 
-            trader.Tickers.Remove(ticker);
+        //    trader.Tickers.Remove(ticker);
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
-        private bool TraderExists(int id)
-        {
-            return _context.Traders.Any(e => e.Id == id);
-        }
+        //private bool TraderExists(int id)
+        //{
+        //    return _context.Traders.Any(e => e.Id == id);
+        //}
     }
 }

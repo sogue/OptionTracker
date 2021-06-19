@@ -23,9 +23,9 @@ namespace OptionTracker.Data
         public DbSet<Greeks> Greeks { get; set; }
         public DbSet<Stats> Stats { get; set; }
         
-        public DbSet<Watchlist> Watchlist { get; set; }
+        // public DbSet<Watchlist> Watchlist { get; set; }
 
-        public DbSet<Trader> Traders { get; set; }
+       // public DbSet<Trader> Traders { get; set; }
         public DbSet<Ticker> Ticker { get; set; }
 
         public DbSet<Core.Entities.Legacy.Ticker> Tickers { get; set; }
