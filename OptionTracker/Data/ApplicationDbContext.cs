@@ -25,7 +25,7 @@ namespace OptionTracker.Data
         
         // public DbSet<Watchlist> Watchlist { get; set; }
 
-        public DbSet<Trader> Traders { get; set; }
+       // public DbSet<Trader> Traders { get; set; }
         public DbSet<Ticker> Ticker { get; set; }
 
         public DbSet<Core.Entities.Legacy.Ticker> Tickers { get; set; }
@@ -40,9 +40,8 @@ namespace OptionTracker.Data
         public DbSet<PortfolioEth> PortfoliosEth { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<DailyBalance> DailyBalances { get; set; }
-        
-        public DbSet<TickerSector> TickerSectors { get; set; }
-        public DbSet<TickerType> TickerTypes { get; set; }
+
+
 
         public DbSet<VolumeAnal> VolumeAnals { get; set; }
         public DbSet<VolumeData> VolumeDatas { get; set; }
