@@ -22,20 +22,15 @@ namespace OptionTracker.Data
         public DbSet<BookDetail> BookDetails { get; set; }
         public DbSet<Greeks> Greeks { get; set; }
         public DbSet<Stats> Stats { get; set; }
-        public DbSet<OptionResult> OptionResults { get; set; }
+        
         public DbSet<Watchlist> Watchlist { get; set; }
+
         public DbSet<Trader> Traders { get; set; }
         public DbSet<Ticker> Ticker { get; set; }
+
         public DbSet<Core.Entities.Legacy.Ticker> Tickers { get; set; }
         public DbSet<OptionChainRaw> OptionChainRaw { get; set; }
-        public DbSet<ChainRaw> ChainRaw { get; set; }
-        public DbSet<OptionResultViewModel> CompareRaw { get; set; }
-        public DbSet<OptionTracker.Models.DateChain> DateChain { get; set; }
-        public DbSet<ChainResultViewModel> ComparedChains { get; set; }
         public DbSet<OptionContract> OptionContracts { get; set; }
-        public DbSet<HistoricalOptionContract> HistoricalOptionContracts { get; set; }
-        public DbSet<HistoricalDate> HistoricalDates { get; set; }
-        public DbSet<HistoricalChain> HistoricalChains { get; set; }
 
         public DbSet<Instrument> Instruments { get; set; }
 
@@ -46,16 +41,12 @@ namespace OptionTracker.Data
         public DbSet<Position> Positions { get; set; }
         public DbSet<DailyBalance> DailyBalances { get; set; }
 
-        public DbSet<Stock> Stocks { get; set; }
-        public DbSet<StockOption> StockOptions { get; set; }
-        public DbSet<StockOptionHistory> StockOptionHistories { get; set; }
+
+
         public DbSet<VolumeAnal> VolumeAnals { get; set; }
         public DbSet<VolumeData> VolumeDatas { get; set; }
 
         public DbSet<OptionActivity> OptionActivities { get; set; }
-
-        public DbSet<TickerSector> TickerSectors { get; set; }
-        public DbSet<TickerType> TickerTypes { get; set; }
     }
 
 

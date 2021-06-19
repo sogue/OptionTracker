@@ -24,16 +24,16 @@ namespace OptionTracker.Models
         public int LastOptionVolume { get; set; }
         public decimal OptionVolumeChange { get; set; }
 
-        public HistoricalChain Chain { get; set; }
+     //   public HistoricalChain Chain { get; set; }
         public DateTime NextEarnings { get; set; }
 
-        public ICollection<Trader> Traders { get; set; } = new List<Trader>();
+       // public ICollection<Trader> Traders { get; set; } = new List<Trader>();
 
-        public TickerType TickerType { get; set; }
-        public TickerSector TickerSector { get; set; }
+      //  public TickerType TickerType { get; set; }
+       // public TickerSector TickerSector { get; set; }
 
-        public int TickerSectorId { get; set; }
-        public int TickerTypeId { get; set; }
+      //  public int TickerSectorId { get; set; }
+      //  public int TickerTypeId { get; set; }
 
     }
 

@@ -84,27 +84,6 @@ namespace OptionTracker.Controllers
                 productParams.PageSize, count, tickers));
         }
 
-        // GET: Ticker/Details/5
-        [Microsoft.AspNetCore.Mvc.HttpGet("Tickers/TotalDetails/")]
-        [Microsoft.AspNetCore.Mvc.Route("Tickers/TotalDetails/{id}")]
-        public async Task<IActionResult> DetailsTotal(string? id)
-        {
-            var chainRaws = await _context.CompareRaw.ToListAsync();
-
-            var result = chainRaws.OrderByDescending(x => x.OpenInterestChange).Take(50).ToList();
-
-            if (id != null && id.Equals("true"))
-                result = result.OrderByDescending(x => x.TotalValue).ToList();
-
-            if (id != null && id.Equals("oChange"))
-                result = result.OrderByDescending(x => x.OpenInterestChange).ToList();
-
-            if (id != null && id.Equals("cChange"))
-                result = result.OrderByDescending(x => x.ClosePriceChange).ToList();
-
-            return View(result);
-        }
-
         [Microsoft.AspNetCore.Mvc.HttpPost("Tickers/GetOptionChartData/{ticker}")]
         public JsonResult GetOptionChartData(string ticker)
         {
@@ -491,30 +470,7 @@ namespace OptionTracker.Controllers
             {
                 if (!_context.Ticker.Any(x => x.Name == ticker.Name))
                 {
-                    _context.Add(ticker);
-                    await _context.SaveChangesAsync();
-
-                    var y = await _apiService.GetContractsByTickerName(ticker.Name);
-
-                    var contracts =
-                        new ChainRaw
-                        {
-                            Chain = new Chain
-                            {
-                                Symbol = y.RootElement.GetProperty("symbol").GetString(),
-                                UnderlyingPrice = y.RootElement.GetProperty("underlyingPrice").GetDecimal(),
-                                OptionContracts = JsonConvert
-                                    .DeserializeObject<Dictionary<string, Dictionary<string, OptionContract[]>>>(
-                                        y.RootElement.GetProperty("callExpDateMap").ToString() ?? "")
-                                    .SelectMany(a => a.Value.Values)
-                                    .SelectMany(x => x).ToArray()
-                            }
-                        };
-
-                    _logger.LogWarning("Log - Poco Save Start:" + DateTime.Now);
-                    await _context.ChainRaw.AddRangeAsync(contracts);
-                    await _context.SaveChangesAsync();
-                    _logger.LogWarning("Log - Poco Save Done:" + DateTime.Now);
+                
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -621,12 +577,12 @@ namespace OptionTracker.Controllers
             {
                 var newTrader = new Trader() { IdentityUserId = userId };
                 await _context.Traders.AddAsync(newTrader);
-                ticker.Traders.Add(newTrader);
+               // ticker.Traders.Add(newTrader);
                 await _context.SaveChangesAsync();
             }
             else
             {
-                ticker.Traders.Add(trader);
+               // ticker.Traders.Add(trader);
                 await _context.SaveChangesAsync();
             }
 
