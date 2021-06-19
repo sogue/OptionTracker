@@ -13,18 +13,24 @@ namespace OptionTracker
     {
         public static async Task Main(string[] args)
         {
-            CreateHostBuilder(args).Build();
-            IHost host = CreateHostBuilder(args).Build();
-            using IServiceScope scope = host.Services.CreateScope();
-            IServiceProvider services = scope.ServiceProvider;
+            var host = CreateHostBuilder(args).Build();
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            var loggerFactory = services.GetRequiredService<ILoggerFactory>();
             try
             {
                 var context = services.GetRequiredService<ApplicationDbContext>();
                 await context.Database.MigrateAsync();
+                //await StoreContextSeed.SeedAsync(context, loggerFactory);
+
+                //var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                //var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+                //await identityContext.Database.MigrateAsync();
+                //await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
             }
             catch (Exception ex)
             {
-                ILogger<Program> logger = services.GetRequiredService<ILogger<Program>>();
+                var logger = loggerFactory.CreateLogger<Program>();
                 logger.LogError(ex, "An error occurred during migration");
             }
 
