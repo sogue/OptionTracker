@@ -54,6 +54,8 @@ namespace OptionTracker.Controllers
 
             query["PageIndex"] = productParams.PageIndex.ToString();
             query["PageSize"] = productParams.PageSize.ToString();
+            query["BrandId"] = productParams.BrandId.ToString();
+            query["TypeId"] = productParams.TypeId.ToString();
 
             if (!string.IsNullOrEmpty(productParams.Sort))
             {
