@@ -3,6 +3,7 @@ using System;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OptionTracker.Data;
@@ -10,15 +11,58 @@ using OptionTracker.Data;
 namespace OptionTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210619194343_Init5")]
+    partial class Init5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+            modelBuilder.Entity("Core.Entities.Legacy.Ticker", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("AssetType")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("ClosePrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("LastOptionVolume")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MarketCap")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("NextEarnings")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<decimal>("OptionVolumeChange")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("PictureUrl")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tickers");
+                });
 
             modelBuilder.Entity("Core.Entities.TickerSector", b =>
                 {
@@ -32,7 +76,7 @@ namespace OptionTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TickerSectors");
+                    b.ToTable("TickerSector");
                 });
 
             modelBuilder.Entity("Core.Entities.TickerType", b =>
@@ -47,7 +91,7 @@ namespace OptionTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TickerTypes");
+                    b.ToTable("TickerType");
                 });
 
             modelBuilder.Entity("FlowService.Models.Anal.OptionActivity", b =>
@@ -686,6 +730,48 @@ namespace OptionTracker.Migrations
                     b.ToTable("OptionContracts");
                 });
 
+            modelBuilder.Entity("OptionTracker.Models.Ticker", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("AssetType")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("ClosePrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("LastOptionVolume")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MarketCap")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("NextEarnings")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<decimal>("OptionVolumeChange")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("PictureUrl")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ticker");
+                });
+
             modelBuilder.Entity("OptionTracker.Models.TickerSymbol", b =>
                 {
                     b.Property<int>("Id")
@@ -740,21 +826,6 @@ namespace OptionTracker.Migrations
                     b.HasIndex("TickerTypeId");
 
                     b.ToTable("TickerSymbols");
-                });
-
-            modelBuilder.Entity("OptionTracker.Models.Trader", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("IdentityUserId")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Traders");
                 });
 
             modelBuilder.Entity("Org.OpenAPITools.Models.BookSummary", b =>
@@ -1093,21 +1164,6 @@ namespace OptionTracker.Migrations
                     b.ToTable("Positions");
                 });
 
-            modelBuilder.Entity("TickerSymbolTrader", b =>
-                {
-                    b.Property<int>("TickersId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TradersId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("TickersId", "TradersId");
-
-                    b.HasIndex("TradersId");
-
-                    b.ToTable("TickerSymbolTrader");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1236,21 +1292,6 @@ namespace OptionTracker.Migrations
                     b.HasOne("Org.OpenAPITools.Models.DailyBalance", null)
                         .WithMany("Positions")
                         .HasForeignKey("DailyBalanceId");
-                });
-
-            modelBuilder.Entity("TickerSymbolTrader", b =>
-                {
-                    b.HasOne("OptionTracker.Models.TickerSymbol", null)
-                        .WithMany()
-                        .HasForeignKey("TickersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OptionTracker.Models.Trader", null)
-                        .WithMany()
-                        .HasForeignKey("TradersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("OptionTracker.Models.Anal.VolumeAnal", b =>

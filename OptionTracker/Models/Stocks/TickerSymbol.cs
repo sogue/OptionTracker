@@ -7,8 +7,7 @@ using FlowService.Models.ChainModels;
 
 namespace OptionTracker.Models
 {
-    [DataContract]
-    public class Ticker
+    public class TickerSymbol
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -27,13 +26,13 @@ namespace OptionTracker.Models
      //   public HistoricalChain Chain { get; set; }
         public DateTime NextEarnings { get; set; }
 
-       // public ICollection<Trader> Traders { get; set; } = new List<Trader>();
+        public ICollection<Trader> Traders { get; set; } = new List<Trader>();
 
-      //  public TickerType TickerType { get; set; }
-       // public TickerSector TickerSector { get; set; }
+         public TickerType TickerType { get; set; }
+         public TickerSector TickerSector { get; set; }
 
-      //  public int TickerSectorId { get; set; }
-      //  public int TickerTypeId { get; set; }
+         public int TickerSectorId { get; set; }
+         public int TickerTypeId { get; set; }
 
     }
 

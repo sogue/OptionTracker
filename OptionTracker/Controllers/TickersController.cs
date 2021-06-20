@@ -128,7 +128,7 @@ namespace OptionTracker.Controllers
         public async Task<IActionResult> Details(string symbol, string? id, string? type)
         {
             if (symbol == null) return NotFound();
-            var ticker = await _context.Ticker
+            var ticker = await _context.TickerSymbols
                 .FirstOrDefaultAsync(m => m.Name.Equals(symbol.ToUpper()));
 
             if (ticker == null) return NotFound();
@@ -340,7 +340,7 @@ namespace OptionTracker.Controllers
             }
         }
 
-        private  ChainResultViewModel CreateChainResultViewModel(IList<OptionChainRaw> raws, string id, Ticker ticker)
+        private  ChainResultViewModel CreateChainResultViewModel(IList<OptionChainRaw> raws, string id, TickerSymbol tickerSymbol)
         {
             var oldChainRaw = new OptionChainRaw();
 
@@ -364,8 +364,8 @@ namespace OptionTracker.Controllers
                 viewModel = new ChainResultViewModel
                 {
                     Ticker = chainRaw.Data.RootElement.GetProperty("symbol").GetString(),
-                    MarketCap = ticker.MarketCap,
-                    ClosePrice = ticker.ClosePrice,
+                    MarketCap = tickerSymbol.MarketCap,
+                    ClosePrice = tickerSymbol.ClosePrice,
                     Created = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)
                         .AddMilliseconds(os[0].QuoteTimeInLong.GetValueOrDefault()).ToLocalTime(),
 
@@ -418,8 +418,8 @@ namespace OptionTracker.Controllers
                     Ticker = chainRaw.Data.RootElement.GetProperty("symbol").GetString(),
                     Created = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)
                         .AddMilliseconds(os[0].QuoteTimeInLong.GetValueOrDefault()).ToLocalTime(),
-                    MarketCap = ticker.MarketCap,
-                    ClosePrice = ticker.ClosePrice,
+                    MarketCap = tickerSymbol.MarketCap,
+                    ClosePrice = tickerSymbol.ClosePrice,
                     TimeChange = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)
                         .AddMilliseconds(os[0].QuoteTimeInLong.GetValueOrDefault()).ToLocalTime() -
                     new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc)
@@ -468,7 +468,7 @@ namespace OptionTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!_context.Ticker.Any(x => x.Name == ticker.Name))
+                if (!_context.TickerSymbols.Any(x => x.Name == ticker.Name))
                 {
                 
                 }
@@ -555,7 +555,7 @@ namespace OptionTracker.Controllers
         {
             if (id == null) return NotFound();
 
-            var ticker = await _context.Ticker
+            var ticker = await _context.TickerSymbols
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ticker == null) return NotFound();
 
@@ -591,7 +591,7 @@ namespace OptionTracker.Controllers
 
         private bool TickerExists(int id)
         {
-            return _context.Ticker.Any(e => e.Id == id);
+            return _context.TickerSymbols.Any(e => e.Id == id);
         }
     }
 }

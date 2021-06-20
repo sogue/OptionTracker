@@ -6,6 +6,6 @@ namespace OptionTracker.Models
     {
         public int Id { get; set; }
         public string IdentityUserId { get; set; }
-        public ICollection<Ticker> Tickers { get; set; }
+        public ICollection<TickerSymbol> Tickers { get; set; }
     }
 }

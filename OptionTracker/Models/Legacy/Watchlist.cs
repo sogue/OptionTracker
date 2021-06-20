@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using OptionTracker.Models;
 
 namespace Core.Entities.Legacy
 {
     public class Watchlist : BaseEntity
     {
-        public ICollection<Ticker> TickerList = new List<Ticker>();
+        public ICollection<TickerSymbol> TickerList = new List<TickerSymbol>();
     }
 }
