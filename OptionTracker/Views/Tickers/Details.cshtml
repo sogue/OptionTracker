@@ -55,15 +55,16 @@
                 <form class="d-inline-flex" asp-action="Details" method="get">
                     <div class="input-group-sm">
                         <div>
-                            Go to
-                            <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
-                            <input type="hidden" name="PageSize" value="@Model.PageSize" />
-                            <input type="hidden" name="TypeId" value=@ViewData["Type"] />
-                            <input type="hidden" name="Sort" value="@ViewData["Sort"]" />
-                            <input type="number" name="BrandId" value="@ViewData["Brand"]" />
-                            <input type="submit" class="btn" value="Days Ago" />
+                            <p>Go to: </p>
+                              
+                                <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
+                                <input type="hidden" name="PageSize" value="@Model.PageSize" />
+                                <input type="hidden" name="TypeId" value=@ViewData["Type"] />
+                                <input type="hidden" name="Sort" value="@ViewData["Sort"]" />
+                                <input type="number" name="BrandId" value="@ViewData["Brand"]" />
+                                <input type="submit" class="btn" value="Days Ago" />
+                            </div>
                         </div>
-                    </div>
                 </form>
             </dd>
             <dd>

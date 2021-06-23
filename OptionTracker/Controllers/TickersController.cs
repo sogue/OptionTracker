@@ -219,7 +219,7 @@ namespace OptionTracker.Controllers
                 viewModel.OptionsResults = viewModel.OptionsResults.OrderByDescending(x => x.Volume).ToList();
 
             if (productParams.Search != null &&
-                (productParams.Search.Equals("dWeek") || productParams.Search.Equals("threeD")))
+                (productParams.Search.Equals("dweek") || productParams.Search.Equals("threed")))
             {
                 var chainRaws = await _context.OptionChainRaw.Where(x =>
                         x.Data.RootElement.GetProperty("symbol").GetString() == ticker.Name)
