@@ -1,19 +1,19 @@
-﻿@model ChainResultViewModel
+﻿@model API.Helpers.Pagination<ChainResultViewModel>
 
 @{
-    ViewData["Title"] = @Model.Ticker;
+    ViewData["Title"] = @Model.Data.FirstOrDefault()?.Ticker;
 }
 
 <div>
     <div>
         <dl class="row">
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Ticker)
+                @Html.DisplayNameFor(model => model.Data.FirstOrDefault().Ticker)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Ticker)
+                @Html.DisplayFor(model => model.Data.FirstOrDefault().Ticker)
                 <a asp-controller="DateChains"
-                   asp-action="@Model.Ticker">
+                   asp-action="@Model.Data.FirstOrDefault()?.Ticker">
                     Date Chains
                 </a>
                 <a asp-controller="Tickers"
@@ -24,102 +24,157 @@
             </dd>
             <dd>
                 <a asp-controller="DateChains"
-                   asp-action="@Model.Ticker">
+                   asp-action="@Model.Data.FirstOrDefault()?.Ticker">
                     Option Chains
                 </a> |
-                <a asp-action="Details" asp-route-id="@Model.Ticker">Most Active Options</a>
-                | <a asp-controller="VolumeAnals" asp-action="Details" asp-route-id="@Model.Ticker">Daily Option Volume</a>
+                <a asp-action="Details" asp-route-id="@Model.Data.FirstOrDefault()?.Ticker">Most Active Options</a>
+                | <a asp-controller="VolumeAnals" asp-action="Details" asp-route-id="@Model.Data.FirstOrDefault()?.Ticker">Daily Option Volume</a>
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.MarketCap)
+                @Html.DisplayNameFor(model => model.Data.FirstOrDefault().MarketCap)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.MarketCap)
+                @Html.DisplayFor(model => model.Data.FirstOrDefault().MarketCap)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.ClosePrice)
+                @Html.DisplayNameFor(model => model.Data.FirstOrDefault().ClosePrice)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.ClosePrice)
+                @Html.DisplayFor(model => model.Data.FirstOrDefault().ClosePrice)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Created)
+                @Html.DisplayNameFor(model => model.Data.FirstOrDefault().Created)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Created)
-                @Html.DisplayFor(model => model.TimeChange)
-                <a asp-controller="Tickers"
-                   asp-action="Details"
-                   asp-route-id="threeD">
-                    3 Days
-                </a>
-                <a asp-controller="Tickers"
-                   asp-action="Details"
-                   asp-route-id="dWeek">
-                    7 Days
-                </a>
+                @Html.DisplayFor(model => model.Data.FirstOrDefault().Created)
+
+                @Html.DisplayFor(model => model.Data.FirstOrDefault().TimeChange)
+                
+            </dd>
+            <dd>
+                <form class="d-inline-flex" asp-action="Details" method="get">
+                    <div class="input-group-sm">
+                        <div>
+                            Go to
+                            <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
+                            <input type="hidden" name="PageSize" value="@Model.PageSize" />
+                            <input type="hidden" name="TypeId" value=@ViewData["Type"] />
+                            <input type="hidden" name="Sort" value="@ViewData["Sort"]" />
+                            <input type="number" name="BrandId" value="@ViewData["Brand"]" />
+                            <input type="submit" class="btn" value="Days Ago" />
+                        </div>
+                    </div>
+                </form>
+            </dd>
+            <dd>
+                <form class="d-inline-flex" asp-action="Details" method="get">
+                    <div class="input-group-sm">
+                        <div>
+                            <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
+                            <input type="hidden" name="PageSize" value="@Model.PageSize" />
+                            <input type="hidden" name="TypeId" value=@ViewData["Type"] />
+                            <input type="hidden" name="Sort" value="@ViewData["Sort"]" />
+                            <input type="hidden" name="BrandId" value=@ViewData["Brand"] />
+                            <input type="hidden" name="Search" value="threeD" />
+                            <input type="submit" class="btn" value="Last Three" />
+                        </div>
+                    </div>
+                </form>
+                <form class="d-inline-flex" asp-action="Details" method="get">
+                    <div class="input-group-sm">
+                        <div>
+                            <input type="hidden" name="PageIndex" value="@Model.PageIndex" />
+                            <input type="hidden" name="PageSize" value="@Model.PageSize" />
+                            <input type="hidden" name="TypeId" value=@ViewData["Type"] />
+                            <input type="hidden" name="BrandId" value=@ViewData["Brand"] />
+                            <input type="hidden" name="Sort" value="@ViewData["Sort"]" />
+                            <input type="hidden" name="Search" value="dWeek" />
+                            <input type="submit" class="btn" value="Last Seven" />
+                        </div>
+                    </div>
+                </form>
             </dd>
         </dl>
         <table class="table">
             <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().Description)
-                    @{
-                        var parms = new Dictionary<string, string>
-                        {
-                            { "Type", "put" },
-                            { "currentYear", "true" }
-                        };
-                    }
+                    @Html.DisplayNameFor(model => model.Data.FirstOrDefault().OptionsResults.FirstOrDefault().Description)
 
-                    <a asp-controller="Tickers"
-                       asp-action="Details"
-                       asp-all-route-data="parms">Show Puts</a>
+                    <form asp-action="Details" method="get">
+                        <input type="hidden" name="PageIndex" value="@Model.PageIndex"/>
+                        <input type="hidden" name="PageSize" value="@Model.PageSize"/>
+                        <input type="hidden" name="TypeId" value="1"/>
+                        <input type="hidden" name="Sort" value=@ViewData["Sort"]/>
+                        <input type="hidden" name="BrandId" value=@ViewData["Brand"]/>
+                        <input type="submit" class="btn" value="ShowPuts"/>
+                    </form>
 
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().ClosePrice)
+                    <form asp-action="Details" method="get">
+                        <input type="hidden" name="PageIndex" value="@Model.PageIndex"/>
+                        <input type="hidden" name="PageSize" value="@Model.PageSize"/>
+                        <input type="hidden" name="TypeId" value=@ViewData["Type"]/>
+                        <input type="hidden" name="BrandId" value=@ViewData["Brand"]/>
+                        <input type="hidden" name="Sort" value="cpDesc"/>
+                        <input type="submit" class="btn" value=  @Html.DisplayNameFor(model => model.Data.FirstOrDefault().OptionsResults.FirstOrDefault().ClosePrice)/>
+                    </form>
+                    <form asp-action="Details" method="get">
+                        <input type="hidden" name="PageIndex" value="@Model.PageIndex"/>
+                        <input type="hidden" name="PageSize" value="@Model.PageSize"/>
+                        <input type="hidden" name="TypeId" value=@ViewData["Type"]/>
+                        <input type="hidden" name="BrandId" value=@ViewData["Brand"]/>
+                        <input type="hidden" name="Sort" value="cpcDesc"/>
+                        <input type="submit" class="btn" value="(By Change)"/>
+                    </form>
+                </th>
+                <th>
 
-                    <a asp-controller="Tickers"
-                       asp-action="Details"
-                       asp-route-id="cChange">
-                        (By Change)
-                    </a>
+                    <form asp-action="Details" method="get">
+                        <input type="hidden" name="PageIndex" value="@Model.PageIndex"/>
+                        <input type="hidden" name="PageSize" value="@Model.PageSize"/>
+                        <input type="hidden" name="TypeId" value=@ViewData["Type"]/>
+                        <input type="hidden" name="BrandId" value=@ViewData["Brand"]/>
+                        <input type="hidden" name="Sort" value="oiDesc"/>
+                        <input type="submit" class="btn" value=@Html.DisplayNameFor(model => model.Data.FirstOrDefault().OptionsResults.FirstOrDefault().OpenInterest)/>
+                    </form>
+                 <form class="flex-column" asp-action="Details" method="get">
+                        <input type="hidden" name="PageIndex" value="@Model.PageIndex"/>
+                        <input type="hidden" name="PageSize" value="@Model.PageSize"/>
+                        <input type="hidden" name="TypeId" value=@ViewData["Type"]/>
+                        <input type="hidden" name="BrandId" value=@ViewData["Brand"]/>
+                        <input type="hidden" name="Sort" value="oicDesc"/>
+                        <input type="submit" class="btn" value="(By Change)"  />
+                 </form>
                 </th>
                 <th>
-                    <a asp-controller="Tickers"
-                       asp-action="Details"
-                       asp-route-id="false">
-                        @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().OpenInterest)
-                    </a>
-                    <a asp-controller="Tickers"
-                       asp-action="Details"
-                       asp-route-id="oChange">
-                        (By Change)
-                    </a>
-                </th>
-                <th>
-                    <a asp-controller="Tickers"
-                       asp-action="Details"
-                       asp-route-id="volume">
-                        @Html.DisplayNameFor(model => model.OptionsResults.FirstOrDefault().Volume)
-                    </a>
-                </th>
-                <th>
-                    <a asp-controller="Tickers"
-                       asp-action="Details"
-                       asp-route-id="true">
-                        @Html.DisplayNameFor(model =>
-                            model.OptionsResults.FirstOrDefault().TotalValue)
 
-                    </a>
+                    <form asp-action="Details" method="get">
+                        <input type="hidden" name="PageIndex" value="@Model.PageIndex"/>
+                        <input type="hidden" name="PageSize" value="@Model.PageSize"/>
+                        <input type="hidden" name="TypeId" value=@ViewData["Type"]/>
+                        <input type="hidden" name="BrandId" value=@ViewData["Brand"]/>
+                        <input type="hidden" name="Sort" value="volumeDesc"/>
+                        <input type="submit" class="btn" value=@Html.DisplayNameFor(model => model.Data.FirstOrDefault().OptionsResults.FirstOrDefault().Volume) />
+                    </form>
+                </th>
+                <th>
+
+                    <form asp-action="Details" method="get">
+                        <input type="hidden" name="PageIndex" value="@Model.PageIndex"/>
+                        <input type="hidden" name="PageSize" value="@Model.PageSize"/>
+                        <input type="hidden" name="TypeId" value=@ViewData["Type"]/>
+                        <input type="hidden" name="BrandId" value=@ViewData["Brand"]/>
+                        <input type="hidden" name="Sort" value="valueDesc"/>
+                        <input type="submit" class="btn" value=@Html.DisplayNameFor(model => model.Data.FirstOrDefault().OptionsResults.FirstOrDefault().TotalValue) />
+                    </form>
                 </th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            @foreach (var item in Model.OptionsResults)
+            @foreach (var item in Model.Data.FirstOrDefault()?.OptionsResults)
             {
                 <tr>
                     <td>
@@ -153,20 +208,22 @@
 <div>
     <div id="donut-chart" class=""></div>
 </div>
+
 @section scripts{
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         var donutChart;
         var donut;
-        $(document).ready(function () {
+        $(document).ready(function() {
             GetData();
         });
+
         function GetData() {
             $.ajax({
-                url: '/Tickers/GetChartData/@Model.Ticker',
+                url: '/Tickers/GetChartData/@Model.Data.FirstOrDefault()?.Ticker',
                 cache: false,
                 type: "POST",
-                success: function (data) {
+                success: function(data) {
                     //console.log(data);
                     if (data.success) {
                         if (data.series.length > 0) {
@@ -177,12 +234,13 @@
                         alert(data.message);
                     }
                 },
-                error: function (reponse) {
+                error: function(reponse) {
                     console.log(reponse);
                     alert("error : " + reponse);
                 }
             });
         }
+
         function LoadChart(series, labels) {
             // Donut Chart
             donutChart = {
@@ -198,17 +256,19 @@
                 legend: {
                     fontSize: '20px'
                 },
-                responsive: [{
-                    breakpoint: 480,
-                    options: {
-                        chart: {
-                            width: 305
-                        },
-                        legend: {
-                            position: 'bottom'
+                responsive: [
+                    {
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 305
+                            },
+                            legend: {
+                                position: 'bottom'
+                            }
                         }
                     }
-                }]
+                ]
             }
             donut = new ApexCharts(
                 document.querySelector("#donut-chart"),

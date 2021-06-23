@@ -11,7 +11,7 @@ namespace FlowService.Models.Anal
     public class OptionActivity
     {
         public int Id { get; set; }
-        public int TickerId { get; set; }
+        public int TickerId { get; set; } 
         public string Ticker { get; set; }
         public DateTime ActivityDate { get; set; }
         public decimal CallVolume { get; set; }
